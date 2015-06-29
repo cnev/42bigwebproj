@@ -1,0 +1,5 @@
+dans application/modules/database.php, modifier parametres connexion db
+
+dans application/bootstrap.php, activer la ligne db dans Kohana::modules
+
+
