@@ -6,7 +6,7 @@ class Controller_Install extends Controller_Template {
 
 	public function action_index()
 	{
-		$this->template->data['news'] = $this->install->loadFirstPageNews(30);
+
 
 	}
 }
