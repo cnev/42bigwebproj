@@ -1,0 +1,14 @@
+h1 {
+	color: red;
+}
+
+body {
+	background-image: url('login_wall.jpg');
+	text-align: center;
+}
+
+#logbox {
+	margin: 0 auto;
+	text-align: center;
+	background-color: purple;
+}
