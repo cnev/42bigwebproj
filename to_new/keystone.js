@@ -12,8 +12,8 @@ var handlebars = require('express-handlebars');
 
 keystone.init({
 
-	'name': 'test',
-	'brand': 'test',
+	'name': 'Test',
+	'brand': 'Test',
 	
 	'less': 'public',
 	'static': 'public',
@@ -29,13 +29,15 @@ keystone.init({
 		extname: '.hbs'
 	}).engine,
 	
+	'mongo':'mongodb://localhost:27017/test',
+
 	'emails': 'templates/emails',
 	
 	'auto update': true,
 	'session': true,
 	'auth': true,
 	'user model': 'User',
-	'cookie secret': 'a^xE!S=ba%byVi5TM02MFF0}0cc:%^)N/EGR2TBb3AXl<L|V~6&M-UHxo~vcHo$^'
+	'cookie secret': '18NSefonTtE8Iy05C-H~BDAqUaSGOb<5%qL,oIMFz/!=q2B708B13^U"gV9{*pRp'
 
 });
 
@@ -97,6 +99,9 @@ keystone.set('email tests', require('./routes/emails'));
 // Configure the navigation bar in Keystone's Admin UI
 
 keystone.set('nav', {
+	'posts': ['posts', 'post-categories'],
+	'galleries': 'galleries',
+	'enquiries': 'enquiries',
 	'users': 'users'
 });
 
