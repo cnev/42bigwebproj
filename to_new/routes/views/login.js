@@ -19,24 +19,36 @@ router.post('/', function (req, res) {
 	scope: 'sub',
 	attributes: 'dn'
 };
-	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, res) {
+	var user_dn = '';
+	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result) {
 	assert.ifError(err);
 
-	res.on('searchEntry', function(entry) {
-		console.log('entry: ' + JSON.stringify(entry.object));
+	result.on('searchEntry', function(entry) {
+		//console.log('entry: ' + JSON.stringify(entry.object));
+		//console.log('test: ' + entry.object.dn);
+		client.bind(entry.object.dn, req.body.password, function(err) {
+		if (err) {
+			// error case;	assert.ifError(err);
+			res.status(200).send("<p>Hello World of FAILED LOGINS</p>");
+		}
+		else {
+			res.status(200).send("<p>Hello World of POST</p>");
+		}
+		});
 	});
-	res.on('searchReference', function(referral) {
+	result.on('searchReference', function(referral) {
 		console.log('referral: ' + referral.uris.join());
 	});
-	res.on('error', function(err) {
+	result.on('error', function(err) {
 		console.error('error: ' + err.message);
 	});
-	res.on('end', function(result) {
+	result.on('end', function(result) {
 		console.log('status: ' + result.status);
 	});
 });
-	var testo = "<p>Hello World of POST</p>";
-	res.status(200).send(testo);
+	console.log(user_dn);
+	console.log(req.body.password);
+
 
 
 })
