@@ -17,7 +17,7 @@ router.post('/', function (req, res) {
 	var opts = {
 	filter: '(&(uid='+req.body.username+'))',
 	scope: 'sub',
-	attributes: 'dn'
+	//attributes: 'dn'
 };
 	var user_dn = '';
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result) {
@@ -38,6 +38,7 @@ router.post('/', function (req, res) {
 			sess.pw = req.body.password;
 			sess.dn = entry.object.dn;
 			sess.logged = 'true';
+			console.log(entry.object);
 			res.redirect("/");
 		}
 		});
