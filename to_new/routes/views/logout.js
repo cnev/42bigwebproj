@@ -6,13 +6,17 @@ var router = express.Router();
 router.get('/', function (req, res) {
 	//var test = "<a href='http://www.google.com'>Hello My Friend</a>";
 	//res.status(200).send(test);
+	/*req.session.destroy(function () {
+		res.redirect("/");
+	});*/
 	var sess = req.session;
-	if (sess.logged == 'true')
-		var test2 = "<a href='logout'>LOG OUT</a>";
-	else
-		var test2 = "<a href='login'>LOG IN</a>";
-	res.status(200).send(test2);
-
+	sess.user = '';
+	sess.logged = 'false';
+	//req.session.cookie.expires = new Date(Date.now() + 0);
+	//req.session.cookie.maxAge = 0;
+	//req.session.destroy(function () {
+	res.redirect("/");
+	//});
 });
 
 module.exports = router;

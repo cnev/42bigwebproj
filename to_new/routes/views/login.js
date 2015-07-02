@@ -1,6 +1,6 @@
 var express = require('express');
+var session = require('express-session');
 var ldap = require('ldapjs');
-var assert = require('assert');
 
 var router = express.Router();
 
@@ -21,7 +21,7 @@ router.post('/', function (req, res) {
 };
 	var user_dn = '';
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result) {
-	assert.ifError(err);
+	//assert.ifError(err);
 
 	result.on('searchEntry', function(entry) {
 		//console.log('entry: ' + JSON.stringify(entry.object));
@@ -30,9 +30,16 @@ router.post('/', function (req, res) {
 		if (err) {
 			// error case;	assert.ifError(err);
 			res.status(200).send("<p>Hello World of FAILED LOGINS</p>");
+
 		}
 		else {
-			res.status(200).send("<p>Hello World of POST</p>");
+			var sess = req.session;
+			sess.user = req.body.username;
+			sess.logged = 'true';
+			var to_send = "";
+			to_send += "<p>Hello "+sess.user+" !</p><br />";
+			to_send += "<a href='logout'>LOG OUT</a";
+			res.status(200).send(to_send);
 		}
 		});
 	});

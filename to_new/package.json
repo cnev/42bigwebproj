@@ -12,7 +12,8 @@
     "express-handlebars": "^1.1.0",
     "handlebars": "^2.0.0",
     "dotenv": "^1.1.0",
-    "ldapjs": "latest"
+    "ldapjs": "latest",
+    "express-session": "latest"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
