@@ -18,9 +18,6 @@ Ticket.add({
 	category: { type: Types.Relationship, ref: 'TicketCategory' }
 });
 
-<<<<<<< HEAD
 Ticket.defaultColumns = 'title, state|20%, author|20%, category|20%';
-=======
-Ticket.defaultColumns = 'title';
->>>>>>> 1c10a222eec3eb494290706e9563222751b85d1d
+//Ticket.defaultColumns = 'title';
 Ticket.register();
