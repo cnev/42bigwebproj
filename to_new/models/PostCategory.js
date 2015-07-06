@@ -1,5 +1,4 @@
 var keystone = require('keystone');
-
 /**
  * PostCategory Model
  * ==================

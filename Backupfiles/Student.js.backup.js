@@ -18,7 +18,7 @@ User.add({
 	cn: 'Mickael SORIN',
 	gidNumber: '4207',
 	givenName: 'Mickael',
-	jpegPhoto:,
+	jpegPhoto:'',
 	loginShell: '/bin/zsh',
 	objectClass:
 	[ 'posixAccount',
