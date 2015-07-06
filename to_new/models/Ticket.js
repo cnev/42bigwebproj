@@ -9,8 +9,8 @@ var Types = keystone.Field.Types;
 var Ticket = new keystone.List('Ticket', {
 	});
 
-Post.add({
-	title: { type: String, required: true },
+Ticket.add({
+	title: { type: String, initial: 'title', required: true },
 	state: { type: Types.Select, options: 'new, open, close', default: 'open' },
 	author: { type: Types.Relationship, ref: 'User' },
 	publishedDate: { type: Types.Date },
@@ -18,5 +18,5 @@ Post.add({
 	category: { type: Types.Relationship, ref: 'TicketCategory' }
 });
 
-Post.defaultColumns = 'title, state|20%, author|20%, category|20%';
-Post.register();
+Ticket.defaultColumns = 'title, state|20%, author|20%, category|20%';
+Ticket.register();
