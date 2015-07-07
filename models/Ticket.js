@@ -15,7 +15,8 @@ Ticket.add({
 	author: { type: Types.Relationship, ref: 'User' },
 	publishedDate: { type: Types.Date },
 	content: { type: Types.Textarea },
-	category: { type: Types.Relationship, ref: 'TicketCategory' }
+	category: { type: Types.Relationship, ref: 'TicketCategory' },
+	priority: { type: Types.Select, options: 'Non Important, Normal, Important, Urgent, Over 9000', default: 'Normal' }
 });
 
 Ticket.defaultColumns = 'title, state|20%, author|20%, category|20%';

@@ -11,8 +11,7 @@ var TicketCategory = new keystone.List('TicketCategory', {
 });
 
 TicketCategory.add({
-	name: { type: String, index: true },
-	assigned_staff: { type: Types.Relationship, ref: 'Staff' }
+	name: { type: String, index: true }
 });
 
 TicketCategory.register();
