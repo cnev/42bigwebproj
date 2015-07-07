@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var keystone = require('keystone');
 
 var router = express.Router();
 
@@ -30,4 +31,4 @@ router.get('/', function (req, res)
 	view.render('ticket_test');
 });
 
-module.exports.router = router;
+module.exports = router;
