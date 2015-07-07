@@ -44,6 +44,7 @@ exports = module.exports = function(app) {
 	app.use('/login', require('./views/login'));
 	app.use('/logout', require('./views/logout'));
 	app.use('/search', require('./views/search'));
+	app.use('/ticket_test', require('./views/ticket_test'));
 
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
