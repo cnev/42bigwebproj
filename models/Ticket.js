@@ -7,7 +7,11 @@ var Types = keystone.Field.Types;
  */
 
 var Ticket = new keystone.List('Ticket', {
-	});
+	track: {
+		createdAt: true,
+		updatedAt: true
+	}
+});
 
 Ticket.add({
 	title: { type: String, initial: 'title', required: true },
