@@ -29,3 +29,5 @@ router.get('/', function (req, res)
 		});
 	view.render('ticket_test');
 });
+
+module.exports.router = router;
