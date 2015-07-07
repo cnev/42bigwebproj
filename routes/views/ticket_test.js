@@ -2,6 +2,8 @@ var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
 
+var Ticket = keystone.list('Ticket');
+
 var router = express.Router();
 
 router.get('/', function (req, res)
@@ -21,7 +23,7 @@ router.get('/', function (req, res)
 	});
 	add_q.save();
 
-	var q = keystone.list('Ticket').model.find()
+	var q = Ticket.model.find()
 		.where('state', 'open')
 		.exec(function (err, result)
 		{
