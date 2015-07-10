@@ -13,24 +13,31 @@ router.get('/', function (req, res)
 	locals.data = {
 		tickets: []
 	};
-	var add_q = new Ticket(
+	var add_q = new Ticket.model(
 	{
 		title: 'MATTHOU MA VOLE MA LILIANAAAAA',
-		author: 'Chandoo',
 		publishedDate: '',
 		content: 'Au voleuuuuuuuuuuur ma premiere rare mythique bouhhhhhhhh :\'(',
 		priority: 'Urgent'
 	});
-	add_q.save();
-
-	var q = Ticket.model.find()
-		.where('state', 'open')
-		.exec(function (err, result)
-		{
-			locals.data.ticket = result;
-			next(err);
-		});
-	view.render('ticket_test');
+	add_q.save(function (err, q_saved) {
+		var q = Ticket.model.find()
+			.exec(function (err, result)
+			{
+				for (var i = 0; i < result.length; i++)
+				{
+					locals.data.tickets.push(result[i]);
+				}
+				for (var i = 0; i < locals.data.tickets.length; i++)
+				{
+					console.log("New Ticket:");
+					console.log(locals.data.tickets[i]);
+				}
+				//locals.data.tickets = result;
+				//console.log(result);
+			});
+		view.render('ticket_test');
+	});
 });
 
 module.exports = router;

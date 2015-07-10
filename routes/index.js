@@ -41,6 +41,7 @@ exports = module.exports = function(app) {
 	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);*/
 	app.use('/', require('./views/test'));
+	app.use('/pititest', require('./views/pititest'));
 	app.use('/login', require('./views/login'));
 	app.use('/logout', require('./views/logout'));
 	app.use('/search', require('./views/search'));

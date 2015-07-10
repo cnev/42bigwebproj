@@ -1,12 +1,31 @@
+{{#pitiTest data.tickets}}
+{{this}}
+{{/pitiTest}}
+
+
+{{!--
+{{#if data.tickets}}
+{{#each data.tickets}}
+	{{this}}
+{{/each}}
+{{else}}
+pouet
+{{/if}}
+
+
 <div class="container">
 	<div class="row">
 		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
 			<article>
 				<hr>
 				<div class="post">
-					{{#ticketlist data.ticket}}{{firstName}} {{lastName}}{{/list}}
+					{{#ticketlist data.ticket}}
+						{{firstName}}
+						{{lastName}}
+					{{/ticketlist}}
 				</div>
 			</article>
 		</div>
 	</div>
 </div>
+--}}
