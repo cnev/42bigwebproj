@@ -336,13 +336,15 @@ _helpers.flashMessages = function(messages) {
 
 _helpers.pitiTest = function(tickets)
 {
-	var output = '';
+	var output = '<div class="container theme-showcase">';
+	output += '<div class="page-header">TICKETS</div>';
 	for (var i = 0; i < tickets.length; i++)
 	{
-		output += '<div style="background-color: green;">';
+		output += '<p><button class="btn btn-lg btn-danger" type="button">';
 		output += tickets[i].content;
-		output += '</div>';
+		output += '</button></p>';
 	}
+	output += '</div>';
 	return new hbs.SafeString(output);
 };
 

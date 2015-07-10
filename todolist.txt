@@ -1,0 +1,12 @@
+2 helpers hbs pour la navigation:
+	1 pour les eleves
+	1 pour le panneau admin
+
+Modeles:
+	Activity <- URLs des fichiers assignes a l'activite
+	Module <- URLs des fichiers assignes au module
+	Scale
+	
+Preparer un set de donnees pour la correction
+
+LESS-CSS-ifier tout le site (DONT PANIC)
