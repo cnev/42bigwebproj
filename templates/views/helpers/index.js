@@ -3,8 +3,8 @@ var _ = require('underscore');
 var hbs = require('handlebars');
 var keystone = require('keystone');
 var cloudinary = require('cloudinary');
-
-
+var express = require('express');
+var session = require('express-session');
 // Declare Constants
 var CLOUDINARY_HOST = 'http://res.cloudinary.com';
 
@@ -336,7 +336,7 @@ _helpers.flashMessages = function(messages) {
 
 _helpers.pitiTest = function(tickets)
 {
-	var output = '<div class="container theme-showcase">';
+	var output = '<div class="container">';
 	output += '<div class="page-header">TICKETS</div>';
 	for (var i = 0; i < tickets.length; i++)
 	{
@@ -347,6 +347,25 @@ _helpers.pitiTest = function(tickets)
 	output += '</div>';
 	return new hbs.SafeString(output);
 };
+
+_helpers.userNav = function(userClass)
+{
+	var output =  '<div class="container">';
+	if (userClass == 'student')
+	{
+		output += '<div class="page-header">STUDENTOR</div>';
+		output += '<p><button class="btn btn-lg btn-danger" type="button">HI !</button></p>';
+		output += '<p><button class="btn btn-lg btn-danger" type="button">STUDENT !</button></p>';
+	}
+	else if (userClass == 'admin')
+	{
+		output += '<div class="page-header">STAFFATOR</div>';
+		output += '<p><button class="btn btn-lg btn-danger" type="button">HI !</button></p>';
+		output += '<p><button class="btn btn-lg btn-danger" type="button">STAFF !</button></p>';
+	}
+	output += '</div>';
+	return new hbs.SafeString(output);
+}
 
 return _helpers;
 };

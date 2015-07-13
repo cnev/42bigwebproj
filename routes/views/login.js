@@ -49,6 +49,7 @@ router.post('/', function (req, res)
 					sess.pw = req.body.password;
 					sess.dn = entry.object.dn;
 					sess.logged = 'true';
+					sess.userClass = 'student';
 					console.log(entry.object);
 					res.redirect("/");
 				}

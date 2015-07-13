@@ -28,13 +28,6 @@ router.get('/', function (req, res)
 				{
 					locals.data.tickets.push(result[i]);
 				}
-				for (var i = 0; i < locals.data.tickets.length; i++)
-				{
-					console.log("New Ticket:");
-					console.log(locals.data.tickets[i]);
-				}
-				//locals.data.tickets = result;
-				//console.log(result);
 			});
 		view.render('ticket_test');
 	});
