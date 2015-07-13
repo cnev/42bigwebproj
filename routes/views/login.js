@@ -1,8 +1,10 @@
 var express = require('express');
 var session = require('express-session');
 var ldap = require('ldapjs');
+var keystone = require('keystone');
 
 var router = express.Router();
+var User = keystone.list('User');
 
 router.get('/', function (req, res)
 {
@@ -43,15 +45,24 @@ router.post('/', function (req, res)
 				}
 				else
 				{
-					console.log("Successful login ... maybe ?");
-					var sess = req.session;
-					sess.user = req.body.username;
-					sess.pw = req.body.password;
-					sess.dn = entry.object.dn;
-					sess.logged = 'true';
-					sess.userClass = 'student';
-					console.log(entry.object);
-					res.redirect("/");
+					User.model.findOne({'name':req.body.username}).exec(function (err, usr) {
+						if (err) {
+							console.error(err);
+							res.status(500).send(err);
+						}
+						else if (!usr) {/*add user to db*/}
+						else {
+							console.log("Successful login ... maybe ?");
+							var sess = req.session;
+							sess.user = req.body.username;
+							sess.pw = req.body.password;
+							sess.dn = entry.object.dn;
+							sess.logged = 'true';
+							sess.userClass = usr.isAdmin ? 'staff' : 'student';
+							console.log(entry.object);
+							res.redirect("/");
+						}
+					});
 				}
 			});
 		});
