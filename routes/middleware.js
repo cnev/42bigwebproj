@@ -74,7 +74,6 @@ exports.requireUser = function(req, res, next) {
 
 exports.testmiddle = function (req, res, next)
 {
-	console.log("WAS SOMETHING EVER DONE ?");
 	if (req.session)
 	{
 		console.log("REQ SESSION OK");
@@ -82,6 +81,12 @@ exports.testmiddle = function (req, res, next)
 		{
 			console.log("USERCLASS OK");
 			res.locals.userClass = 'student';
+			console.log(res.locals.userClass);
+		}
+		else if (req.session.userClass == 'admin')
+		{
+			console.log("USERCLASS OK");
+			res.locals.userClass = 'admin';
 			console.log(res.locals.userClass);
 		}
 	}
