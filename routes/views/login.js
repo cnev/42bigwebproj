@@ -6,6 +6,14 @@ var keystone = require('keystone');
 var router = express.Router();
 var User = keystone.list('User');
 
+function checkbocalstaff(usrName) {
+	return(usrName ? false : false);
+}
+
+function checkbocalstudent(usrName) {
+	return(usrName ? false : false);
+}
+
 router.get('/', function (req, res)
 {
 	var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
@@ -34,6 +42,9 @@ router.post('/', function (req, res)
 		result.on('searchEntry', function(entry)
 		{
 			//console.log('entry: ' + JSON.stringify(entry.object));
+			console.log(entry);
+			console.log('/* *************** */');
+			console.log(entry.object);
 			//console.log('test: ' + entry.object.dn);
 			client.bind(entry.object.dn, req.body.password, function(err)
 			{
@@ -45,12 +56,41 @@ router.post('/', function (req, res)
 				}
 				else
 				{
-					User.model.findOne({'name':req.body.username}).exec(function (err, usr) {
+					User.model.findOne({'uid':req.body.username}).exec(function (err, usr) {
 						if (err) {
 							console.error(err);
 							res.status(500).send(err);
 						}
-						else if (!usr) {/*add user to db*/}
+						else if (!usr) {
+							/*add user to db*/
+							var newUser = new User.model({
+								name: { last: req.body.username, first: req.body.username },
+								uid: req.body.username,
+								password: req.body.password,
+								isStaff: {
+									bocalStaff: checkbocalstaff(req.body.username),
+									bocalStudent: checkbocalstudent(req.body.username)
+								},
+								email: req.body.username + '@' + (checkbocalstaff(req.body.username) ?
+										'staff' : 'student') + '.42.fr'
+							});
+							newUser.save(function (err, usrsaved) {
+								if (err) {
+									console.error(err);
+									res.status(500).send(err);
+								}
+								else {
+									var sess = req.session;
+									sess.user = usrsaved.name;
+									sess.pw = usrsaved.password;
+									sess.dn = entry.object.dn;
+									sess.logged = 'true';
+									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
+											(usrsaved.isStaff.bocalStudent ? 'bocal' : 'student');
+									res.redirect("/");
+								}
+							});
+						}
 						else {
 							console.log("Successful login ... maybe ?");
 							var sess = req.session;
@@ -58,7 +98,7 @@ router.post('/', function (req, res)
 							sess.pw = req.body.password;
 							sess.dn = entry.object.dn;
 							sess.logged = 'true';
-							sess.userClass = usr.isAdmin ? 'staff' : 'student';
+							sess.userClass = usr ? (usr.isAdmin ? 'staff' : 'student') : 'student';
 							console.log(entry.object);
 							res.redirect("/");
 						}
