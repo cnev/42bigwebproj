@@ -6,7 +6,13 @@ Modeles:
 	Activity <- URLs des fichiers assignes a l'activite
 	Module <- URLs des fichiers assignes au module
 	Scale
-	
+
+Vues:
+	mettre en place les differentes vu du panel admin (edit user, edit ticket, ...)
+
+Controleur:
+	ajouter les fonctions d'edition.
+
 Preparer un set de donnees pour la correction
 
 LESS-CSS-ifier tout le site (DONT PANIC)

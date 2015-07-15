@@ -10,6 +10,8 @@ var User = new keystone.List('User');
 
 User.add({
 	uid: { type: String },
+	uidNumber: { type: Number },
+	gidNumber: { type: Number },
 	name: { type: Types.Name, required: true, index: true },
 	email: { type: Types.Email, initial: true, required: true, index: true },
 	password: { type: Types.Password, initial: true, required: true },

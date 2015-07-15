@@ -33,7 +33,7 @@ router.post('/', function (req, res)
 	{
 		filter: '(&(uid='+req.body.username+'))',
 		scope: 'sub',
-		attributes: 'dn'
+		attributes: ['sn', 'uid', 'uidNumber', 'dn', 'alias', 'cn', 'gidNumber', 'givenName']
 	};
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result)
 	{
@@ -56,7 +56,8 @@ router.post('/', function (req, res)
 				}
 				else
 				{
-					User.model.findOne({'uid':req.body.username}).exec(function (err, usr) {
+					var logger = entry.object;
+					User.model.findOne({'uid':logger.uid}).exec(function (err, usr) {
 						if (err) {
 							console.error(err);
 							res.status(500).send(err);
@@ -64,15 +65,12 @@ router.post('/', function (req, res)
 						else if (!usr) {
 							/*add user to db*/
 							var newUser = new User.model({
-								name: { last: req.body.username, first: req.body.username },
-								uid: req.body.username,
+								name: { first: logger.givenName, last: logger.sn },
+								uid: logger.uid,
 								password: req.body.password,
-								isStaff: {
-									bocalStaff: checkbocalstaff(req.body.username),
-									bocalStudent: checkbocalstudent(req.body.username)
-								},
-								email: req.body.username + '@' + (checkbocalstaff(req.body.username) ?
-										'staff' : 'student') + '.42.fr'
+								email: logger.alias[0],
+								uidNumber: logger.uidNumber,
+								gidNumber: logger.gidNumber
 							});
 							newUser.save(function (err, usrsaved) {
 								if (err) {
@@ -81,7 +79,7 @@ router.post('/', function (req, res)
 								}
 								else {
 									var sess = req.session;
-									sess.user = usrsaved.name;
+									sess.user = usrsaved.uid;
 									sess.pw = usrsaved.password;
 									sess.dn = entry.object.dn;
 									sess.logged = 'true';
@@ -98,7 +96,8 @@ router.post('/', function (req, res)
 							sess.pw = req.body.password;
 							sess.dn = entry.object.dn;
 							sess.logged = 'true';
-							sess.userClass = usr ? (usr.isAdmin ? 'staff' : 'student') : 'student';
+							sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
+									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							console.log(entry.object);
 							res.redirect("/");
 						}

@@ -83,12 +83,33 @@ exports.testmiddle = function (req, res, next)
 			res.locals.userClass = 'student';
 			console.log(res.locals.userClass);
 		}
-		else if (req.session.userClass == 'admin')
+		else if (req.session.userClass == 'staff')
 		{
 			console.log("USERCLASS OK");
-			res.locals.userClass = 'admin';
+			res.locals.userClass = 'staff';
 			console.log(res.locals.userClass);
+		}
+		else if (req.session.userClass == 'bocal')
+		{
+			res.locals.userCLass = 'bocal';
 		}
 	}
 	next();
 }
+
+/*
+exports.forkByUserClass = function(req, res, next)
+{
+	if (req.session)
+	{
+		if (req.session.route)
+		{
+			if (req.session.userClass != 'student')
+			{
+				req.session.route = '/admin_' + req.session.route;
+				res.redirect(req.session.route);
+			}
+		}
+	}
+}
+*/
