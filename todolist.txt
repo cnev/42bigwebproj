@@ -3,8 +3,8 @@
 	1 pour le panneau admin
 
 Modeles:
-	Activity <- URLs des fichiers assignes a l'activite
-	Module <- URLs des fichiers assignes au module
+	Activity
+	Module
 	Scale
 
 Vues:
