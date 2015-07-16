@@ -10,19 +10,19 @@ var Activity = new keystone.List('Activity');
 
 Activity.add({
 	name: {type: Types.Name, required: true, index: true},
-	description: {type: Types.Textarea, required: true},
-	subject: {type: String, required: true},
+	description: {type: Types.Textarea},
+	subject: {type: String},
 	/* slots devrait etre un objet contenant deux valeurs 'actuel' et 'max' */
-	slots: {type: Types.Number, required: true, default: 424242},
+	slots: {type: Types.Number, default: 424242},
 	/* pareil, 'begins' et 'ends' */
-	register_period: {type: Types.Date, required: true},
+	register_period: {type: Types.Date},
 	/* pareil */
-	period: {type: Types.Date, required: true},
+	period: {type: Types.Date},
 	/* ... */
-	group_size: {type: Types.Date, required: true},
-	req_corrections: {type: Types.Number, required: true},
-	auto_group: {type: Types.Boolean, required: true},
-	module: {type: Types.Relationship, ref: 'Module', required: true},
+	group_size: {type: Types.Date},
+	req_corrections: {type: Types.Number},
+	auto_group: {type: Types.Boolean},
+	module: {type: Types.Relationship, ref: 'Module'},
 	type: {type: Types.Select, options: 'project, exam, td'}
 });
 

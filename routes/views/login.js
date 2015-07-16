@@ -2,7 +2,6 @@ var express = require('express');
 var session = require('express-session');
 var ldap = require('ldapjs');
 var keystone = require('keystone');
-
 var router = express.Router();
 var User = keystone.list('User');
 
@@ -22,12 +21,35 @@ router.get('/', function (req, res)
 
 router.post('/', function (req, res)
 {
-	console.log("Trying to connecto tototo ldaps");
+	/*
 	var client = ldap.createClient(
 	{
 		url: 'ldaps://ldap.42.fr:636'
+	}, function(err, res) {
+		if (err)
+		{
+			client = ldap.createClient(
+			{
+				url: 'ldap://ldap.42.fr:389'
+			});
+		}
 	});
-	console.log("Connected...maybe");
+	*/
+	try
+	{
+		var client = ldap.createClient(
+		{
+			url: 'ldaps://ldap.42.fr:636'
+		});
+	}
+	catch(err)
+	{
+		console.log('external connection protocol failed, internal')
+		client = ldap.createClient(
+		{
+			url: 'ldap://ldap.42.fr:389'
+		});
+	}
 
 	var opts =
 	{
