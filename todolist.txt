@@ -3,8 +3,8 @@
 	1 pour le panneau admin
 
 Modeles:
-	Activity
-	Module
+	Activity: modif table (cf commentaires)
+	Module : modif table (cf commentaires)
 	Scale
 
 Vues:
