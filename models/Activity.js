@@ -9,17 +9,25 @@ var Types = keystone.Field.Types;
 var Activity = new keystone.List('Activity');
 
 Activity.add({
-	name: {type: Types.Name, required: true, index: true},
-	description: {type: Types.Textarea},
-	subject: {type: String},
-	/* slots devrait etre un objet contenant deux valeurs 'actuel' et 'max' */
-	slots: {type: Types.Number, default: 424242},
-	/* pareil, 'begins' et 'ends' */
-	register_period: {type: Types.Date},
-	/* pareil */
-	period: {type: Types.Date},
-	/* ... */
-	group_size: {type: Types.Date},
+	name: {type: String, required: true, index: true},
+	description: {type: String},
+	subject: {type: Types.Textarea},
+	slots: {
+		max: {type: Number},
+		current: {type: Number}
+	},
+	registration: {
+		begins: {type: Types.Date},
+		ends: {type: Types.Date}
+	},
+	period: {
+		begins: {type: Types.Date},
+		ends: {type: Types.Date}
+	},
+	group_size: {
+		min: {type: Number},
+		max: {type: Number}
+	},
 	req_corrections: {type: Types.Number},
 	auto_group: {type: Types.Boolean},
 	module: {type: Types.Relationship, ref: 'Module'},

@@ -3,8 +3,6 @@
 	1 pour le panneau admin
 
 Modeles:
-	Activity: modif table (cf commentaires)
-	Module : modif table (cf commentaires)
 	Scale
 
 Vues:
@@ -13,6 +11,11 @@ Vues:
 Controleur:
 	ajouter les fonctions d'edition.
 
+Controleur /prepare
 Preparer un set de donnees pour la correction
+	- des Users
+	- des Modules/Activites/Baremes
+	- des membres du Staff (a plusieurs niveaux d'acces)
+	- ...
 
 LESS-CSS-ifier tout le site (DONT PANIC)
