@@ -19,14 +19,9 @@ router.get('/view/:name', function (req, res) {
 				}
 				else
 				{
-					var print = '';
-					print += '<div>';
-					print += '<p>'+result.name+'</p>';
-					print += '<p>'+result.description+'</p>';
-					print += '<p>'+result.slots.max+'</p>';
-					print += '<p>'+result.slots.current+'</p>';
-					print += '</div>';
-					res.status(200).send(print);
+					res.locals.result = result;
+					var view = new keystone.View(req, res);
+					view.render('view_activity');
 				}
 			});
 });
