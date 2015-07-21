@@ -10,14 +10,14 @@ router.get('/', function (req, res) {
 	view.render('index');
 });
 
-router.get('/module/:id', function (req, res) {
+router.get('/module/:name', function (req, res) {
 
 	var view = new keystone.View(req, res);
 
 	//view.render('index');
 });
 
-router.get('/activity/:id', function (req, res) {
+router.get('/activity/:name', function (req, res) {
 
 	var view = new keystone.View(req, res);
 
