@@ -8,7 +8,7 @@ router.get('/', function (req, res) {
 	//var test = "<a href='http://www.google.com'>Hello My Friend</a>";
 	//res.status(200).send(test);
 	var sess = req.session;
-	if (sess.logged == 'true')
+	if (sess.logged == true)
 	{
 		//var view = new keystone.View(req, res);
 		//var locals = res.locals;

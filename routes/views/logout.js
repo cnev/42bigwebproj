@@ -11,7 +11,7 @@ router.get('/', function (req, res) {
 	});*/
 	var sess = req.session;
 	sess.user = '';
-	sess.logged = 'false';
+	sess.logged = false;
 	//req.session.cookie.expires = new Date(Date.now() + 0);
 	//req.session.cookie.maxAge = 0;
 	//req.session.destroy(function () {

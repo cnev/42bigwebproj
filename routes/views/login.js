@@ -91,7 +91,7 @@ router.post('/', function (req, res)
 									sess.user = usrsaved.uid;
 									sess.pw = usrsaved.password;
 									sess.dn = entry.object.dn;
-									sess.logged = 'true';
+									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
 											(usrsaved.isStaff.bocalStudent ? 'bocal' : 'student');
 									res.redirect("/");
@@ -104,7 +104,7 @@ router.post('/', function (req, res)
 							sess.user = req.body.username;
 							sess.pw = req.body.password;
 							sess.dn = entry.object.dn;
-							sess.logged = 'true';
+							sess.logged = true;
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							console.log(entry.object);
