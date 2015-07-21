@@ -2,7 +2,7 @@ var express = require('express');
 var session = require('express-session');
 
 var router = express.Router();
-var Module = require('Module');
+var Module = require('keystone').list('Module');
 
 router.get('/', function (req, res) {
 	var form = '';
