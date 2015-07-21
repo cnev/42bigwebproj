@@ -3,12 +3,17 @@
 	1 pour le panneau admin
 
 Modeles:
-	Scale
+	Champs [model_name]_id en auto_increment
 
 Vues:
-	mettre en place les differentes vu du panel admin (edit user, edit ticket, ...)
+	Layout
+	Profil eleve
+	Activites
+	Modules
+	Corrections [pas encore implementees]
+	...
 
-Controleur:
+Controleurs:
 	ajouter les fonctions d'edition.
 
 Controleur /prepare

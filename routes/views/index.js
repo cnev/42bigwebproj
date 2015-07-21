@@ -10,27 +10,33 @@ router.get('/', function (req, res) {
 	var sess = req.session;
 	if (sess.logged == 'true')
 	{
-		var view = new keystone.View(req, res);
-		var locals = res.locals;
+		//var view = new keystone.View(req, res);
+		//var locals = res.locals;
 
 		// locals.section is used to set the currently selected
 		// item in the header navigation.
-		locals.section = 'home';
+		//locals.section = 'home';
 
 		// Render the view
-		view.render('index');
+		//view.render('index');
+		if (sess.userClass.isStaff.bocalStaff || sess.userClass.isStaff.bocalStudent)
+			res.redirect('/admin');
+		else
+			res.redirect('/profile');
+		//res.redirect('/profile');
 	}
 	else
 	{
-		var view = new keystone.View(req, res);
-		var locals = res.locals;
+		res.redirect('/login');
+		//var view = new keystone.View(req, res);
+		//var locals = res.locals;
 
 		// locals.section is used to set the currently selected
 		// item in the header navigation.
-		locals.section = 'home';
+		//locals.section = 'home';
 
 		// Render the view
-		view.render('login');
+		//view.render('login');
 	}
 	//res.status(200).send(test2);
 

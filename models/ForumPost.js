@@ -9,7 +9,7 @@ var Types = keystone.Field.Types;
 var ForumPost = new keystone.List('ForumPost');
 
 ForumPost.add({
-	id: {type: Number, index: true},
+	post_id: {type: Number},
 	author: {type: String},
 	date: {type: Types.Date},
 	message: {type: Types.Textarea}	

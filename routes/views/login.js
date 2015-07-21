@@ -15,26 +15,14 @@ function checkbocalstudent(usrName) {
 
 router.get('/', function (req, res)
 {
-	var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
-	res.status(200).send(test);
+	//var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
+	//res.status(200).send(test);
+	var view = new keystone.View(req, res);
+	view.render('login');
 });
 
 router.post('/', function (req, res)
 {
-	/*
-	var client = ldap.createClient(
-	{
-		url: 'ldaps://ldap.42.fr:636'
-	}, function(err, res) {
-		if (err)
-		{
-			client = ldap.createClient(
-			{
-				url: 'ldap://ldap.42.fr:389'
-			});
-		}
-	});
-	*/
 	try
 	{
 		var client = ldap.createClient(
@@ -44,7 +32,7 @@ router.post('/', function (req, res)
 	}
 	catch(err)
 	{
-		console.log('external connection protocol failed, internal')
+		console.log('la connexion via ldaps a echoue, tentative de connexion via ldap')
 		client = ldap.createClient(
 		{
 			url: 'ldap://ldap.42.fr:389'
@@ -60,7 +48,6 @@ router.post('/', function (req, res)
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result)
 	{
 	//assert.ifError(err);
-		console.log("Searching ... maybe ?");
 		result.on('searchEntry', function(entry)
 		{
 			//console.log('entry: ' + JSON.stringify(entry.object));
@@ -72,7 +59,7 @@ router.post('/', function (req, res)
 			{
 				if (err)
 				{
-						// error case;	assert.ifError(err);
+					// error case;	assert.ifError(err);
 					console.log("Failed login ... maybe ?");
 					res.status(200).send("<p>Hello World of FAILED LOGINS</p>");
 				}
@@ -118,7 +105,7 @@ router.post('/', function (req, res)
 							sess.pw = req.body.password;
 							sess.dn = entry.object.dn;
 							sess.logged = 'true';
-							sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
+			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							console.log(entry.object);
 							res.redirect("/");
