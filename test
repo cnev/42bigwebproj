@@ -3,3 +3,6 @@
 db.users.update({'uid':'cnev'}, {"uid" : "cnev","password" : "$2a$10$.vZHYufnBN5fBLA0dbU21O75lYixHA1QlQcBxYe/YbXH6mB6kHTu6","email" : "nev.chandara@student.42.fr","uidNumber" : 5491,"gidNumber" : 4207,"isStaff" : {"bocalStudent" : false,"bocalStaff" : true},"name" : {"first" : "Chandara","last" : "NEV"},"_id" : ObjectId("55a66cdd607873ea100f8892"),"__v" : 0}, {'upsert':true})
 
 {name: "My_First_Activity", description: "The first activity you're going to work on!", subject: "this subject is goint to be very long ... was it?", slots: { max: 1, current: 0 }, registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) }, period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 }, req_corrections: 6, auto_group: false, type: 'project'}
+
+
+{name: 'ModuleTest', description: "This modul will be used in order to test or beutifull intranet.", slots: 424242, register_period: Date.now, period: Date.now, credits: 42}
