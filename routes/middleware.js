@@ -76,6 +76,9 @@ exports.testmiddle = function (req, res, next)
 {
 	if (req.session)
 	{
+
+		res.locals.sess = req.session;
+/*
 		console.log("REQ SESSION OK");
 		if (req.session.userClass == 'student')
 		{
@@ -93,6 +96,7 @@ exports.testmiddle = function (req, res, next)
 		{
 			res.locals.userCLass = 'bocal';
 		}
+*/
 	}
 	next();
 }

@@ -1,4 +1,5 @@
 {{!< default}}
+<!--
 <div class="container">
 	<div class="jumbotron"><img src="/images/logo.svg" width="160">
 		<h1>Welcome</h1>
@@ -10,8 +11,8 @@
 		</p>
 		<p>Visit the <a href='http://keystonejs.com/guide' target='_blank'>Getting Started</a> guide to learn how to customise it.</p>
 		<hr>
-		<p>We have created a default Admin user for you with the email <strong>user@keystonejs.com</strong> and the password <strong>admin</strong>.</p>
-		<p><a href="/keystone/signin" style="margin-right: 10px" class="btn btn-lg btn-primary">Sign in</a> to use the Admin UI.</p>
+			<p>We have created a default Admin user for you with the email <strong>user@keystonejs.com</strong> and the password <strong>admin</strong>.</p>
+			<p><a href="/keystone/signin" style="margin-right: 10px" class="btn btn-lg btn-primary">Sign in</a> to use the Admin UI.</p>
 		<hr>
 		<p>
 			Remember to <a href='https://github.com/keystonejs/keystone' target='_blank'>Star KeystoneJS on GitHub</a> and
@@ -19,3 +20,13 @@
 		</p>
 	</div>
 </div>
+-->
+
+		<div><p>Hello {{sess.user}} !</p></div>
+		<div>
+			<form action='/search' method='POST'>
+				<label for='username'>Username:</label>
+				<input type='text' id='username' name='username'><input type='submit' value='Login'>
+			</form>
+		</div>
+		<div><a href='logout'>LOG OUT</a></div>
