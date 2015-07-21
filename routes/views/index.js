@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
 
 		// Render the view
 		//view.render('index');
-		if (sess.userClass.isStaff.bocalStaff || sess.userClass.isStaff.bocalStudent)
+		if (sess.userClass == 'staff' || sess.userClass == 'bocal')
 			res.redirect('/admin');
 		else
 			res.redirect('/profile');
