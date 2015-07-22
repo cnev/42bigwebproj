@@ -6,14 +6,30 @@ var Module = keystone.list('Module');
 
 router.get('/', function (req, res) {
 	var view = new keystone.View(req, res);
-
-	//view_render('module_overview');
+	var locals = res.locals;
+	locals.data = {
+		modules: [];
+	};
+	var q = Module.model.find()
+		.sort('name')
+		.exec(function (err, q_res)) {
+			if (err)
+				res.status(500).send('internal error');
+			else if (!result)
+				res.status(404).send('NOPE');
+			else
+			{
+				for (var i = 0; i < q_res.length; i++)
+					locals.data.modules.push(q_res[i]);
+				//view_render('module_overview');
+			}
+		}
 });
 
 router.get('/view/:name', function (req, res) {
 
 	var q = Module.model.findOne({'name': req.params.name})
-			.exec(function(err, result) {
+			.exec(function (err, result) {
 				if (err)
 				{
 					res.status(500).send('internal error');
