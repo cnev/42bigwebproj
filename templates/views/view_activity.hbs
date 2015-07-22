@@ -2,9 +2,11 @@
 
 <div class="container">
 	<ul class="list-group">
-		<li class="list-group-item">{{result.name}}</li>
-		<li class="list-group-item">{{result.descrilition}}</li>
-		<li class="list-group-item">{{result.slots.max}}</li>
-		<li class="list-group-item">{{result.slots.current}}</li>
+		<li class="list-group-item">{{result.activity.name}}</li>
+		<li class="list-group-item">{{result.activity.description}}</li>
+		<li class="list-group-item"><a href="/files/subjects/{{result.activity.subject}}">Link to subject</a></li>
+		<li class="list-group-item">{{result.activity.slots.max}}</li>
+		<li class="list-group-item">{{result.activity.slots.current}}</li>
+		<li class="list-group-item">{{result.module.name}}</li>
 	</ul>
 </div>

@@ -18,6 +18,7 @@ router.get('/', function (req, res)
 	//var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
 	//res.status(200).send(test);
 	var view = new keystone.View(req, res);
+	req.session.atLogin = true;
 	view.render('login');
 });
 
@@ -94,6 +95,7 @@ router.post('/', function (req, res)
 									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
 											(usrsaved.isStaff.bocalStudent ? 'bocal' : 'student');
+									sess.atLogin = false;
 									res.redirect("/");
 								}
 							});
@@ -108,6 +110,7 @@ router.post('/', function (req, res)
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							console.log(entry.object);
+							sess.atLogin = false;
 							res.redirect("/");
 						}
 					});

@@ -9,7 +9,7 @@ var Types = keystone.Field.Types;
 var Module = new keystone.List('Module');
 
 Module.add({
-	name: {type: Types.Name, index: true},
+	name: {type: String, index: true},
 	description: {type: Types.Textarea},
 	/* slots devrait etre un objet contenant deux valeurs 'actuel' et 'max' */
 	slots: {type: Types.Number, default: 424242},
@@ -32,3 +32,23 @@ Module.add({
  */
 
 Module.register();
+
+var testModule = new Module.model({
+	name: 'jefaisuntest',
+	descripton: "ceci est un test",
+	register_period: new Date(),
+	period: new Date(),
+	credits: 42
+});
+
+testModule.save(function (err, modulesaved) {
+	if (err) {
+		console.error(err);
+	}
+	else if (!modulesaved) {
+		console.log('piti problem');
+	}
+	else {
+		console.log(modulesaved);
+	}
+});

@@ -19,6 +19,7 @@ router.get('/', function (req, res) {
 
 		// Render the view
 		//view.render('index');
+		sess.atLogin = false;
 		if (sess.userClass == 'staff' || sess.userClass == 'bocal')
 			res.redirect('/admin');
 		else
@@ -27,6 +28,7 @@ router.get('/', function (req, res) {
 	}
 	else
 	{
+		sess.atLogin = true;
 		res.redirect('/login');
 		//var view = new keystone.View(req, res);
 		//var locals = res.locals;
