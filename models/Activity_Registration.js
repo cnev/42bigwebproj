@@ -1,11 +1,11 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
-var Activity_Registration = new keystone.List('Activity_Registration');
+var ActivityRegistration = new keystone.List('ActivityRegistration');
 
-Activity_Registration.add({
+ActivityRegistration.add({
 	user: {type: Types.Relationship, ref: 'User'},
 	activity: {type: Types.Relationship, ref: 'Activity'}
 });
 
-Activity_Registration.register();
+ActivityRegistration.register();

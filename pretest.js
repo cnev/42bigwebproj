@@ -30,3 +30,17 @@ function editUsr (req, res) {
 		}
 	});
 }
+
+function findUser (req, res, uid) {
+	var q = User.model.findOne({'uid': uid})
+		.exec(function (err, q_res) {
+			return(q_res.ObjectId);
+		});
+}
+
+function findModule (req, res, name) {
+	var q = Module.model.findOne({'name': name})
+		.exec(function (err, q_res) {
+			return(q_res.ObjectId);
+		});
+}

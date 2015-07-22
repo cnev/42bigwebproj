@@ -73,25 +73,14 @@ exports.requireUser = function(req, res, next) {
 
 };
 
-// cette fonction reinitialise la variable 'atLogin' a false;
-// cette variable indique au site s'il se trouve sur la page de login
-// elle est redefinie a true quand le site se dirige vers /login
-exports.setAtLogin = function(req, res, next) {
-
-	//console.log('SETTING ATLOGIN TO FALSE');
-	req.session.atLogin = false;
-	next();
-};
-
 exports.checkAuth = function(req, res, next) {
 
-	console.log(req.session.atLogin);
-	console.log(req.session.logged);
-	if (!req.session || (req.session.atLogin == false
-		&& (!req.session.logged || req.session.logged == false)))
+	console.log('atLogin: '+req.session.atLogin);
+	console.log('logged: '+req.session.logged);
+	if (!req.session || (req.session.logged == false))
 	{
-		//console.log(req.session.atLogin);
-		//console.log(req.session.logged);
+		console.log('redirecting...');
+		req.session.atLogin = true;
 		res.redirect('/login');
 	}
 	else

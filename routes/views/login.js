@@ -17,8 +17,8 @@ router.get('/', function (req, res)
 {
 	//var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
 	//res.status(200).send(test);
+	console.log('route: '+req.route.path);
 	var view = new keystone.View(req, res);
-	req.session.atLogin = true;
 	view.render('login');
 });
 

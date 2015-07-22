@@ -1,11 +1,11 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
-var Module_Registration = new keystone.List('Module_Registration');
+var ModuleRegistration = new keystone.List('ModuleRegistration');
 
-Module_Registration.add({
+ModuleRegistration.add({
 	user: {type: Types.Relationship, ref: 'User'},
 	module: {type: Types.Relationship, ref: 'Module'}
 });
 
-Module_Registration.register();
+ModuleRegistration.register();

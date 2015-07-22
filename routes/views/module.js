@@ -3,7 +3,24 @@ var session = require('express-session');
 var keystone = require('keystone');
 var router = express.Router();
 var Module = keystone.list('Module');
-var Module_Registration = keystone.list('Module_Registration');
+var User = keystone.list('User');
+var ModuleRegistration = keystone.list('ModuleRegistration');
+/*
+function findUser (req, res, uid) {
+	var q = User.model.findOne({'uid': uid})
+		.exec(function (err, q_res) {
+			console.log(q_res.ObjectId);
+			return(q_res.ObjectId);
+		});
+}
+
+function findModule (req, res, name) {
+	var q = Module.model.findOne({'name': name})
+		.exec(function (err, q_res) {
+			console.log(q_res.ObjectId);
+			return(q_res.ObjectId);
+		});
+}*/
 
 router.get('/', function (req, res) {
 	var view = new keystone.View(req, res);
@@ -12,16 +29,16 @@ router.get('/', function (req, res) {
 		modules: []
 	};
 	var q = Module.model.find()
-		.sort('name')
-		.exec(function (err, q_res) {
-			if (err)
-				res.status(500).send('internal error');
-			else if (!result)
-				res.status(404).send('NOPE');
-			else
-			{
-				for (var i = 0; i < q_res.length; i++)
-					locals.data.modules.push(q_res[i]);
+	.sort('name')
+	.exec(function (err, q_res) {
+		if (err)
+			res.status(500).send('internal error');
+		else if (!result)
+			res.status(404).send('NOPE');
+		else
+		{
+			for (var i = 0; i < q_res.length; i++)
+				locals.data.modules.push(q_res[i]);
 				//view_render('module_overview');
 			}
 		});
@@ -30,78 +47,119 @@ router.get('/', function (req, res) {
 router.get('/view/:name', function (req, res) {
 
 	var q = Module.model.findOne({'name': req.params.name})
-			.exec(function (err, result) {
-				if (err)
-				{
-					res.status(500).send('internal error');
-				}
-				else if (!result)
-				{
-					res.status(404).send('NOPE');
-				}
-				else
-				{
-					var print = '';
-					print += '<div>';
-					print += '<p>'+result.name+'</p>';
-					print += '<p>'+result.description+'</p>';
-					print += '<p>'+result.slots.max+'</p>';
-					print += '<p>'+result.slots.current+'</p>';
-					print += '</div>';
-					res.status(200).send(print);
-				}
-			});
+	.exec(function (err, result) {
+		if (err)
+		{
+			res.status(500).send('internal error');
+		}
+		else if (!result)
+		{
+			res.status(404).send('NOPE');
+		}
+		else
+		{
+			var print = '';
+			print += '<div>';
+			print += '<p>'+result.name+'</p>';
+			print += '<p>'+result.description+'</p>';
+			print += '<p>'+result.slots.max+'</p>';
+			print += '<p>'+result.slots.current+'</p>';
+			print += '</div>';
+			res.status(200).send(print);
+		}
+	});
 });
 
 router.get('/register/:name', function (req, res) {
+	console.log('route: '+req.route.path);
 	var view = new keystone.View(req, res);
 	console.log(req.params.name);
 	var q = Module.model.findOne({'name': req.params.name})
-			.exec(function (err, result) {
-				if (err)
-				{
-					res.status(500).send('internal error');
-				}
-				else if (!result)
-				{
-					res.status(404).send('NOPE');
-				}
-				else
-				{
-					var q2 = Module_Registration.model.findOne({'user.name': req.session.user})
-						.where('module.name', req.params.name)
-						.exec(function (err, q2_res) {
-							if (err)
-								res.status(500).send(err);
-							else if (!q2_res)
-							{
-								test = "<form action='/module/register/" + req.params.name + "' method='POST'>";
-								test += "<ul>";
-								test += "<li><input type='submit' name='answer' value='yes'></li>";
-								test += "<li><input type='submit' name='answer' value='no'></li>";
-								test += "</ul>";
-								res.status(200).send(test);
-								//view.render('confirm_registration');
-							}
-							else
-							{
-								res.status(500).send('already registered');
-								//view.render('already_registered');
-							}
-						})
-				}
+	.exec(function (err, q_res) {
+		if (err)
+		{
+			res.status(500).send('internal error');
+		}
+		else if (!q_res)
+		{
+			res.status(404).send('NOPE');
+		}
+		else
+		{
+			var search_user, search_model;
+			var user_q = User.model.findOne({'uid': req.session.user})
+			.exec(function (err, user_q_res) {
+				search_user = user_q_res._id;
+				var model_q = Module.model.findOne({'name': req.params.name})
+				.exec(function (err, model_q_res) {
+					search_model = model_q_res._id;
+					var q2 = ModuleRegistration.model.findOne({'user': search_user})
+					.where('module', search_model)
+					.exec(function (err, q2_res) {
+						if (err)
+							res.status(500).send(err);
+						else if (!q2_res)
+						{
+							test = "<form action='/module/register/" + req.params.name + "' method='POST'>";
+							test += "<ul>";
+							test += "<li><input type='submit' name='answer' value='yes'></li>";
+							test += "<li><input type='submit' name='answer' value='no'></li>";
+							test += "</ul>";
+							res.status(200).send(test);
+							//view.render('confirm_registration');
+						}
+						else
+						{
+							res.status(500).send('already registered');
+							//view.render('already_registered');
+						}
+					});
+				});
 			});
+		}
+	});
 });
 
 router.post('/register/:name', function (req, res) {
-	console.log(req.body);
+	var view = new keystone.View(req, res);
 	if (!req.body || !req.body.answer)
 		res.status(500).send('httpshitstorm');
 	else if (req.body.answer == 'yes')
-		res.status(200).send('YES');
+	{
+		console.log("answer is yes");
+		var search_user, search_model;
+			var user_q = User.model.findOne({'uid': req.session.user})
+			.exec(function (err, user_q_res) {
+				search_user = user_q_res._id;
+				var model_q = Module.model.findOne({'name': req.params.name})
+				.exec(function (err, model_q_res) {
+					search_model = model_q_res._id;
+					var q2 = ModuleRegistration.model.findOne({'user': search_user})
+					.where('module', search_model)
+					.exec(function (err, q2_res) {
+						if (err)
+							res.status(500).send(err);
+						else if (!q2_res)
+						{
+							var add_q = new ModuleRegistration.model({
+								user: search_user,
+								module: search_model
+							});
+							add_q.save();
+							res.status(200).send("OK!");
+							//view.render('confirm_registration');
+						}
+						else
+						{
+							res.status(500).send('already registered');
+							//view.render('already_registered');
+						}
+					});
+				});
+			});
+	}
 	else
-		res.status(200).send('NO');
-
+		res.redirect('/module');
 });
 
 module.exports = router;
