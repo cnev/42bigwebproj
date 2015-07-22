@@ -10,7 +10,6 @@
 
 var _ = require('underscore');
 
-
 /**
 	Initialises the standard view locals
 
