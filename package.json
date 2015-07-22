@@ -14,7 +14,8 @@
     "dotenv": "^1.1.0",
     "express-session": "latest",
     "ldapjs": "latest",
-    "mongoose": "latest"
+    "mongoose": "latest",
+    "assert": "latest"
   },
   "devDependencies": {
     "grunt": "^0.4.4",
