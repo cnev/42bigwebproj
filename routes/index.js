@@ -53,6 +53,7 @@ exports = module.exports = function(app) {
 	app.use('/prepare', require('./views/prepare'));
 	app.use('/test', require('./views/testRoute'));
 	app.use('/activity', require('./views/activity'));
+	app.use('/module', require('./views/module'));
 	app.use('/profile', require('./views/profile'));
 	app.use('/admin', require('./views/admin'));
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
