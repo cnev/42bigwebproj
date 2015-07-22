@@ -9,6 +9,8 @@
  */
 
 var _ = require('underscore');
+var express = require('express');
+var session = require('express-session');
 
 
 /**
@@ -71,6 +73,31 @@ exports.requireUser = function(req, res, next) {
 	}
 
 };
+
+// cette fonction reinitialise la variable 'atLogin' a false;
+// cette variable indique au site s'il se trouve sur la page de login
+// elle est redefinie a true quand le site se dirige vers /login
+exports.setAtLogin = function(req, res, next) {
+
+	//console.log('SETTING ATLOGIN TO FALSE');
+	req.session.atLogin = false;
+	next();
+};
+
+exports.checkAuth = function(req, res, next) {
+
+	console.log(req.session.atLogin);
+	console.log(req.session.logged);
+	if (!req.session || (req.session.atLogin == false
+		&& (!req.session.logged || req.session.logged == false)))
+	{
+		//console.log(req.session.atLogin);
+		//console.log(req.session.logged);
+		res.redirect('/login');
+	}
+	else
+		next();
+}
 
 exports.testmiddle = function (req, res, next)
 {
