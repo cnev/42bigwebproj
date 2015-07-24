@@ -30,6 +30,7 @@ router.post('/', function (req, res)
 		{
 			url: 'ldaps://ldap.42.fr:636'
 		});
+		console.log('la connexion via ldaps a lair de faire des trucs');
 	}
 	catch(err)
 	{
@@ -52,10 +53,11 @@ router.post('/', function (req, res)
 		result.on('searchEntry', function(entry)
 		{
 			//console.log('entry: ' + JSON.stringify(entry.object));
-			console.log(entry);
-			console.log('/* *************** */');
-			console.log(entry.object);
+			//console.log(entry);
+			//console.log('/* *************** */');
+			//console.log(entry.object);
 			//console.log('test: ' + entry.object.dn);
+			console.log('HOLA SENIOR');
 			client.bind(entry.object.dn, req.body.password, function(err)
 			{
 				if (err)

@@ -28,7 +28,7 @@ router.get('/', function (req, res) {
 				//credits_owned: functionLambda(q_res, req, res)
 				//credits_max:
 			};
-			//view.render('index');
+			view.render('index');
 		}
 	});
 });
