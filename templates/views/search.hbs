@@ -1,9 +1,9 @@
-{{#if this.uid}}
+{{#if seeking.uid}}
 	<table>
-		<tr><td>Uid</td><td>{{this.uid}}</td></tr>
-		<tr><td>Name</td><td>{{this.sn}}</td></tr>
-		<tr><td>Firstname</td><td>{{this.givenName}}</td></tr>
-		<tr><td>pic</td><td><img src={{this.jpegPhoto}} /></td></tr>
+		<tr><td>Uid</td><td>{{seeking.uid}}</td></tr>
+		<tr><td>Name</td><td>{{seeking.sn}}</td></tr>
+		<tr><td>Firstname</td><td>{{seeking.givenName}}</td></tr>
+		<tr><td>pic</td><td><img>{{!-- seeking.jpegPhoto --}}</img></td></tr>
 	</table>
 {{else}}
 	<h1>{{this}}</h1>
