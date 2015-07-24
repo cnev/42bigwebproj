@@ -4,6 +4,7 @@ var ldap = require('ldapjs');
 var _ = require('underscore');
 var assert = require('assert');
 var fs = require('fs');
+var keystone = require('keystone');
 
 var router = express.Router();
 
@@ -34,6 +35,7 @@ router.post('/', function (req, res) {
 	/*var client = ldap.createClient({
 		url: 'ldap://ldap.42.fr:389'
 	});*/
+	var view = new keystone.View(req, res);
 	console.log(client);
 	console.log('(|((uid=*'+req.body.search+'*)(cn=*'+req.body.search+'*)))');
 	var opts = {
@@ -65,7 +67,8 @@ router.post('/', function (req, res) {
 						console.log('entry.object.uid - ' + entry.object.uid);
 						console.log('entry.object.givenName - ' + entry.object.givenName);
 						console.log('entry.object.sn - ' + entry.object.sn);
-						res.status(200).send(entry.object);
+						view.render('search');
+						//res.status(200).send(entry.object);
 					}
 				});
 			});

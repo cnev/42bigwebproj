@@ -24,4 +24,6 @@ router.get('/activity/:name', function (req, res) {
 	//view.render('index');
 });
 
+
+
 module.exports = router;
