@@ -20,12 +20,43 @@
 		</p>
 	</div>
 </div>
--->
 
-		<div><p>Hello {{sess.user}} !</p></div>
-		<div>
 			<form action='/search' method='POST'>
 				<label for='username'>Username:</label>
 				<input type='text' id='username' name='username'><input type='submit' value='Login'>
 			</form>
+-->
+
+
+<!--
+- nom / prénom
+- photo
+- nombre de crédits acquis / possibles
+- liste des modules / activités en cours, ceux qui sont passés et ceux qui vont débuter
+- liste des personnes liées aux activités et corrections
+
+
+
+var normales:
+	sess.name (le nom)
+	sess.fname (le prenom)
+	sess.login (le login)
+	sess.picture (source de la photo)
+
+var tableau:
+	sess.cred_a (credit aquis)
+	sess.cred_p (credit possible)
+	sess.mod (liste des modules)
+	sess.act_ec (liste des activites en court)
+	sess.act_past (liste des activites passes)
+	sess.act_go (liste des activites qui vont debuter)
+	sess.people_to_correct (liste des personnes qui soivent me corriger)
+	sess.people_correct_me (liste des personnes que je dois corriger)
+-->
+
+		<div class="container-fluid">
+			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{!-- sess.name --}} {{!-- sess.fname --}}, {{sess.user}}</p>
+			<p>your password: {{sess.pw}} </br> et oui Chanda, ta fais du caca XD</p>
 		</div>
+
+
