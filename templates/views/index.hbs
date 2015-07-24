@@ -38,19 +38,19 @@
 
 
 var normales:
-	sess.name (le nom)
-	sess.fname (le prenom)
-	sess.login (le login)
-	sess.picture (source de la photo)
+	data.lastname (le nom)
+	data.firstname (le prenom)
+	sess.user (le login)
+	sess.picture (source de la photo) <= {CNEV} : PAS ENCORE DISPO
 
 var tableau:
-	sess.cred_a (credit aquis)
-	sess.cred_p (credit possible)
-	sess.mod (liste des modules)
-	sess.act_ec (liste des activites en court)
-	sess.act_past (liste des activites passes)
+	sess.cred_a (credit acquis) <= {CNEV} : valeur actuelle arbitraire
+	sess.cred_p (credit possible) <= {CNEV} : valeur actuelle arbitraire
+	sess.mod (liste des modules) <= {CNEV} : CECI EST UN TABLEAU
+	sess.act_ec (liste des activites en cours)
+	sess.act_past (liste des activites passees)
 	sess.act_go (liste des activites qui vont debuter)
-	sess.people_to_correct (liste des personnes qui soivent me corriger)
+	sess.people_to_correct (liste des personnes qui doivent me corriger)
 	sess.people_correct_me (liste des personnes que je dois corriger)
 -->
 

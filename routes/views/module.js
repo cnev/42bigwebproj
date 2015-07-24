@@ -143,7 +143,8 @@ router.post('/register/:name', function (req, res) {
 						{
 							var add_q = new ModuleRegistration.model({
 								user: search_user,
-								module: search_model
+								module: search_model,
+								status: 'pending'
 							});
 							add_q.save();
 							res.status(200).send("OK!");

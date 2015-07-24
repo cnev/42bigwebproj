@@ -3,9 +3,23 @@ var session = require('express-session');
 var keystone = require('keystone');
 var router = express.Router();
 var User = keystone.list('User');
+var Module = keystone.list('Module');
 
-function functionLambda(q_res, req, res) {
+function fetchModules(user, req, res) {
 
+	var q = Module.model.find()
+		.exec(function (err, q_res){
+			if (err)
+				res.status(500).send(err);
+			else if (!res)
+				res.status(404).send('not found');
+			else {
+				var tab = [];
+				for (var i = 0; i < q_res.length; i++)
+					tab.push(q_res[i]);
+				return (tab);
+			}
+		});
 }
 
 router.get('/', function (req, res) {
@@ -23,8 +37,16 @@ router.get('/', function (req, res) {
 		else {
 			locals.data = {
 				firstname: q_res.name.first,
-				lastname: q_res.name.last
-				//pic: '',
+				lastname: q_res.name.last,
+				cred_a: 20//function
+				cred_p: 50//function
+				mod: fetchModules(q_res, req, res),
+				//act_ec
+				//act_past
+				//act_go
+				//to_correct
+				//corrected_by
+				//picture: '',
 				//credits_owned: functionLambda(q_res, req, res)
 				//credits_max:
 			};
