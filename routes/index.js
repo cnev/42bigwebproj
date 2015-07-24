@@ -43,18 +43,18 @@ exports = module.exports = function(app) {
 	app.get('/blog/post/:post', routes.views.post);
 	app.get('/gallery', routes.views.gallery);
 	app.all('/contact', routes.views.contact);*/
-	app.use('/', require('./views/index'));
-	app.use('/pititest', require('./views/pititest'));
 	app.use('/login', require('./views/login'));
 	app.use('/logout', require('./views/logout'));
-	app.use('/search', require('./views/search'));
-	app.use('/ticket_test', require('./views/ticket_test'));
-	app.use('/prepare', require('./views/prepare'));
-	app.use('/test', require('./views/testRoute'));
-	app.use('/activity', require('./views/activity'));
-	app.use('/module', require('./views/module'));
-	app.use('/profile', require('./views/profile'));
-	app.use('/admin', require('./views/admin'));
+	app.use('/', middleware.checkAuth, require('./views/index'));
+	app.use('/pititest', middleware.checkAuth, require('./views/pititest'));
+	app.use('/search', middleware.checkAuth, middleware.checkAuth, require('./views/search'));
+	app.use('/ticket_test', middleware.checkAuth, require('./views/ticket_test'));
+	app.use('/prepare', middleware.checkAuth, require('./views/prepare'));
+	app.use('/test', middleware.checkAuth, require('./views/testRoute'));
+	app.use('/activity', middleware.checkAuth, require('./views/activity'));
+	app.use('/module', middleware.checkAuth, require('./views/module'));
+	app.use('/profile', middleware.checkAuth, require('./views/profile'));
+	app.use('/admin', middleware.checkAuth, require('./views/admin'));
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 

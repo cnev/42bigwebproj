@@ -2,7 +2,9 @@ var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
 var Activity = keystone.list('Activity');
+var ActivityRegistration = keystone.list('ActivityRegistration');
 var Module = keystone.list('Module');
+var User = keystone.list('User');
 
 var router = express.Router();
 
@@ -17,13 +19,18 @@ router.get('/', function (req, res) {
 		.exec(function (err, q_res) {
 			if (err)
 				res.status(500).send('internal error');
-			else if (!result)
+			else if (!q_res)
 				res.status(404).send('NOPE');
 			else
 			{
 				for (var i = 0; i < q_res.length; i++)
 					locals.data.activities.push(q_res[i]);
 				//view_render('activity_overview');
+				//temporary display
+				var to_send = '';
+				for (var i = 0; i < locals.data.activities.length; i++)
+					to_send += '<p>'+locals.data.activities[i].name+'</p>';
+				res.status(200).send(to_send);
 			}
 		});
 });
@@ -47,7 +54,7 @@ router.get('/view/:name', function (req, res) {
 						.exec(function (err, q2_res)
 					{
 						if (err)
-							es.status(500).send('internal error');
+							res.status(500).send('internal error');
 						else if (!q2_res)
 							res.status(404).send('NOPE');
 						else
@@ -65,6 +72,98 @@ router.get('/view/:name', function (req, res) {
 					});
 				}
 			});
+});
+
+router.get('/register/:name', function (req, res) {
+	console.log('route: '+req.route.path);
+	var view = new keystone.View(req, res);
+	console.log(req.params.name);
+	var q = Activity.model.findOne({'name': req.params.name})
+	.exec(function (err, q_res) {
+		if (err)
+		{
+			res.status(500).send('internal error');
+		}
+		else if (!q_res)
+		{
+			res.status(404).send('NOPE');
+		}
+		else
+		{
+			var search_user, search_model;
+			var user_q = User.model.findOne({'uid': req.session.user})
+			.exec(function (err, user_q_res) {
+				search_user = user_q_res._id;
+				var model_q = Activity.model.findOne({'name': req.params.name})
+				.exec(function (err, model_q_res) {
+					search_model = model_q_res._id;
+					var q2 = ActivityRegistration.model.findOne({'user': search_user})
+					.where('activity', search_model)
+					.exec(function (err, q2_res) {
+						if (err)
+							res.status(500).send(err);
+						else if (!q2_res)
+						{
+							test = "<form action='/activity/register/" + req.params.name + "' method='POST'>";
+							test += "<ul>";
+							test += "<li><input type='submit' name='answer' value='yes'></li>";
+							test += "<li><input type='submit' name='answer' value='no'></li>";
+							test += "</ul>";
+							res.status(200).send(test);
+							//view.render('confirm_registration');
+						}
+						else
+						{
+							res.status(500).send('already registered');
+							//view.render('already_registered');
+						}
+					});
+				});
+			});
+		}
+	});
+});
+
+router.post('/register/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	if (!req.body || !req.body.answer)
+		res.status(500).send('httpshitstorm');
+	else if (req.body.answer == 'yes')
+	{
+		console.log("answer is yes");
+		var search_user, search_model;
+			var user_q = User.model.findOne({'uid': req.session.user})
+			.exec(function (err, user_q_res) {
+				search_user = user_q_res._id;
+				var model_q = Activity.model.findOne({'name': req.params.name})
+				.exec(function (err, model_q_res) {
+					search_model = model_q_res._id;
+					var q2 = ActivityRegistration.model.findOne({'user': search_user})
+					.where('activity', search_model)
+					.exec(function (err, q2_res) {
+						if (err)
+							res.status(500).send(err);
+						else if (!q2_res)
+						{
+							var add_q = new ActivityRegistration.model({
+								user: search_user,
+								activity: search_model
+							});
+							add_q.save();
+							res.status(200).send("OK!");
+							//view.render('confirm_registration');
+						}
+						else
+						{
+							res.status(500).send('already registered');
+							//view.render('already_registered');
+						}
+					});
+				});
+			});
+	}
+	else
+		res.redirect('/activity');
 });
 
 module.exports = router;
