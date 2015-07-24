@@ -3,6 +3,7 @@ var session = require('express-session');
 var ldap = require('ldapjs');
 var _ = require('underscore');
 var assert = require('assert');
+var fs = require('fs');
 
 var router = express.Router();
 
@@ -34,11 +35,11 @@ router.post('/', function (req, res) {
 		url: 'ldap://ldap.42.fr:389'
 	});*/
 	console.log(client);
-	console.log('(|((uid=*'+req.body.search+'*)(cn=*'+req.body.search+'*)(sn=*'+req.body.search+'*)(given-name=*'+req.body.search+'*)))');
+	console.log('(|((uid=*'+req.body.search+'*)(cn=*'+req.body.search+'*)))');
 	var opts = {
-		filter: '(|((uid=*'+req.body.search+'*)(cn=*'+req.body.search+'*)(sn=*'+req.body.search+'*)(given-name=*'+req.body.search+'*)))',
-		scope: 'sub',
-		attributes: 'uid'
+		filter: '(|(uid=*'+req.body.search+'*)(cn=*'+req.body.search+'*)(sn=*'+req.body.search+'*)(given-name=*'+req.body.search+'*))',
+		scope: 'sub'
+		//attributes: 'uid'
 	};
 	var to_send = '';
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result) {
@@ -59,9 +60,12 @@ router.post('/', function (req, res) {
 						return ;
 					}
 					else {
-						to_send += "<p>"+entry.object.uid+"</p><br />";
+						for (var key in entry.object)
+							to_send += key + "<br />";
 						console.log('entry.object.uid - ' + entry.object.uid);
-			res.status(200).send(to_send);
+						console.log('entry.object.givenName - ' + entry.object.givenName);
+						console.log('entry.object.sn - ' + entry.object.sn);
+						res.status(200).send(entry.object);
 					}
 				});
 			});
@@ -72,8 +76,7 @@ router.post('/', function (req, res) {
 				console.error('error: ' + err.message);
 			});
 			result.on('end', function(result) {
-				console.log(result);
-				console.log('status: ' + result.status);
+				console.log('function finished');
 			});
 		}
 
