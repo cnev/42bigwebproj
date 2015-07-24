@@ -42,10 +42,10 @@ var normales:
 	data.firstname (le prenom)
 	sess.user (le login)
 	sess.picture (source de la photo) <= {CNEV} : PAS ENCORE DISPO
-
-var tableau:
 	sess.cred_a (credit acquis) <= {CNEV} : valeur actuelle arbitraire
 	sess.cred_p (credit possible) <= {CNEV} : valeur actuelle arbitraire
+
+var tableau:
 	sess.mod (liste des modules) <= {CNEV} : CECI EST UN TABLEAU
 	sess.act_ec (liste des activites en cours)
 	sess.act_past (liste des activites passees)
@@ -55,8 +55,12 @@ var tableau:
 -->
 
 		<div class="container-fluid">
-			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ sess.name }} {{ sess.fname }}, {{ sess.user }}</br></br></br></p>
-			<p>your password: {{ sess.pw }} </br> et oui Chanda, le mot de pass... pas en claire</p>
+			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.lastname }} {{ sess.firstname }}, {{ sess.user }}</br></br></br></p>
+			<p>
+				your password: {{ sess.pw }}
+				</br> MICK !!!! Tu va me changer ca vite fait... le mot de pass en clair c'est po bien
+				</br>si jamais tu cherche: routes/views/login.js
+			</p>
 		</div>
 
 
