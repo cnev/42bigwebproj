@@ -70,17 +70,13 @@ exports.requireUser = function(req, res, next) {
 	} else {
 		next();
 	}
-
 };
 
 exports.checkAuth = function(req, res, next) {
 
-	console.log('atLogin: '+req.session.atLogin);
-	console.log('logged: '+req.session.logged);
-	if (!req.session || (req.session.logged == false))
+	if (!req.session.logged || req.session.logged == false)
 	{
 		console.log('redirecting...');
-		req.session.atLogin = true;
 		res.redirect('/login');
 	}
 	else

@@ -95,7 +95,6 @@ router.post('/', function (req, res)
 									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
 											(usrsaved.isStaff.bocalStudent ? 'bocal' : 'student');
-									sess.atLogin = false;
 									res.redirect("/");
 								}
 							});
@@ -110,7 +109,7 @@ router.post('/', function (req, res)
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							console.log(entry.object);
-							sess.atLogin = false;
+							req.session.forceLog = false;
 							res.redirect("/");
 						}
 					});
