@@ -43,6 +43,15 @@ router.get('/thread/:id', function (req, res){
 	//view.render(forum_thread);
 });
 
+router.get('/post/thread/:id')
+{
+
+}
+
+router.post('/post/thread/:id'){
+
+}
+
 /*
 	/forum/thread/:id
 */
