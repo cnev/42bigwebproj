@@ -2,6 +2,7 @@ var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
 var router = express.Router();
+var User = keystone.list('User');
 
 function functionLambda(q_res, req, res) {
 

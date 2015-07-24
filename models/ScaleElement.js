@@ -6,7 +6,7 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var ScaleElement = new keystone.List('Scale');
+var ScaleElement = new keystone.List('ScaleElement');
 
 ScaleElement.add({
 	title: {type: String},
