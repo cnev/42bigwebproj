@@ -49,29 +49,35 @@ function getNbPeers(activity_name, cb){
 		});
 }
 
-function generatePeers (userList, peerList, user, activity_name, cb) {
+function generatePeers (userList, peerList, user, activity_name) {
 	console.log("peerList to be included to user("+user+"): "+peerList);
 	Activity.model.findOne({'name': activity_name}).exec(function (err, activity) {
+		var to_ret = {};
 		if (err) {
-			console.error(err);
-			cb(err);
+			console.log("ERROR 10");
+			to_ret.err = err;
+			return (to_ret);
 		}
 		else if (!activity) {
-			console.error("What kind of black magic is that fucking shit?!");
-			cb(1);
+			console.log("ERROR 11");
+			to_ret.err = "What kind of black magic is that fucking shit?!";
+			return (to_ret);
 		}
 		else {
 			ActivityRegistration.model.findOne({'activity': activity}).exec(function (err, actReg) {
 				if (err) {
-					console.error(err);
-					cb(err);
+					console.log("ERROR 12");
+					to_ret.err = err;
+					return (to_ret);
 
 				}
 				else if (!actReg) {
-					console.error("What kind of black magic is that fucking shit?!");
-					cb(2);
+					console.log("ERROR 13");
+					to_ret.err = "What kind of black magic is that fucking shit?! V2";
+					return (to_ret);
 				}
 				else {
+					console.log("CLEAR ?!");
 					console.log("Pre-FOR: USER: "+user);
 					for (var i = 0; i < peerList.length; i++){
 						console.log("PUSHING peerList!= "+peerList[i]);
@@ -79,10 +85,13 @@ function generatePeers (userList, peerList, user, activity_name, cb) {
 					}
 					actReg.save(function (err, saved) {
 						if (err) {
-							cb(err);
+							to_ret.err = err;
+							return (to_ret);
 						}
 						else {
-							cb(null, saved);
+							to_ret = saved;
+							to_ret.err = null;
+							return (to_ret);
 						}
 					});
 				}
@@ -111,14 +120,14 @@ function allocate_userList(activity_name, userList, cb){
 						usedUsers.push(userList[randomUserId]);
 					}
 				}
-				generatePeers(userList, usedUsers, userList[i], activity_name, function (err, ret) {
-					if (err) {
-						cb(err);
-						return ;
-					}
-					else
-						to_ret.push(ret);
-				});
+				var tmp;
+				tmp = generatePeers(userList, usedUsers, userList[i], activity_name);
+				//if (tmp.err) {
+				//	cb(tmp.err);
+				//		return ;
+				//}
+				//else
+				//	to_ret.push(tmp);
 			}
 			cb(null, to_ret);
 		}
