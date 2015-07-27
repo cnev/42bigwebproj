@@ -105,7 +105,7 @@ function allocate_userList(activity_name, userList, cb){
 					if (usedUsers.indexOf(randomUserId) != -1 || randomUserId == i)
 						j--;
 					else {
-						usedUsers.push(randomUserId);
+						usedUsers.push(userList[randomUserId]);
 					}
 				}
 				generatePeers(userList, usedUsers, userList[i], activity_name, function (err, ret) {
