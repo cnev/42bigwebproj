@@ -49,10 +49,35 @@ function getNbPeers(activity_name, cb){
 		});
 }
 
-function generatePeers(userList, peerList, user, activity_name){
-	for (var i = 0; i < peerList.length; i++){
-
-	}
+function generatePeers (userList, peerList, user, activity_name) {
+	Activity.model.findOne({'name': activity_name}).exec(function (err, activity) {
+		if (err) {
+			console.error(err);
+		}
+		else if (!activity) {
+			console.error("What kind of black magic is that fucking shit?!");
+		}
+		else {
+			ActivityRegistration.model.findOne({'activity': activity}).exec(function (err, actReg) {
+				if (err) {
+					console.error(err);
+				}
+				else if (!actReg) {
+					console.error("What kind of black magic is that fucking shit?!")
+				}
+				else {
+					for (var i = 0; i < peerList.length; i++){
+						actReg.peers.push(peerList[i]);
+					}
+					actReg.save(function (err) {
+						if (err) {
+							console.error(err);
+						}
+					});
+				}
+			});
+		}
+	});
 }
 
 function allocate_userList(activity_name, userList){
@@ -79,7 +104,6 @@ function allocate_userList(activity_name, userList){
 }
 
 router.get('/allocate/:activity', function (req, res) {
-
 	build_userList(req.params.activity, function (err, userList) {
 		if (err && !userList)
 			res.status(500).send(err);
