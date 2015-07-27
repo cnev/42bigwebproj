@@ -57,7 +57,7 @@ function generatePeers (userList, peerList, user, activity_name, cb) {
 		}
 		else if (!activity) {
 			console.error("What kind of black magic is that fucking shit?!");
-			cb(1, 0);
+			cb(1);
 		}
 		else {
 			ActivityRegistration.model.findOne({'activity': activity}).exec(function (err, actReg) {
@@ -68,18 +68,20 @@ function generatePeers (userList, peerList, user, activity_name, cb) {
 				}
 				else if (!actReg) {
 					console.error("What kind of black magic is that fucking shit?!");
-					cb(1, 0);
+					cb(2);
 				}
 				else {
 					for (var i = 0; i < peerList.length; i++){
 						actReg.peers.push(peerList[i]);
 					}
-					actReg.save(function (err) {
+					actReg.save(function (err, saved) {
 						if (err) {
-							console.error(err);
+							cb(err);
+						}
+						else {
+							cb(null, saved);
 						}
 					});
-					cb(1, 1);
 				}
 			});
 		}
@@ -89,12 +91,13 @@ function generatePeers (userList, peerList, user, activity_name, cb) {
 function allocate_userList(activity_name, userList, cb){
 
 	getNbPeers(activity_name, function (err, nbPeers){
+		var to_ret = [];
+		console.log("Required corrections for "+activity_name+" : "+nbPeers);
 		if (err)
 			cb(err);
-		else if (nbPeers <= userList.length)
-			cb(1, 0);
+		else if (userList.length <= nbPeers)
+			cb(1, 1);
 		else {
-			console.log("Required corrections for "+activity_name+" : "+nbPeers);
 			for (var i = 0; i < userList.length; i++){
 				var usedUsers = [];
 				for (var j = 0; j < nbPeers; j++){
@@ -106,12 +109,15 @@ function allocate_userList(activity_name, userList, cb){
 					}
 				}
 				generatePeers(userList, usedUsers, userList[i], activity_name, function (err, ret) {
-					if (err && !ret)
+					if (err) {
 						cb(err);
-					else if ()
-						cb(1, 0);
+						return ;
+					}
+					else
+						to_ret.push(ret);
 				});
 			}
+			cb(null, to_ret);
 		}
 	});
 }
@@ -125,9 +131,9 @@ router.get('/allocate/:activity', function (req, res) {
 		}
 		else {
 			allocate_userList(req.params.activity, userList, function (err, ret) {
-				if (err)
+				if (err && !ret)
 					res.status(500).send(err);
-				else if (!ret)
+				else if (err)
 					res.status(404).send('insufficent number of registered users');
 				else
 					res.status(200).send("YOLO !");
