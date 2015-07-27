@@ -94,7 +94,7 @@ function getActivitys (uid, cb) {
 			cb(err);
 		}
 		else {
-			Activity.model.find().$where('period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime()').exec(function (err, actList) {
+			Activity.model.find().where('period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime()').exec(function (err, actList) {
 				var i;
 				var j;
 				var Activitys = [];
