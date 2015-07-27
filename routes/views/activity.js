@@ -114,7 +114,11 @@ router.get('/register/:name', function (req, res) {
 						}
 						else
 						{
-							res.status(500).send('already registered');
+							req.flash('error', 'You are already registered to this activity !');
+							// temp render
+							view.render('index');
+							//res.redirect('/');
+							//res.status(500).send('already registered');
 							//view.render('already_registered');
 						}
 					});

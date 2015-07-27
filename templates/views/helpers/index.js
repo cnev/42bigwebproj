@@ -313,7 +313,7 @@ _helpers.paginationNextUrl = function(nextPage, totalPages){
 
 _helpers.flashMessages = function(messages) {
 	var output = '';
-	for (var i = 0; i < messages.length; i++) {
+	/*for (var i = 0; i < messages.length; i++) {
 
 		if (messages[i].title) {
 			output += '<h4>' + messages[i].title + '</h4>';
@@ -331,6 +331,8 @@ _helpers.flashMessages = function(messages) {
 			output += '</ul>';
 		}
 	}
+	console.log("flash-output="+output);*/
+	output = '<p>'+messages+'</p>';
 	return new hbs.SafeString(output);
 };
 

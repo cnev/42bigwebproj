@@ -15,9 +15,6 @@ function checkbocalstudent(usrName) {
 
 router.get('/', function (req, res)
 {
-	//var test = "<div><form action='/login' method='POST'><label for='username'>Username:</label><input type='text' id='username' name='username'><label for='password'>Password:</label><p><a href='#'>Forgot your password?</a></p><input type='password' id='password' name='password'><div><input type='checkbox'><label class='check' for='checkbox'>Keep me logged in</label><input type='submit' value='Login'></div></form></div>";
-	//res.status(200).send(test);
-	console.log('route: '+req.route.path);
 	var view = new keystone.View(req, res);
 	view.render('login');
 });
@@ -30,11 +27,9 @@ router.post('/', function (req, res)
 		{
 			url: 'ldaps://ldap.42.fr:636'
 		});
-		console.log('la connexion via ldaps a lair de faire des trucs');
 	}
 	catch(err)
 	{
-		console.log('la connexion via ldaps a echoue, tentative de connexion via ldap')
 		client = ldap.createClient(
 		{
 			url: 'ldap://ldap.42.fr:389'
@@ -49,22 +44,14 @@ router.post('/', function (req, res)
 	};
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result)
 	{
-	//assert.ifError(err);
 		result.on('searchEntry', function(entry)
 		{
-			//console.log('entry: ' + JSON.stringify(entry.object));
-			//console.log(entry);
-			//console.log('/* *************** */');
-			//console.log(entry.object);
-			//console.log('test: ' + entry.object.dn);
 			console.log('HOLA SENIOR');
 			client.bind(entry.object.dn, req.body.password, function(err)
 			{
 				if (err)
 				{
-					// error case;	assert.ifError(err);
-					console.log("Failed login ... maybe ?");
-					res.status(200).send("<p>Hello World of FAILED LOGINS</p>");
+					res.status(501).send("<p>Hello World of FAILED LOGINS</p>");
 				}
 				else
 				{
@@ -75,7 +62,6 @@ router.post('/', function (req, res)
 							res.status(500).send(err);
 						}
 						else if (!usr) {
-							/*add user to db*/
 							var newUser = new User.model({
 								name: { first: logger.givenName, last: logger.sn },
 								uid: logger.uid,
