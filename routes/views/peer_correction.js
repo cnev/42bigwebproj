@@ -55,8 +55,8 @@ function generatePeers(userList, peerList, user, activity_name){
 	}
 }
 
-function allocate_userList(activity_name, userList)
-{
+function allocate_userList(activity_name, userList){
+
 	getNbPeers(activity_name, function (err, nbPeers){
 		if (err)
 			res.status(500).send(err);
