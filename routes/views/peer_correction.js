@@ -49,7 +49,7 @@ function getNbPeers(activity_name, cb){
 		});
 }
 
-function generatePeers(peerList, user){
+function generatePeers(userList, peerList, user, activity_name){
 	for (var i = 0; i < peerList.length; i++){
 
 	}
@@ -73,7 +73,7 @@ function allocate_userList(activity_name, userList)
 					usedUsers.push(randomUserId);
 				}
 			}
-			generatePeers(usedUsers, userList[i]);
+			generatePeers(userList, usedUsers, userList[i], activity_name);
 		}
 	});
 }
@@ -87,7 +87,7 @@ router.get('/allocate/:activity', function (req, res) {
 			res.status(404).send('activity not found');
 		}
 		else {
-			allocate_userList(req.params.activity);
+			allocate_userList(req.params.activity, userList);
 		}
 	});
 });
