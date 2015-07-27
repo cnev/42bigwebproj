@@ -38,10 +38,11 @@ router.get('/', function (req, res) {
 			locals.data = {
 				firstname: q_res.name.first,
 				lastname: q_res.name.last,
-				cred_a: 20//function
-				cred_p: 50//function
-				mod: fetchModules(q_res, req, res),
-				//act_ec
+				cred_a: 20,//function
+				cred_p: 50,//function
+				mod: fetchModules(q_res, req, res)
+				//act_insc
+				//act_disp
 				//act_past
 				//act_go
 				//to_correct
