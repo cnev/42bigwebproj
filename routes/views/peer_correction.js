@@ -50,6 +50,7 @@ function getNbPeers(activity_name, cb){
 }
 
 function generatePeers (userList, peerList, user, activity_name, cb) {
+	console.log("peerList to be included to user("+user+"): "+peerList);
 	Activity.model.findOne({'name': activity_name}).exec(function (err, activity) {
 		if (err) {
 			console.error(err);
@@ -71,7 +72,9 @@ function generatePeers (userList, peerList, user, activity_name, cb) {
 					cb(2);
 				}
 				else {
+					console.log("Pre-FOR: USER: "+user);
 					for (var i = 0; i < peerList.length; i++){
+						console.log("PUSHING peerList!= "+peerList[i]);
 						actReg.peers.push(peerList[i]);
 					}
 					actReg.save(function (err, saved) {
