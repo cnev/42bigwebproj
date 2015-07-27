@@ -7,7 +7,7 @@ ActivityRegistration.add({
 	user: {type: Types.Relationship, ref: 'User'},
 	activity: {type: Types.Relationship, ref: 'Activity'},
 	encours: {type: Boolean},
-	peers: {type: Types.relationship, ref: 'User', many: true}
+	peers: {type: Types.Relationship, ref: 'User', many: true}
 });
 
 ActivityRegistration.register();

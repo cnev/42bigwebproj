@@ -92,7 +92,7 @@ router.post('/', function (req, res)
 								else {
 									var sess = req.session;
 									sess.user = usrsaved.uid;
-									sess.pw = usrsaved.password;
+									//sess.pw = usrsaved.password;
 									sess.dn = entry.object.dn;
 									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
@@ -105,7 +105,7 @@ router.post('/', function (req, res)
 							console.log("Successful login ... maybe ?");
 							var sess = req.session;
 							sess.user = req.body.username;
-							sess.pw = req.body.password;
+							//sess.pw = req.body.password;
 							sess.dn = entry.object.dn;
 							sess.logged = true;
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
