@@ -33,13 +33,13 @@ router.get('/', function (req, res) {
 	.exec(function (err, q_res) {
 		if (err)
 			res.status(500).send('internal error');
-		else if (!result)
+		else if (!q_res)
 			res.status(404).send('NOPE');
 		else
 		{
 			for (var i = 0; i < q_res.length; i++)
 				locals.data.modules.push(q_res[i]);
-				//view_render('module_overview');
+				view.render('module_overview');
 			}
 		});
 });
