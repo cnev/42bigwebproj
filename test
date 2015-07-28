@@ -15,6 +15,28 @@ auto_group: false,
 module: ObjectId("55afb685477535fe144ed041"),
 type: 'project'})
 
+db.activities.insert({name: "Time",
+description: "The second activity you're going to work on!",
+subject: "this subject is goint to be very long ... was it?",
+slots: { max: 1, current: 0 },
+registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) },
+period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
+req_corrections: 1,
+auto_group: false,
+module: ObjectId("55afb685477535fe144ed041"),
+type: 'project'})
+
+db.activities.insert({name: "X2",
+description: "The third activity you're going to work on!",
+subject: "this subject is goint to be very long ... was it?",
+slots: { max: 1, current: 0 },
+registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 15, 23, 42, 0, 0) },
+period: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 25, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
+req_corrections: 1,
+auto_group: false,
+module: ObjectId("55afb685477535fe144ed041"),
+type: 'project'})
+
 db.modules.insert({name: 'ModuleTest',
 description: "This module will be used in order to test or beautiful intranet.",
 slots: { max: 1, current: 0 },
