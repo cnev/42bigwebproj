@@ -51,7 +51,8 @@ router.post('/', function (req, res)
 			{
 				if (err)
 				{
-					res.status(501).send("<p>Hello World of FAILED LOGINS</p>");
+					req.flash('error', 'Wrong password !');
+					res.status(501).redirect('/login');
 				}
 				else
 				{
