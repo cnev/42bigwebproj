@@ -102,6 +102,9 @@ function getActivitys (uid, cb) {
 					cb(err);
 				}
 				else {
+					/*for (i = 0 ; i < actList.length ; i++) {
+						if (period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime())
+					}*/
 					for (i = 0 ; i < actInList.length ; i++) {
 						for (j = 0 ; j < actList.length ; i++) {
 							if (toString(actList[j]._id) != toString(actInList[i].activity)) {
