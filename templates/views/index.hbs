@@ -53,7 +53,7 @@ var tableau:
 	sess.people_to_correct (liste des personnes qui doivent me corriger)
 	sess.people_correct_me (liste des personnes que je dois corriger)
 -->
-
+{{#unless sess.isAdmin}}
 		<div class="container-fluid">
 			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.lastname }} {{ sess.firstname }}, {{ sess.user }}</br></br></br></p>
 			<p>
@@ -66,5 +66,10 @@ var tableau:
 				</br>si jamais tu cherche: routes/views/login.js
 			</p>
 		</div>
+{{/unless}}
+
+{{#if sess.isAdmin}}
+		LES TRUCS D'UN ADMIN HEUREUX !
+{{/if}}
 
 

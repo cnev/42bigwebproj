@@ -1,6 +1,6 @@
 {"uid" : "cnev","password" : "$2a$10$.vZHYufnBN5fBLA0dbU21O75lYixHA1QlQcBxYe/YbXH6mB6kHTu6","email" : "nev.chandara@student.42.fr","uidNumber" : 5491,"gidNumber" : 4207,"isStaff" : {"bocalStudent" : false,"bocalStaff" : false},"name" : {"first" : "Chandara","last" : "NEV"},"_id" : ObjectId("55a66cdd607873ea100f8892"),"__v" : 0}
 
-db.users.update({'uid':'cnev'}, {"uid" : "cnev","password" : "$2a$10$.vZHYufnBN5fBLA0dbU21O75lYixHA1QlQcBxYe/YbXH6mB6kHTu6","email" : "nev.chandara@student.42.fr","uidNumber" : 5491,"gidNumber" : 4207,"isStaff" : {"bocalStudent" : false,"bocalStaff" : true},"name" : {"first" : "Chandara","last" : "NEV"},"_id" : ObjectId("55a66cdd607873ea100f8892"),"__v" : 0}, {'upsert':true})
+db.users.update({'uid':'cnev'}, {"uid" : "cnev","password" : "$2a$10$.vZHYufnBN5fBLA0dbU21O75lYixHA1QlQcBxYe/YbXH6mB6kHTu6","email" : "nev.chandara@student.42.fr","uidNumber" : 5491,"gidNumber" : 4207,"isStaff" : {"bocalStudent" : false,"bocalStaff" : true},"name" : {"first" : "Chandara","last" : "NEV"},"_id" : ObjectId("55afb69cd64338743df841b3"),"__v" : 0}, {'upsert':true})
 
 
 // Warning: valeur 'module' non specifique, fichier a editer en live avec l'objectId correspondant a un module existant !!

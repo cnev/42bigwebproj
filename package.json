@@ -16,7 +16,8 @@
     "ldapjs": "latest",
     "mongoose": "latest",
     "assert": "latest",
-    "password-hash": "latest"
+    "password-hash": "latest",
+    "node-schedule": "latest"
   },
   "devDependencies": {
     "grunt": "^0.4.4",

@@ -86,6 +86,7 @@ router.post('/', function (req, res)
 									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
 											(usrsaved.isStaff.bocalStudent ? 'bocal' : 'student');
+									sess.isAdmin = (usrsaved.isStaff.bocalStaff || usrsaved.isStaff.bocalStudent) ? true : false;
 									res.redirect("/");
 								}
 							});
@@ -103,6 +104,7 @@ router.post('/', function (req, res)
 							sess.logged = true;
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
+							sess.isAdmin = (usr.isStaff.bocalStaff || usr.isStaff.bocalStudent) ? true : false;
 							console.log(entry.object);
 							req.session.forceLog = false;
 							res.redirect("/");

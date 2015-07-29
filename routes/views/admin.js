@@ -10,6 +10,20 @@ router.get('/', function (req, res) {
 	view.render('index');
 });
 
+router.get('/module', function (req, res) {
+
+	var view = new keystone.View(req, res);
+
+	//view.render('index');
+});
+
+router.get('/activity', function (req, res) {
+
+	var view = new keystone.View(req, res);
+
+	//view.render('index');
+});
+
 router.get('/module/:name', function (req, res) {
 
 	var view = new keystone.View(req, res);
