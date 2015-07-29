@@ -15,7 +15,8 @@
     "express-session": "latest",
     "ldapjs": "latest",
     "mongoose": "latest",
-    "assert": "latest"
+    "assert": "latest",
+    "password-hash": "latest"
   },
   "devDependencies": {
     "grunt": "^0.4.4",

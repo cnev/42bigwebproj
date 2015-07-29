@@ -2,6 +2,8 @@ var express = require('express');
 var session = require('express-session');
 var ldap = require('ldapjs');
 var keystone = require('keystone');
+var passhash = require('password-hash');
+
 var router = express.Router();
 var User = keystone.list('User');
 
@@ -66,7 +68,7 @@ router.post('/', function (req, res)
 							var newUser = new User.model({
 								name: { first: logger.givenName, last: logger.sn },
 								uid: logger.uid,
-								password: req.body.password,
+								password: passhash.generate(req.body.password, {'algorithm':'whirlpool', 'saltLength':16, 'iteration':3}),
 								email: logger.alias[0],
 								uidNumber: logger.uidNumber,
 								gidNumber: logger.gidNumber
@@ -79,7 +81,7 @@ router.post('/', function (req, res)
 								else {
 									var sess = req.session;
 									sess.user = usrsaved.uid;
-									//sess.pw = usrsaved.password;
+									sess.pw = usrsaved.password;
 									sess.dn = entry.object.dn;
 									sess.logged = true;
 									sess.userClass = usrsaved.isStaff.bocalStaff ? 'staff' :
@@ -88,11 +90,15 @@ router.post('/', function (req, res)
 								}
 							});
 						}
+						else if (passhash.verify(req.body.password, usr.password)) {
+							req.flash('error', 'Wrong password !');
+							res.status(501).redirect('/login');
+						}
 						else {
 							console.log("Successful login ... maybe ?");
 							var sess = req.session;
 							sess.user = req.body.username;
-							//sess.pw = req.body.password;
+							sess.pw = usr.password;
 							sess.dn = entry.object.dn;
 							sess.logged = true;
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
