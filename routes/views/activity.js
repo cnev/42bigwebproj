@@ -96,31 +96,38 @@ router.get('/register/:name', function (req, res) {
 				search_user = user_q_res._id;
 				var model_q = Activity.model.findOne({'name': req.params.name})
 				.exec(function (err, model_q_res) {
-					search_model = model_q_res._id;
-					var q2 = ActivityRegistration.model.findOne({'user': search_user})
-					.where('activity', search_model)
-					.exec(function (err, q2_res) {
-						if (err)
-							res.status(500).send(err);
-						else if (!q2_res)
-						{
-							test = "<form action='/activity/register/" + req.params.name + "' method='POST'>";
-							test += "<ul>";
-							test += "<li><input type='submit' name='answer' value='yes'></li>";
-							test += "<li><input type='submit' name='answer' value='no'></li>";
-							test += "</ul>";
-							res.status(200).send(test);
-							//view.render('confirm_registration');
-						}
-						else
-						{
-							req.flash('error', 'You are already registered to this activity !');
-							res.redirect('/activity/view/'+req.params.name);
-							//res.redirect('/');
-							//res.status(500).send('already registered');
-							//view.render('already_registered');
-						}
-					});
+					var now = new Date();
+					if (model_q_res.registration.ends.getTime() < now.getTime()) {
+						req.flash('error', 'Registrations are over, you cannot register to this activity anymore !');
+						res.redirect('/activity/view/'+req.params.name);
+					}
+					else {
+						search_model = model_q_res._id;
+						var q2 = ActivityRegistration.model.findOne({'user': search_user})
+						.where('activity', search_model)
+						.exec(function (err, q2_res) {
+							if (err)
+								res.status(500).send(err);
+							else if (!q2_res)
+							{
+								test = "<form action='/activity/register/" + req.params.name + "' method='POST'>";
+								test += "<ul>";
+								test += "<li><input type='submit' name='answer' value='yes'></li>";
+								test += "<li><input type='submit' name='answer' value='no'></li>";
+								test += "</ul>";
+								res.status(200).send(test);
+								//view.render('confirm_registration');
+							}
+							else
+							{
+								req.flash('error', 'You are already registered to this activity !');
+								res.redirect('/activity/view/'+req.params.name);
+								//res.redirect('/');
+								//res.status(500).send('already registered');
+								//view.render('already_registered');
+							}
+						});
+					}
 				});
 			});
 		}
