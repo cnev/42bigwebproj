@@ -1,0 +1,11 @@
+{{!< default}}
+
+<div class="containers-fluid">
+{{#if data.activities}}
+	<ul class="list-group">
+		{{#each data.activities}}
+			<li class="list-group-item">{{displayActivityList this}}</li>
+		{{/each}}
+	</ul>
+{{/if}}
+</div>

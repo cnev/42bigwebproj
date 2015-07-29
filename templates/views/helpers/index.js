@@ -369,5 +369,19 @@ _helpers.userNav = function(userClass)
 	return new hbs.SafeString(output);
 }
 
+_helpers.displayModuleList = function(module)
+{
+	var output = '';
+	output += '<a href="/module/view/'+module.name+'">'+module.name+'</a>';
+	return new hbs.SafeString(output);
+}
+
+_helpers.displayActivityList = function(activity)
+{
+	var output = '';
+	output += '<a href="/activity/view/'+activity.name+'">'+activity.name+'</a>';
+	return new hbs.SafeString(output);
+}
+
 return _helpers;
 };

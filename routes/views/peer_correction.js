@@ -64,7 +64,9 @@ function generatePeers (userList, peerList, user, activity_name) {
 			return (to_ret);
 		}
 		else {
-			ActivityRegistration.model.findOne({'activity': activity}).exec(function (err, actReg) {
+			ActivityRegistration.model.findOne({'activity': activity})
+				.where('user', user)
+				.exec(function (err, actReg) {
 				if (err) {
 					console.log("ERROR 12");
 					to_ret.err = err;
@@ -82,6 +84,8 @@ function generatePeers (userList, peerList, user, activity_name) {
 					for (var i = 0; i < peerList.length; i++){
 						console.log("PUSHING peerList!= "+peerList[i]);
 						actReg.peers.push(peerList[i]);
+						//if (i == peerList.length - 1)
+						//	rdy = true;
 					}
 					actReg.save(function (err, saved) {
 						if (err) {
@@ -91,6 +95,7 @@ function generatePeers (userList, peerList, user, activity_name) {
 						else {
 							to_ret = saved;
 							to_ret.err = null;
+							console.log(saved);
 							return (to_ret);
 						}
 					});

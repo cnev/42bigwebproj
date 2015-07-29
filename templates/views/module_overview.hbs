@@ -4,8 +4,12 @@
 {{#if data.modules}}
 	<ul class="list-group">
 		{{#each data.modules}}
-		<li class="list-group-item">{{this}}</li>
+			<li class="list-group-item">{{displayModuleList this}}</li>
 		{{/each}}
 	</ul>
 {{/if}}
 </div>
+
+<!--
+<li class="list-group-item">{{this}}</li>
+-->

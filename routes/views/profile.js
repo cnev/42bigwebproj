@@ -8,6 +8,7 @@ var User = keystone.list('User');
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
 var ActivityRegistration = keystone.list('ActivityRegistration');
+var schedule = require('node-schedule');
 
 function fetchModules(user, req, res) {
 
@@ -104,9 +105,9 @@ function getActivitys (uid, cb) {
 				else {
 					for (i = 0 ; i < actInList.length ; i++) {
 						for (j = 0 ; j < actList.length ; i++) {
-							if (toString(actList[j]._id) != toString(actInList[i].activity)) {
-								Activitys.push(actList[i]);
-							}
+						//	if (toString(actList[j]._id) != toString(actInList[i].activity)) {
+						//		Activitys.push(actList[i]);
+						//	}
 						}
 					}
 					cb(null, Activitys, actInList);
@@ -136,14 +137,21 @@ router.get('/', function (req, res) {
 				}
 				else {
 
+					var rule = new schedule.RecurrenceRule();
+					rule.second = 10;
+					schedule.scheduleJob(rule, function(){
+  						 console.log('The answer to life, the universe, and everything!');
+  						 console.log(new Date());
+					});
+
 					locals.data = {
 						firstname: q_res.name.first,
 						lastname: q_res.name.last,
 						cred_a: 20,//function
 						cred_p: 50,//function
 						mod: fetchModules(q_res, req, res),
-						act_insc: actInList,
-						act_disp : actList
+						//act_insc: actInList,
+						//act_disp : actList
 						//act_past
 						//act_go
 						//to_correct

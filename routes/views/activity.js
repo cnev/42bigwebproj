@@ -25,12 +25,12 @@ router.get('/', function (req, res) {
 			{
 				for (var i = 0; i < q_res.length; i++)
 					locals.data.activities.push(q_res[i]);
-				//view_render('activity_overview');
+				view.render('activity_overview');
 				//temporary display
-				var to_send = '';
+				/*var to_send = '';
 				for (var i = 0; i < locals.data.activities.length; i++)
 					to_send += '<p>'+locals.data.activities[i].name+'</p>';
-				res.status(200).send(to_send);
+				res.status(200).send(to_send);*/
 			}
 		});
 });
@@ -114,9 +114,8 @@ router.get('/register/:name', function (req, res) {
 						}
 						else
 						{
-							req.flash('error', 'You are already registered to this activity !');
-							// temp render
-							view.render('index');
+							req,flash('error', 'You are already registered to this activity !');
+							res.redirect('/activity/view/'+req.params.name);
 							//res.redirect('/');
 							//res.status(500).send('already registered');
 							//view.render('already_registered');
