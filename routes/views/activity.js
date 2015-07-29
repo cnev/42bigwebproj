@@ -151,7 +151,8 @@ router.post('/register/:name', function (req, res) {
 						{
 							var add_q = new ActivityRegistration.model({
 								user: search_user,
-								activity: search_model
+								activity: search_model,
+								encours: true
 							});
 							add_q.save();
 							res.status(200).send("OK!");

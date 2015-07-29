@@ -66,20 +66,25 @@ function checkact (actreg) {
 }
 
 function getInActivity(uid, cb) {
-	ActivityRegistration.model.find({'user':uid, 'encours':true}).exec(function (err, actList) {
+	ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actList) {
 		var i;
 		if (err) {
+			console.error(err);
 			cb(err);
 		}
 		else {
+			console.log(actList);
 			for (i = 0 ; i < actList.length ; i++) {
 				checkact(actList[i]);
 			}
-			ActivityRegistration.model.find({'user':uid, 'encours':true}).exec(function (err, actInList) {
+			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
 				if (err) {
+					console.error(err);
 					cb(err);
 				}
 				else {
+					console.log('qwerty');
+					console.log(actInList);
 					cb(null, actInList);
 				}
 			});
@@ -94,19 +99,22 @@ function getActivitys (uid, cb) {
 			cb(err);
 		}
 		else {
-			Activity.model.find().where('period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime()').exec(function (err, actList) {
+			Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
 				var i;
 				var j;
 				var Activitys = [];
 				if (err) {
+					console.error(err);
 					cb(err);
 				}
 				else {
+					console.log(actList);
+					console.log(actInList);
 					/*for (i = 0 ; i < actList.length ; i++) {
 						if (period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime())
 					}*/
 					for (i = 0 ; i < actInList.length ; i++) {
-						for (j = 0 ; j < actList.length ; i++) {
+						for (j = 0 ; j < actList.length ; j++) {
 							if (toString(actList[j]._id) != toString(actInList[i].activity)) {
 								Activitys.push(actList[i]);
 							}
