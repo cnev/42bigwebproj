@@ -373,6 +373,7 @@ _helpers.displayModuleList = function(module)
 {
 	var output = '';
 	output += '<a href="/module/view/'+module.name+'">'+module.name+'</a>';
+	output += '<a href="/module/register/'+module.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
 }
 
@@ -380,6 +381,7 @@ _helpers.displayActivityList = function(activity)
 {
 	var output = '';
 	output += '<a href="/activity/view/'+activity.name+'">'+activity.name+'</a>';
+	output += '<a href="/activity/register/'+activity.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
 }
 

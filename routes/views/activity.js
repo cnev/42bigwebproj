@@ -114,7 +114,7 @@ router.get('/register/:name', function (req, res) {
 						}
 						else
 						{
-							req,flash('error', 'You are already registered to this activity !');
+							req.flash('error', 'You are already registered to this activity !');
 							res.redirect('/activity/view/'+req.params.name);
 							//res.redirect('/');
 							//res.status(500).send('already registered');

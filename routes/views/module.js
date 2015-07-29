@@ -110,7 +110,7 @@ router.get('/register/:name', function (req, res) {
 						}
 						else
 						{
-							req,flash('error', 'You are already registered to this module !');
+							req.flash('error', 'You are already registered to this module !');
 							res.redirect('/module/view/'+req.params.name);
 							//res.status(500).send('already registered');
 							//view.render('already_registered');
