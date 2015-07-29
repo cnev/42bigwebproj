@@ -37,7 +37,8 @@ auto_group: false,
 module: ObjectId("55afb685477535fe144ed041"),
 type: 'project'})
 
-db.modules.insert({name: 'ModuleTest',
+db.modules.insert({_id:ObjectId("55afb685477535fe144ed041"),
+name: 'ModuleTest',
 description: "This module will be used in order to test or beautiful intranet.",
 slots: { max: 1, current: 0 },
 registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) },
