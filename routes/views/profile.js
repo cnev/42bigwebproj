@@ -65,7 +65,7 @@ function checkact (actreg) {
 	});
 }
 
-function getInActivity(uid, cb) {
+/*function getInActivity(uid, cb) {
 	ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actList) {
 		var i;
 		if (err) {
@@ -102,7 +102,8 @@ function getActivitys (uid, cb) {
 			Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
 				var i;
 				var j;
-				var Activitys = [];
+				var check;
+				var Activities = [];
 				if (err) {
 					console.error(err);
 					cb(err);
@@ -112,19 +113,47 @@ function getActivitys (uid, cb) {
 					console.log(actInList);
 					/*for (i = 0 ; i < actList.length ; i++) {
 						if (period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime())
-					}*/
-					for (i = 0 ; i < actInList.length ; i++) {
-						for (j = 0 ; j < actList.length ; j++) {
-							if (toString(actList[j]._id) != toString(actInList[i].activity)) {
-								Activitys.push(actList[i]);
+					}* /
+					for (i = 0 ; i < actList.length ; i++) {
+						check = false;
+						for (j = 0 ; j < actInList.length ; j++) {
+							if (toString(actList[i]._id) == toString(actInList[j].activity)) {
+								console.log((check = true));
 							}
 						}
+						if (!check) {
+							Activities.push(actList[i]);
+						}
 					}
-					cb(null, Activitys, actInList);
+					cb(null, Activities, actInList);
 				}
-			})
+			});
 		}
-	})
+	});
+}*/
+
+function getActivities (uid, cb) {
+	Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
+		if (err) {
+			cb(err);
+		}
+		else if (!actList) {
+			cb();
+		}
+		else {
+			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
+				if (err) {
+					cb(err);
+				}
+				else if (!actInList) {
+					cb(null, actList);
+				}
+				else {
+					cb(null, actList, actInList);
+				}
+			});
+		}
+	});
 }
 
 router.get('/', function (req, res) {
@@ -140,7 +169,7 @@ router.get('/', function (req, res) {
 		else if (!q_res)
 			res.status(404).send('not found');
 		else {
-			getActivitys(q_res._id, function (err, actList, actInList) {
+			getActivities(q_res._id, function (err, actList, actInList) {
 				if (err) {
 					console.error(err);
 					res.status(500).send(err);
@@ -153,8 +182,8 @@ router.get('/', function (req, res) {
 						cred_a: 20,//function
 						cred_p: 50,//function
 						mod: fetchModules(q_res, req, res),
-						act_insc: actInList,
-						act_disp : actList
+						actInList: actInList,
+						actList: actList
 						//act_past
 						//act_go
 						//to_correct
