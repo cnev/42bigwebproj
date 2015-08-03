@@ -25,6 +25,37 @@ router.get('/module/new', function (req, res) {
 	view.render('index');
 });
 
+router.post('/module/new', function (req, res) {
+	if (!req.body || !req.body.submit){
+		req.flash('error', 'form error');
+		res.redirect('/admin/module/new');
+	}
+	else {
+		var add_q = new Module.model({
+			name: req.body.name,
+			description: req.body.description,
+			slots: {
+				max: req.body.slots,
+				current: 0
+			},
+			registration: {
+				begins: req.body.registrationbegins,
+				ends: req.body.registrationends
+			},
+			period: {
+				begins: req.body.periodbegins,
+				ends: req.body.periodends
+			},
+			credits: req.body.credits
+		});
+		add_q.save(function (err, q_saved) {
+			req.flash('info', req.body.name+' was successfully added to the module list !');
+			res.redirect('/admin/module');
+		});
+
+	}
+});
+
 router.get('/activity', function (req, res) {
 
 	var view = new keystone.View(req, res);
