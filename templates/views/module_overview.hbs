@@ -4,11 +4,16 @@
 {{#if data.modules}}
 	<ul class="list-group">
 		{{#each data.modules}}
-			<li class="list-group-item">{{displayModuleList this}}</li>
+			<li class="list-group-item">{{displayModuleList this sess.isAdmin}}</li>
 		{{/each}}
 	</ul>
 {{/if}}
 </div>
+
+<div class="containers-fluid">
+{{#if sess.isAdmin}}
+	<a class="btn btn-info" role="button" href="/admin/module/new">Add new module</a>';
+{{/if}}
 
 <!--
 <li class="list-group-item">{{this}}</li>

@@ -369,11 +369,13 @@ _helpers.userNav = function(userClass)
 	return new hbs.SafeString(output);
 }
 
-_helpers.displayModuleList = function(module)
+_helpers.displayModuleList = function(module, isAdmin)
 {
 	var output = '';
-	output += '<a class="btn btn-info" role="button" href="/module/view/'+module.name+'">'+module.name+'</a>';
-	output += '<a class="btn btn-info" role="button" href="/module/register/'+module.name+'">Register ?</a>';
+	var admin = (isAdmin) ? '/admin' : '';
+	output += '<a class="btn btn-info" role="button" href="'+admin+'/module/view/'+module.name+'">'+module.name+'</a>';
+	if (isAdmin)
+		output += '<a class="btn btn-info" role="button" href="/module/register/'+module.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
 }
 

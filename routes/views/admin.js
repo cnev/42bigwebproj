@@ -14,7 +14,15 @@ router.get('/module', function (req, res) {
 
 	var view = new keystone.View(req, res);
 
-	//view.render('index');
+	view.render('module_overview');
+});
+
+router.get('/module/new', function (req, res) {
+
+	var view = new keystone.View(req, res);
+
+	req.flash('error', 'should be /admin/module/new');
+	view.render('index');
 });
 
 router.get('/activity', function (req, res) {
