@@ -374,16 +374,18 @@ _helpers.displayModuleList = function(module, isAdmin)
 	var output = '';
 	var admin = (isAdmin) ? '/admin' : '';
 	output += '<a class="btn btn-info" role="button" href="'+admin+'/module/view/'+module.name+'">'+module.name+'</a>';
-	if (isAdmin)
+	if (!isAdmin)
 		output += '<a class="btn btn-info" role="button" href="/module/register/'+module.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
 }
 
-_helpers.displayActivityList = function(activity)
+_helpers.displayActivityList = function(activity, isAdmin)
 {
 	var output = '';
-	output += '<a class="btn btn-info" role="button" href="/activity/view/'+activity.name+'">'+activity.name+'</a>';
-	output += '<a class="btn btn-info" role="button" href="/activity/register/'+activity.name+'">Register ?</a>';
+	var admin = (isAdmin) ? '/admin' : '';
+	output += '<a class="btn btn-info" role="button" href="'+admin+'/activity/view/'+activity.name+'">'+activity.name+'</a>';
+	if (!isAdmin)
+		output += '<a class="btn btn-info" role="button" href="/activity/register/'+activity.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
 }
 

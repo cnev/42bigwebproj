@@ -4,8 +4,14 @@
 {{#if data.activities}}
 	<ul class="list-group">
 		{{#each data.activities}}
-			<li class="list-group-item">{{displayActivityList this}}</li>
+			<li class="list-group-item">{{displayActivityList this sess.isAdmin}}</li>
 		{{/each}}
 	</ul>
 {{/if}}
 </div>
+
+{{#if sess.isAdmin}}
+<div class="containers-fluid">
+	<a class="btn btn-info" role="button" href="/admin/activity/new">Add new module</a>';
+</div>
+{{/if}}

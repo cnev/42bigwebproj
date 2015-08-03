@@ -1,0 +1,61 @@
+`<div class="container">
+	<h2>Insert a new activity</h2>
+	<form role="form" method="post">
+		<div class="form-group">
+			<label for="name">Activity name:</label>
+			<input type="text" class="form-control" name="name" placeholder="The activity's name">
+		</div>
+		<div class="form-group">
+			<label for="description">Description:</label>
+			<textarea class="form-control" rows="5" name="description"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="subject">Subject file:</label>
+			<input type="text" class="form-control" name="subject" placeholder="path to file in /public">
+		</div>
+		<div class="form-group">
+			<label for="slots">Slots:</label>
+			<input type="number" class="form-control" name="slots">
+		</div>
+		<h3>Registrations</h3>
+		<div class="form-group">
+			<label for="registrationbegins">Beginning:</label>
+			<input type="date" class="form-control" name="registrationbegins">
+		</div>
+		<div class="form-group">
+			<label for="registrationends">Ending:</label>
+			<input type="date" class="form-control" name="registrationends">
+		</div>
+		<h3>Period</h3>
+		<div class="form-group">
+			<label for="periodbegins">Beginning:</label>
+			<input type="date" class="form-control" name="periodbegins">
+		</div>
+		<div class="form-group">
+			<label for="periodends">Ending:</label>
+			<input type="date" class="form-control" name="periodends">
+		</div>
+		<div class="form-group">
+			<label for="reqcorrections">Required corrections:</label>
+			<input type="number" class="form-control" name="reqcorrections">
+		</div>
+		<div class="form-group">
+			<label for="autogroup">Auto-Groups:</label>
+			<select class="form-control" name="autogroup">
+				<option>True</option>
+				<option>False</option>
+		</div>
+		<div class="form-group">
+			<label for="name">Module:</label>
+			<input type="text" class="form-control" name="name">
+		</div>
+		<div class="form-group">
+			<label for="type">Type:</label>
+			<select class="form-control" name="type">
+				<option>Project</option>
+				<option>TD</option>
+				<option>Exam</option>
+		</div>
+		<button type="submit" class="btn btn-default" action="/admin/module/new">Submit</button>
+	</form>
+</div>
