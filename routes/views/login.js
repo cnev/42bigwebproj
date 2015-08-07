@@ -23,9 +23,11 @@ router.get('/', function (req, res)
 
 router.post('/', function (req, res)
 {
+	var client;
+
 	try
 	{
-		var client = ldap.createClient(
+		client = ldap.createClient(
 		{
 			url: 'ldaps://ldap.42.fr:636'
 		});
