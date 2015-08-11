@@ -2,45 +2,46 @@
 
 db.users.update({'uid':'cnev'}, {"uid" : "cnev","password" : "$2a$10$.vZHYufnBN5fBLA0dbU21O75lYixHA1QlQcBxYe/YbXH6mB6kHTu6","email" : "nev.chandara@student.42.fr","uidNumber" : 5491,"gidNumber" : 4207,"isStaff" : {"bocalStudent" : false,"bocalStaff" : true},"name" : {"first" : "Chandara","last" : "NEV"},"_id" : ObjectId("55afb69cd64338743df841b3"),"__v" : 0}, {'upsert':true})
 
+db.users.update({ "_id" : ObjectId("55c9d089cd5e708bc1d59f2b"), "uid" : "mde-jesu", "password" : "$2a$10$hWp5Oxamj8QiP1x4lRhPG.OzA/QGaX/My8MZ0SglyrWii8hPq5ru.", "email" : "de-jesus-oliveira.matthias@student.42.fr", "uidNumber" : 5364, "gidNumber" : 4207, "isStaff" : { "bocalStudent" : true, "bocalStaff" : true }, "name" : { "first" : "Matthias", "last" : "DE-JESUS-OLIVEIRA" }, "__v" : 0 }, {'upsert':true})
 
 // Warning: valeur 'module' non specifique, fichier a editer en live avec l'objectId correspondant a un module existant !!
 db.activities.insert({name: "Twins",
-description: "The first activity you're going to work on!",
-subject: "this subject is goint to be very long ... was it?",
-slots: { max: 1, current: 0 },
-registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 01, 15, 23, 42, 0, 0) },
-period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
-req_corrections: 1,
-auto_group: false,
-module: ObjectId("55afb685477535fe144ed041"),
-type: 'project'})
+		description: "The first activity you're going to work on!",
+		subject: "this subject is goint to be very long ... was it?",
+		slots: { max: 1, current: 0 },
+		registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 01, 15, 23, 42, 0, 0) },
+		period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
+		req_corrections: 1,
+		auto_group: false,
+		module: ObjectId("55afb685477535fe144ed041"),
+		type: 'project'})
 
 db.activities.insert({name: "Time",
-description: "The second activity you're going to work on!",
-subject: "this subject is goint to be very long ... was it?",
-slots: { max: 1, current: 0 },
-registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 15, 23, 42, 0, 0) },
-period: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
-req_corrections: 1,
-auto_group: false,
-module: ObjectId("55afb685477535fe144ed041"),
-type: 'project'})
+		description: "The second activity you're going to work on!",
+		subject: "this subject is goint to be very long ... was it?",
+		slots: { max: 1, current: 0 },
+		registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 15, 23, 42, 0, 0) },
+		period: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 16, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
+		req_corrections: 1,
+		auto_group: false,
+		module: ObjectId("55afb685477535fe144ed041"),
+		type: 'project'})
 
 db.activities.insert({name: "X2",
-description: "The third activity you're going to work on!",
-subject: "this subject is goint to be very long ... was it?",
-slots: { max: 1, current: 0 },
-registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 15, 23, 42, 0, 0) },
-period: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 25, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
-req_corrections: 1,
-auto_group: false,
-module: ObjectId("55afb685477535fe144ed041"),
-type: 'project'})
+		description: "The third activity you're going to work on!",
+		subject: "this subject is goint to be very long ... was it?",
+		slots: { max: 1, current: 0 },
+		registration: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 15, 23, 42, 0, 0) },
+		period: { begins: new Date(2015, 07, 14, 8, 42, 0, 0), ends: new Date(2015, 08, 25, 23, 42, 0, 0) }, group_size: { min: 1, max: 4 },
+		req_corrections: 1,
+		auto_group: false,
+		module: ObjectId("55afb685477535fe144ed041"),
+		type: 'project'})
 
 db.modules.insert({_id:ObjectId("55afb685477535fe144ed041"),
-name: 'ModuleTest',
-description: "This module will be used in order to test or beautiful intranet.",
-slots: { max: 1, current: 0 },
-registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) },
-period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) },
-credits: 42})
+		name: 'ModuleTest',
+		description: "This module will be used in order to test or beautiful intranet.",
+		slots: { max: 1, current: 0 },
+		registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) },
+		period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) },
+		credits: 42})
