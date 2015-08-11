@@ -56,3 +56,5 @@ router.post('/post/thread/:id'){
 	/forum/thread/:id
 */
 module.exports = router;
+
+
