@@ -21,11 +21,9 @@ function fetch_modules(user, req, res, cb) {
 				var tab = [];
 				for (var i = 0; i < q_res.length; i++)
 				{
-					console.log("YO "+i);
 					tab.push(q_res[i]);
 					if (i == q_res.length - 1)
 					{
-						console.log(tab);
 						cb(null, tab);
 					}
 				}
@@ -148,15 +146,23 @@ function getActivities (uid, cb) {
 			cb();
 		}
 		else {
-			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
+			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, ret) {
 				if (err) {
 					cb(err);
 				}
-				else if (!actInList) {
+				else if (!ret) {
 					cb(null, actList);
 				}
 				else {
-					cb(null, actList, actInList);
+					var actInList = [];
+					for (var i = 0; i < ret.length; i++) {
+						Activity.model.findById(ret[i].activity)
+							.exec(function (err, q_activity){
+								actInList.push(q_activity);
+							});
+						if (i == ret.length - 1)
+							cb(null, actList, actInList);
+					}
 				}
 			});
 		}
@@ -178,7 +184,10 @@ function fetch_credits(cb){
 
 function fetch_data(q_res, req, res, actInList, actList, cb)
 {
-
+	console.log('actInList:');
+	console.log(actInList);
+	console.log('actList');
+	console.log(actList);
 	var data =
 	{
 		firstname: null,
@@ -186,8 +195,8 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 		cred_a: null,
 		cred_p: null,
 		mod: null,
-		actInList: null,
-		actList: null
+		actInList: actInList,
+		actList: actList
 		/*
 		firstname: q_res.name.first,
 		lastname: q_res.name.last,
@@ -217,6 +226,19 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 	});
 
 }
+
+router.get('/test', function (req, res) {
+	var view = new keystone.View(req, res);
+
+	var objector = {
+		test1: 1,
+		test2: 2,
+		test3: 3
+	};
+	var keys = Object.keys(objector);
+	console.log(keys);
+	view.render('insert_notation');
+});
 
 router.get('/', function (req, res) {
 

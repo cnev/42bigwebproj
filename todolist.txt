@@ -1,27 +1,154 @@
-2 helpers hbs pour la navigation:
-	1 pour les eleves
-	1 pour le panneau admin
+[@Chandara] THE GREATER LIST OF THINGS THAT NEED TO WORK
+		Forum
+			Etudiant:
+				new thread														[NOT OK]
+				new post														[NOT OK]
+				view thread														[NOT OK]
+				edit own posts													[NOT OK]
+			Admin:
+				new thread														[NOT OK]
+				new post														[NOT OK]
+				view thread														[NOT OK]
+				edit ANY post													[NOT OK]
+				delete post														[NOT OK]
+		Connexion ldap															[OK]
+		Annuaire
+			search by
+				uid																[NOT OK]
+				first name														[NOT OK]
+				lastname														[NOT OK]
+		Panel Admin
+				add module														[OK]
+				add activity													[OK]
+				add notation													[NOT OK]
+				edit module														[NOT OK]
+				edit activity													[NOT OK]
+				edit notation													[NOT OK]
+				delete module													[NOT OK]
+				delete activity													[NOT OK]
+				delete notation													[NOT OK]
+		Tickets
+			Student:
+				write ticket													[NOT OK]
+					confirm														[NOT OK]
+				read own tickets												[NOT OK]
+			Admin:
+				reply to ticket													[NOT OK]
+					reading a ticket locks it down (to avoid multiple handlers)	[NOT OK]
+					can forward ticket to another admin							[NOT OK]
+					change status												[NOT OK]
 
-Modeles:
-	Champs [model_name]_id en auto_increment
+		M/A/N
+			Module specifications
+				name															[OK]
+				desc															[OK]
+				registration													[NEED TESTING]
+				period															[NEED TESTING]
+				credit															[OK]
+				added forum category											[NOT OK]
+				auto-credit allocation at end of module (.csv)					[NOT OK]
 
-Vues:
-	Layout
-	Profil eleve
-	Activites
-	Modules
-	Corrections [pas encore implementees]
-	...
+			Activity specifications
+				name															[OK]
+				desc															[OK]
+				subject															[OK]
+									[File isn't verified though ?]
+				registration													[NEED TESTING]
+				period															[NEED TESTING]
+				register by variable group size									[NOT OK]
+									[@Chandara: modifications sur Activity/ModuleRegistration]
+				number of peers													[NOT OK]
+				link to existing module											[OK]
+				type (proj, td, exam)											[OK]
 
-Controleurs:
-	ajouter les fonctions d'edition.
+			Notation specifications
+				link to activity												[NOT OK]
+				selectable grades												[NOT OK]
 
-Controleur /prepare
-Preparer un set de donnees pour la correction
-	- des Users
-	- des Modules/Activites/Baremes
-	- des membres du Staff (a plusieurs niveaux d'acces)
-	- ...
+		Correcting
+			Auto-generate peer corrections										[NOT OK]
+			Students can perform Corrections									[NOT OK]
+			Imports of .csv for exams											[NOT OK]
 
-LESS-CSS-ifier tout le site (DONT PANIC)
+		Profiles
+			Open to all students ?												[NOT OK]
+						[@any: route {/profile/:name}]
+			Specifications
+				full name														[OK]
+				pic																[NOT OK]
+				credits (acquired/possible)										[NOT OK]
+						[@any: math]
+				past activities/modules											[NOT OK]
+				current activities/modules										[NOT OK]
+				next activities/modules											[NOT OK]
+
+		Planning																[NOT OK]
+
+		E-Learning
+			Categories (one for each module or project)							[NOT OK]
+			Add files to a category												[NOT OK]
+
+		Autologin																[NOT OK]
+
+
+				TRUCS A FAIRE
+
+Mickael
+	Enregistrer la date/heure de chaque post/thread (modeles)
+	Refonte du ActInList/ActList
+		pastActivities,pastModules = si inscription effectuee && periode terminee
+		curActivities,curModules = si inscription possible || inscription effectuee && periode en cours
+		nextActivities,nextModules = si inscription possible d'ici 7 jours && hors periode d'execution
+	Etudier les importations de .csv pour la fin de module et les corrections d'exam
+	Autologin (hash de randomstring, integre dans l'entree de la collection User ?)
+
+Matthias
+	[templates/views/module_overview.hbs]
+		un bloc centre
+			titre: Liste des modules
+			<admin only>: Bouton 'new X'
+			contenu: Liste/Tableau/???, un module par element
+
+	[templates/views/activity_overview.hbs]
+		un bloc centre
+			titre: Liste des activites
+			<admin only>: Bouton 'new X'
+			contenu: Liste/Tableau/???, une activite par element
+
+	[templates/views/view_module.hbs]
+		un bloc centre, une fiche:
+			titre: <nom du module>
+			<admin only>: Boutons 'editer' et 'supprimer'
+			contenu: tous les elements du modele
+
+	[templates/views/view_activity.hbs]
+		un bloc centre, une fiche:
+			titre: <nom de l'activite>
+			<admin only>: Boutons 'editer' et 'supprimer'
+			contenu: tous les elements du modele
+
+	[templates/views/forum_overview.hbs]
+		toutes les threads
+		panneau nouveau thread
+
+	[templates/views/forum_thread.hbs]
+		tous les posts du thread concerne
+		panneau nouveau post
+
+Chandara
+	Implementation des baremes (controleurs, modeles)
+	Implementation de l'e-learning (controleurs, modeles)
+	Routes
+		GET/admin/module/delete/:name
+		GET/admin/activity/delete/:name
+		POST/admin/module/delete/:name
+		POST/admin/activity/delete/:name
+
+BAREME
+
+
+
+
+
+
 

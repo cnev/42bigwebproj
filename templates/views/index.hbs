@@ -60,10 +60,14 @@ var tableau:
 				{{#each data.mod}}
 					Hi module : {{this.name}} </br>
 				{{/each}}
-				Supposed to be ActInList ...<br />
-				{{data.actInList}}<br />
-				<br />Supposed to be ActList ...<br />
-				{{data.actList}}<br />
+				<br />Supposed to be actInList ...<br />
+				{{#each data.actInList}}
+					Hi Activity : {{this.name}} </br>
+				{{/each}}
+				<br />Supposed to be actList ...<br />
+				{{#each data.actList}}
+					Hi Activity : {{this.name}} </br>
+				{{/each}}
 			</p>
 		</div>
 {{/unless}}
