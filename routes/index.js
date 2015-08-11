@@ -49,7 +49,7 @@ exports = module.exports = function(app) {
 	app.use('/pititest', middleware.checkAuth, require('./views/pititest'));
 	app.use('/search', middleware.checkAuth, middleware.checkAuth, require('./views/search'));
 	app.use('/ticket_test', middleware.checkAuth, require('./views/ticket_test'));
-	app.use('/prepare', middleware.checkAuth, require('./views/prepare'));
+	//app.use('/prepare', middleware.checkAuth, require('./views/prepare'));
 	app.use('/test', middleware.checkAuth, require('./views/testRoute'));
 	app.use('/activity', middleware.checkAuth, require('./views/activity'));
 	app.use('/module', middleware.checkAuth, require('./views/module'));
