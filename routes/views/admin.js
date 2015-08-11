@@ -78,7 +78,7 @@ router.get('/activity/new', function (req, res) {
 	var view = new keystone.View(req, res);
 
 	//req.flash('error', 'should be /admin/module/new');
-	view.render('insert_activty');
+	view.render('insert_activity');
 });
 
 router.post('/activity/new', function (req, res) {
