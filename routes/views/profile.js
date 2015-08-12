@@ -9,7 +9,7 @@ var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
 var ActivityRegistration = keystone.list('ActivityRegistration');
 
-function fetchModules(user, req, res) {
+function fetch_modules(user, req, res, cb) {
 
 	var q = Module.model.find()
 		.exec(function (err, q_res){
@@ -20,8 +20,13 @@ function fetchModules(user, req, res) {
 			else {
 				var tab = [];
 				for (var i = 0; i < q_res.length; i++)
+				{
 					tab.push(q_res[i]);
-				return (tab);
+					if (i == q_res.length - 1)
+					{
+						cb(null, tab);
+					}
+				}
 			}
 		});
 }
@@ -141,20 +146,99 @@ function getActivities (uid, cb) {
 			cb();
 		}
 		else {
-			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
+			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, ret) {
 				if (err) {
 					cb(err);
 				}
-				else if (!actInList) {
+				else if (!ret) {
 					cb(null, actList);
 				}
 				else {
-					cb(null, actList, actInList);
+					var actInList = [];
+					for (var i = 0; i < ret.length; i++) {
+						Activity.model.findById(ret[i].activity)
+							.exec(function (err, q_activity){
+								actInList.push(q_activity);
+							});
+						if (i == ret.length - 1)
+							cb(null, actList, actInList);
+					}
 				}
 			});
 		}
 	});
 }
+
+function fetch_name(user, cb){
+	var named = user.name;
+	cb(null, named);
+}
+
+function fetch_credits(cb){
+	var credited = {
+		a: 20,
+		p: 50
+	};
+	cb(null, credited);
+}
+
+function fetch_data(q_res, req, res, actInList, actList, cb)
+{
+	console.log('actInList:');
+	console.log(actInList);
+	console.log('actList');
+	console.log(actList);
+	var data =
+	{
+		firstname: null,
+		lastname: null,
+		cred_a: null,
+		cred_p: null,
+		mod: null,
+		actInList: actInList,
+		actList: actList
+		/*
+		firstname: q_res.name.first,
+		lastname: q_res.name.last,
+		cred_a: 20,//function
+		cred_p: 50,//function
+		mod: fetchModules(q_res, req, res),
+		actInList: actInList,
+		actList: actList
+		//act_past
+		//act_go
+		//to_correct
+		//corrected_by
+		//picture: '',
+		//credits_owned: functionLambda(q_res, req, res)
+		//credits_max:*/
+	};
+	fetch_name(q_res, function(err, named){
+			data.name = named;
+			fetch_credits(function(err, credited){
+					data.cred_a = credited.a;
+					data.cred_p = credited.p;
+					fetch_modules(q_res, req, res, function(err, moduled){
+						data.mod = moduled;
+						cb(null, data);
+					});
+			});
+	});
+
+}
+
+router.get('/test', function (req, res) {
+	var view = new keystone.View(req, res);
+
+	var objector = {
+		test1: 1,
+		test2: 2,
+		test3: 3
+	};
+	var keys = Object.keys(objector);
+	console.log(keys);
+	view.render('insert_notation');
+});
 
 router.get('/', function (req, res) {
 
@@ -175,24 +259,10 @@ router.get('/', function (req, res) {
 					res.status(500).send(err);
 				}
 				else {
-
-					locals.data = {
-						firstname: q_res.name.first,
-						lastname: q_res.name.last,
-						cred_a: 20,//function
-						cred_p: 50,//function
-						mod: fetchModules(q_res, req, res),
-						actInList: actInList,
-						actList: actList
-						//act_past
-						//act_go
-						//to_correct
-						//corrected_by
-						//picture: '',
-						//credits_owned: functionLambda(q_res, req, res)
-						//credits_max:
-					};
-					view.render('index');
+					fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
+						locals.data = fetched;
+						view.render('index');
+					});
 				}
 			})
 		}

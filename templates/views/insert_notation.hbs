@@ -1,0 +1,37 @@
+<script type="text/javascript">
+function addElement() {
+
+  var ni = document.getElementById('form1');
+
+  var numi = document.getElementById('theValue');
+
+  var num = (document.getElementById('theValue').value -1)+ 2;
+
+  numi.value = num;
+
+  var newdiv = document.createElement('div');
+
+  var divIdName = 'my'+num+'Div';
+
+  newdiv.setAttribute('id',divIdName);
+
+  var label = 'name'+num;
+  newdiv.innerHTML = '<div class="form-group">';
+  newdiv.innerHTML += '<label for="'+label+'">'+label+'</label>';
+  newdiv.innerHTML += '<input type="text" class="form-control" name="'+label+'">';
+   newdiv.innerHTML += '</div>';
+  ni.appendChild(newdiv);
+
+}
+</script>
+
+<input type="hidden" value="0" id="theValue" />
+<div class="container" id="myDiv">
+<p><a href="javascript:;" onclick="addElement();">Add Some Elements</a></p>
+<h2>Insert a new module</h2>
+	<form role="form" method="post">
+	<div id="form1">
+		<button type="submit" class="btn btn-default" action="/admin/module/new">Submit</button>
+	</div>
+	</form>
+</div>

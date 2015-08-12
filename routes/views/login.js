@@ -50,7 +50,6 @@ router.post('/', function (req, res)
 	{
 		result.on('searchEntry', function(entry)
 		{
-			console.log('HOLA SENIOR');
 			client.bind(entry.object.dn, req.body.password, function(err)
 			{
 				if (err)
@@ -98,7 +97,6 @@ router.post('/', function (req, res)
 							res.status(501).redirect('/login');
 						}
 						else {
-							console.log("Successful login ... maybe ?");
 							var sess = req.session;
 							sess.user = req.body.username;
 							sess.pw = usr.password;
@@ -107,7 +105,6 @@ router.post('/', function (req, res)
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							sess.isAdmin = (usr.isStaff.bocalStaff || usr.isStaff.bocalStudent) ? true : false;
-							console.log(entry.object);
 							req.session.forceLog = false;
 							res.redirect("/");
 						}

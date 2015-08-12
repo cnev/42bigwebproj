@@ -389,5 +389,15 @@ _helpers.displayActivityList = function(activity, isAdmin)
 	return new hbs.SafeString(output);
 }
 
+_helpers.form_listModules = function(modlist)
+{
+	var output = '';
+	for (var i = 0; i < modlist.length; i++){
+		output += '<option value="'+modlist[i]._id+'">'+modlist[i].name+'</option>';
+		if (i == modlist.length - 1)
+			return new hbs.SafeString(output);
+	}
+}
+
 return _helpers;
 };

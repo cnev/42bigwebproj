@@ -57,13 +57,17 @@ var tableau:
 		<div class="container-fluid">
 			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.lastname }} {{ sess.firstname }}, {{ sess.user }}</br></br></br></p>
 			<p>
-				{{!-- #each data}}
-				{{this}}<br />
-				{{/each --}}
-				Supposed to be ActInList ...<br />
-				{{data.actInList}}<br />
-				<br />Supposed to be ActList ...<br />
-				{{data.actList}}<br />
+				{{#each data.mod}}
+					Hi module : {{this.name}} </br>
+				{{/each}}
+				<br />Supposed to be actInList ...<br />
+				{{#each data.actInList}}
+					Hi Activity : {{this.name}} </br>
+				{{/each}}
+				<br />Supposed to be actList ...<br />
+				{{#each data.actList}}
+					Hi Activity : {{this.name}} </br>
+				{{/each}}
 			</p>
 		</div>
 {{/unless}}

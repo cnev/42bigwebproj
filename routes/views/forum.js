@@ -47,3 +47,5 @@ router.get('/thread/:id', function (req, res){
 	/forum/thread/:id
 */
 module.exports = router;
+
+

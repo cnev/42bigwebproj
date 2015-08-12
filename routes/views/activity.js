@@ -116,15 +116,11 @@ router.get('/register/:name', function (req, res) {
 								test += "<li><input type='submit' name='answer' value='no'></li>";
 								test += "</ul>";
 								res.status(200).send(test);
-								//view.render('confirm_registration');
 							}
 							else
 							{
 								req.flash('error', 'You are already registered to this activity !');
-								res.redirect('/activity/view/'+req.params.name);
-								//res.redirect('/');
-								//res.status(500).send('already registered');
-								//view.render('already_registered');
+								res.redirect('/activity');
 							}
 						});
 					}
@@ -160,14 +156,15 @@ router.post('/register/:name', function (req, res) {
 								activity: search_model,
 								encours: true
 							});
-							add_q.save();
-							res.status(200).send("OK!");
-							//view.render('confirm_registration');
+							add_q.save(function (err, saved){
+								req.flash('info', 'You are now registered to this activity !');
+								res.redirect('/activity');
+							});
 						}
 						else
 						{
-							res.status(500).send('already registered');
-							//view.render('already_registered');
+							req.flash('error', 'You are already registered to this activity !');
+							res.redirect('/activity');
 						}
 					});
 				});
