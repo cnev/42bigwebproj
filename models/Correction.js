@@ -6,11 +6,13 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var Correction = new keystone.List('Correction', track: {
-	createdAt: true,
-	createdBy: true,
-	updatedAt: true,
-	updatedBy: true
+var Correction = new keystone.List('Correction', {
+	track: {
+		createdAt: true,
+		createdBy: true,
+		updatedAt: true,
+		updatedBy: true
+	}
 });
 
 Correction.add({

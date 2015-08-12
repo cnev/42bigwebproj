@@ -1,11 +1,13 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
-var ActivityRegistration = new keystone.List('ActivityRegistration', track {
-	createdAt: true,
-	createdBy: true,
-	updatedAt: true,
-	updatedBy: true
+var ActivityRegistration = new keystone.List('ActivityRegistration', {
+	track: {
+		createdAt: true,
+		createdBy: true,
+		updatedAt: true,
+		updatedBy: true
+	}
 });
 
 ActivityRegistration.add({
