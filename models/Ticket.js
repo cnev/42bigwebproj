@@ -8,7 +8,6 @@ var Types = keystone.Field.Types;
 
 var Ticket = new keystone.List('Ticket', {
 	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
-	}
 });
 
 Ticket.add({

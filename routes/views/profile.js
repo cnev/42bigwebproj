@@ -140,7 +140,7 @@ cb(null, Activities, actInList);
 }*/
 
 function getActivities (user, cb) {
-	Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
+	Activity.model.find().where('period.begin.getTime() < now.getTime() + 604800000').exec(function (err, actList) {
 		if (err) {
 			cb(err);
 		}
@@ -149,6 +149,7 @@ function getActivities (user, cb) {
 			cb(null, null, null);
 		}
 		else {
+			console.log(actList);
 			console.log('user is :'+user);
 			ActivityRegistration.model.find()
 			.where('user', user)
@@ -214,6 +215,9 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 		mod: null,
 		actInList: actInList,
 		actList: actList
+		//pastActList,
+		//nextActlist
+
 			/*
 			   firstname: q_res.name.first,
 			   lastname: q_res.name.last,
