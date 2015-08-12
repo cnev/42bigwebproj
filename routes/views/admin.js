@@ -6,6 +6,7 @@ var router = express.Router();
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
 var Notation = keystone.list('Notation');
+var NotationElement = keystone.list('NotationElement');
 
 router.get('/', function (req, res) {
 
@@ -164,9 +165,14 @@ function addNotationElement(id, body, cb)
 	var label_text = 'element'+id+'_text';
 	var label_grade = 'element'+id+'_grade';
 
-	if (!(body.label))
+	if (!(body[label]))
 		cb(1);
 	else {
+		console.log('body');
+		console.log(body[label_title]);
+		console.log(body[label_text]);
+		console.log(body[label_grade]);
+		console.log('endof body');
 		var add_q = new NotationElement.model({
 			title: body[label_title],
 			text: body[label_text],
@@ -187,11 +193,13 @@ function build_contents(req, res, cb)
 {
 	var body = req.body;
 	var contents = [];
+	var num = (body.nb_elements - 1) + 1;
 
-	for (var i = 0; i < body.nb_elements; i++){
+	console.log('elements: '+num);
+	for (var i = 0; i < num; i++){
 		addNotationElement(i + 1, body, function(err, newElement){
 			contents.push(newElement);
-			if (i == body.nb_elements - 1)
+			if (contents.length == num)
 				cb(null, contents);
 		});
 	}
@@ -199,12 +207,15 @@ function build_contents(req, res, cb)
 
 router.post('/notation/new', function (req, res) {
 
-	if (!req.body) {// || !req.body.submit){
+	if (!req.body){// || !req.body.submit){
 		req.flash('error', 'form error');
 		res.redirect('/admin/notation/new');
 	}
-	else {
+	else{
 		build_contents(req, res, function (err, content_res){
+			console.log('content_res');
+			console.log(content_res);
+			console.log('end of content_res');
 			var add_q = new Notation.model({
 				activity: req.body.activity,
 				contents: content_res
@@ -217,7 +228,7 @@ router.post('/notation/new', function (req, res) {
 				else {
 					console.log(q_saved);
 					req.flash('info', 'New notation added to the list !');
-					res.redirect('/admin/notation');
+					res.redirect('/');
 				}
 			});
 		});
