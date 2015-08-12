@@ -137,32 +137,47 @@ cb(null, Activities, actInList);
 });
 }*/
 
-function getActivities (uid, cb) {
+function getActivities (user, cb) {
 	Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
 			cb(err);
 		}
 		else if (!actList) {
+			console.log("no activities found");
 			cb(null, null, null);
 		}
 		else {
-			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, ret) {
+			console.log('user is :'+user);
+			ActivityRegistration.model.find()
+			.where('user', user)
+			.where('encours', true)
+			.exec(function (err, q_register) {
 				if (err) {
 					cb(err);
 				}
-				else if (!ret) {
+				else if (!q_register) {
+					console.log("no registrations found");
 					cb(null, actList, null);
 				}
 				else {
-					var actInList = [];
-					for (var i = 0; i < ret.length; i++) {
-						Activity.model.findById(ret[i].activity)
-				.exec(function (err, q_activity){
-					actInList.push(q_activity);
-				});
-			if (i == ret.length - 1)
-				cb(null, actList, actInList);
+					if (q_register.length == 0)
+						cb(null, actList, null);
+					else
+					{
+						console.log("what is this? ??");
+						console.log(q_register);
+						console.log("registrations found WAIT WHAT ?");
+						var actInList = [];
+						for (var i = 0; i < q_register.length; i++) {
+							Activity.model.findById(q_register[i].activity)
+								.exec(function (err, q_activity){
+								actInList.push(q_activity);
+							});
+							if (i == q_register.length - 1)
+								cb(null, actList, actInList);
+						}
 					}
+
 				}
 			});
 		}
@@ -215,16 +230,18 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 	};
 	fetch_name(q_res, function(err, named){
 		data.name = named;
+		console.log('named:');
 		fetch_credits(function(err, credited){
+			console.log('credited:');
 			data.cred_a = credited.a;
 			data.cred_p = credited.p;
 			fetch_modules(q_res, req, res, function(err, moduled){
+				console.log('moduled:');
 				data.mod = moduled;
 				cb(null, data);
 			});
 		});
 	});
-
 }
 
 router.get('/test', function (req, res) {
@@ -254,27 +271,29 @@ router.get('/', function (req, res) {
 		res.status(404).send('not found');
 		else {
 			if (sess.user.isAdmin)
-		view.render('index');
-			else
-	{
-		getActivities(q_res._id, function (err, actList, actInList) {
-			if (err) {
-				console.error(err);
-				res.status(500).send(err);
-			}
-			else if (!actList && !actInList){
-				console.log('no actlist');
 				view.render('index');
-			}
-			else {
-				fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
-					locals.data = fetched;
-					console.log('actlist available');
-					view.render('index');
+			else
+			{
+				console.log('getting activities');
+				getActivities(q_res._id, function (err, actList, actInList) {
+					if (err) {
+						console.error(err);
+						res.status(500).send(err);
+					}
+					else if (!actList && !actInList){
+						console.log('no actlist');
+						view.render('index');
+					}
+					else {
+							console.log('actlist is here !');
+						fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
+							locals.data = fetched;
+							console.log('actlist available');
+							view.render('index');
+						});
+					}
 				});
 			}
-		})
-	}
 		}
 	});
 });
