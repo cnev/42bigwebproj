@@ -17,6 +17,16 @@
 </div>
 {{/if}}
 
-<!--
-<li class="list-group-item">{{this}}</li>
--->
+<div class="list-group">
+	{{#each data.modules}}
+	<div class="list-group-item">
+		<h4>{{this.name}}</h4>
+		<p>Description : {{this.description}}</br>
+		Ce module donne {{this.credits}} credits.</br>
+		vous pouvez vous enregistrer au project du {{registration.begins}} au {{registration.ends}}</br>
+		le project durera du {{period.begins}} au {{period.ends}}</br>
+		{{slots.current}}/{{slots.max}}
+		</p>
+	</div>
+	{{/each}}
+</ul>
