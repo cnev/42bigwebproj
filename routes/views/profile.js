@@ -14,19 +14,21 @@ function fetch_modules(user, req, res, cb) {
 	var q = Module.model.find()
 		.exec(function (err, q_res){
 			if (err)
-			res.status(500).send(err);
+				cb(1);
 			else if (!res)
-			res.status(404).send('not found');
+				cb(null, null);
 			else {
-				var tab = [];
-				for (var i = 0; i < q_res.length; i++)
-		{
-			tab.push(q_res[i]);
-			if (i == q_res.length - 1)
-		{
-			cb(null, tab);
-		}
-		}
+				if (q_res.length == 0)
+					cb(null, null);
+				else
+				{
+					var tab = [];
+					for (var i = 0; i < q_res.length; i++){
+						tab.push(q_res[i]);
+					if (i == q_res.length - 1)
+						cb(null, tab);
+					}
+				}
 			}
 		});
 }
@@ -243,19 +245,6 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 		});
 	});
 }
-
-router.get('/test', function (req, res) {
-	var view = new keystone.View(req, res);
-
-	var objector = {
-		test1: 1,
-test2: 2,
-test3: 3
-	};
-	var keys = Object.keys(objector);
-	console.log(keys);
-	view.render('insert_notation');
-});
 
 router.get('/', function (req, res) {
 

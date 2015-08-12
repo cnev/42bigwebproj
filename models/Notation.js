@@ -10,7 +10,7 @@ var Notation = new keystone.List('Notation');
 
 Notation.add({
 	activity: {type: Types.Relationship, ref: 'Activity'},
-	contents: {type: Types.Relationship, ref: 'ScaleElement', many: true}
+	contents: {type: Types.Relationship, ref: 'NotationElement', many: true}
 });
 
 Notation.register();
