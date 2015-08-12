@@ -25,6 +25,7 @@ router.get('/', function (req, res) {
 			{
 				for (var i = 0; i < q_res.length; i++)
 					locals.data.activities.push(q_res[i]);
+					locals.data.path = req.route.path;
 				view.render('activity_overview');
 				//temporary display
 				/*var to_send = '';

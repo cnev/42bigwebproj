@@ -1,12 +1,25 @@
 {{!< default}}
 
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-8"><h3>{{result.activity.name}}</h3></div>
+
+{{#if sess.isAdmin}}
+	<div class="col-md-1"><a href="/activity/edit/{{result.activity.name}}" role="button" class="btn btn-primary">edit</a></div>
+	<div class="col-md-1"><a href="/activity/delete/{{result.activity.name}}" role="button" class="btn btn-danger">delete</a></div>
+{{/if}}
+</div>
+</div>
+
 <div class="container">
 	<ul class="list-group">
-		<li class="list-group-item">{{result.activity.name}}</li>
 		<li class="list-group-item">{{result.activity.description}}</li>
 		<li class="list-group-item"><a href="/files/subjects/{{result.activity.subject}}">Link to subject</a></li>
-		<li class="list-group-item">{{result.activity.slots.max}}</li>
-		<li class="list-group-item">{{result.activity.slots.current}}</li>
-		<li class="list-group-item">{{result.module.name}}</li>
+		<li class="list-group-item">{{result.activity.slots.current}}/{{result.activity.slots.max}}</li>
+		<li class="list-group-item"><a href="/module/view/{{result.module.name}}">{{result.module.name}}</a></li>
+		<li class="list-group-item">{{result.activity.registration.begins}} --> {{result.activity.registration.ends}}</li>
+		<li class="list-group-item">{{result.activity.period.begins}} --> {{result.activity.period.ends}}</li>
+		<li class="list-group-item">{{result.activity.type}}</li>
+		<li class="list-group-item">{{result.activity.req_corrections}}</li>
 	</ul>
 </div>

@@ -46,6 +46,7 @@ router.get('/', function (req, res) {
 
 router.get('/view/:name', function (req, res) {
 
+	var view = new keystone.View(req, res);
 	var q = Module.model.findOne({'name': req.params.name})
 	.exec(function (err, result) {
 		if (err)
@@ -58,6 +59,9 @@ router.get('/view/:name', function (req, res) {
 		}
 		else
 		{
+			res.locals.result = result;
+			view.render('view_module')
+			/*
 			var print = '';
 			print += '<div>';
 			print += '<p>'+result.name+'</p>';
@@ -66,6 +70,7 @@ router.get('/view/:name', function (req, res) {
 			print += '<p>'+result.slots.current+'</p>';
 			print += '</div>';
 			res.status(200).send(print);
+			*/
 		}
 	});
 });

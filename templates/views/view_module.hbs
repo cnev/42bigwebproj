@@ -1,0 +1,22 @@
+{{!< default}}
+
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-8"><h3>{{result.name}}</h3></div>
+
+{{#if sess.isAdmin}}
+	<div class="col-md-1"><a href="/module/edit/{{result.name}}" role="button" class="btn btn-primary">edit</a></div>
+	<div class="col-md-1"><a href="/module/delete/{{result.name}}" role="button" class="btn btn-danger">delete</a></div>
+{{/if}}
+</div>
+</div>
+
+<div class="container">
+	<ul class="list-group">
+		<li class="list-group-item">{{result.description}}</li>
+		<li class="list-group-item">{{result.credits}}</li>
+		<li class="list-group-item">{{result.period.begins}} --> {{result.period.ends}}</li>
+		<li class="list-group-item">{{result.registration.begins}} --> {{result.registration.ends}}</li>
+		<li class="list-group-item">{{result.slots.current}}/{{result.slots.max}}</li>
+	</ul>
+</div>
