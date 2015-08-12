@@ -258,6 +258,9 @@ router.get('/', function (req, res) {
 					console.error(err);
 					res.status(500).send(err);
 				}
+				else if (!actList && !actInList){
+					view.render('index');
+				}
 				else {
 					fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
 						locals.data = fetched;
