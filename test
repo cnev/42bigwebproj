@@ -45,3 +45,5 @@ db.modules.insert({_id:ObjectId("55afb685477535fe144ed041"),
 		registration: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 15, 23, 42, 0, 0) },
 		period: { begins: Date(2015, 07, 14, 8, 42, 0, 0), ends: Date(2015, 08, 16, 23, 42, 0, 0) },
 		credits: 42})
+
+db.activityregistrations.find().where('user', 55cb1acbb301356b86623a52)
