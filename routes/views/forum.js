@@ -8,7 +8,7 @@ var ForumThread = keystone.list('ForumThread');
 
 router.get('/', function (req, res) {
 
-	// var view = new keystone.View(req, res);
+	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.tags = [];
 	locals.threads = [];
@@ -27,7 +27,7 @@ router.get('/', function (req, res) {
 			for (var i = 0; i < result.length; i++)
 				locals.threads.push(result[i]);
 		});
-	//view.render(forum_overview);
+	view.render('forum_overview');
 });
 
 router.get('/thread/:id', function (req, res){
@@ -42,15 +42,6 @@ router.get('/thread/:id', function (req, res){
 		});
 	//view.render(forum_thread);
 });
-
-router.get('/post/thread/:id')
-{
-
-}
-
-router.post('/post/thread/:id'){
-
-}
 
 /*
 	/forum/thread/:id

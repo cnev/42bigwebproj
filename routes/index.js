@@ -53,6 +53,7 @@ exports = module.exports = function(app) {
 	app.use('/test', middleware.checkAuth, require('./views/testRoute'));
 	app.use('/activity', middleware.checkAuth, require('./views/activity'));
 	app.use('/module', middleware.checkAuth, require('./views/module'));
+	app.use('/forum', middleware.checkAuth, require('./views/forum'));
 	app.use('/profile', middleware.checkAuth, require('./views/profile'));
 	app.use('/admin', middleware.checkAuth, require('./views/admin'));
 	app.use('/peer_correction', middleware.checkAuth, require('./views/peer_correction'));
