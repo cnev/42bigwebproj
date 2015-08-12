@@ -5,6 +5,8 @@ var router = express.Router();
 
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
+var Notation = keystone.list('Notation');
+var NotationElement = keystone.list('NotationElement');
 
 router.get('/', function (req, res) {
 
@@ -130,4 +132,107 @@ router.post('/activity/new', function (req, res) {
 	}
 });
 
+router.get('/notation', function (req, res) {
+	var view = new keystone.View(req, res);
+
+	view.render('notation_overview');
+});
+
+router.get('/notation/new', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	locals.actlist = [];
+
+	Activity.model.find()
+	.sort('name')
+	.exec(function (err, q_res){
+		for (var i = 0; i < q_res.length; i++){
+			var data = {
+				name: q_res[i].name,
+				_id: q_res[i]._id
+			}
+			locals.actlist.push(data);
+			if (i == q_res.length - 1)
+				view.render('insert_notation');
+		}
+	});
+});
+
+function addNotationElement(id, body, cb)
+{
+	var label = 'element'+id;
+	var label_title = 'element'+id+'_title';
+	var label_text = 'element'+id+'_text';
+	var label_grade = 'element'+id+'_grade';
+
+	if (!(body[label]))
+		cb(1);
+	else {
+		console.log('body');
+		console.log(body[label_title]);
+		console.log(body[label_text]);
+		console.log(body[label_grade]);
+		console.log('endof body');
+		var add_q = new NotationElement.model({
+			title: body[label_title],
+			text: body[label_text],
+			grade: body[label_grade]
+		});
+		add_q.save(function (err, q_saved){
+			if (err) {
+				cb(1);
+			}
+			else {
+				cb(null, add_q);
+			}
+		})
+	}
+}
+
+function build_contents(req, res, cb)
+{
+	var body = req.body;
+	var contents = [];
+	var num = (body.nb_elements - 1) + 1;
+
+	console.log('elements: '+num);
+	for (var i = 0; i < num; i++){
+		addNotationElement(i + 1, body, function(err, newElement){
+			contents.push(newElement);
+			if (contents.length == num)
+				cb(null, contents);
+		});
+	}
+}
+
+router.post('/notation/new', function (req, res) {
+
+	if (!req.body){// || !req.body.submit){
+		req.flash('error', 'form error');
+		res.redirect('/admin/notation/new');
+	}
+	else{
+		build_contents(req, res, function (err, content_res){
+			console.log('content_res');
+			console.log(content_res);
+			console.log('end of content_res');
+			var add_q = new Notation.model({
+				activity: req.body.activity,
+				contents: content_res
+			});
+			add_q.save(function (err, q_saved) {
+				if (err) {
+					console.error(err);
+					res.status(500).send(err);
+				}
+				else {
+					console.log(q_saved);
+					req.flash('info', 'New notation added to the list !');
+					res.redirect('/');
+				}
+			});
+		});
+	}
+	//res.status(200).send(req.body);
+});
 module.exports = router;

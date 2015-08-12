@@ -1,7 +1,9 @@
 var keystone = require('keystone');
 var Types = keystone.Field.Types;
 
-var ProjectGroup = new keystone.List('ProjectGroup');
+var ProjectGroup = new keystone.List('ProjectGroup', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 ProjectGroup.add({
 	

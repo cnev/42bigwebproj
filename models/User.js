@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var User = new keystone.List('User');
+var User = new keystone.List('User', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 User.add({
 	uid: { type: String },

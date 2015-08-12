@@ -1,7 +1,6 @@
 var keystone = require('keystone');
 var express = require('express');
 var session = require('express-session');
-
 var router = express.Router();
 
 router.get('/', function (req, res) {
@@ -20,7 +19,7 @@ router.get('/', function (req, res) {
 		// Render the view
 		//view.render('index');
 		if (sess.userClass == 'staff' || sess.userClass == 'bocal')
-		{	
+		{
 			console.log('im an admin');
 			res.redirect('/admin');
 		}

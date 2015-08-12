@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var Module = new keystone.List('Module');
+var Module = new keystone.List('Module', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 Module.add({
 	name: {type: String, index: true},

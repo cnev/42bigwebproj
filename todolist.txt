@@ -40,7 +40,7 @@
 
 		M/A/N
 			Module specifications
-				name															[OK]
+				name (single word check)										[NOT OK]
 				desc															[OK]
 				registration													[NEED TESTING]
 				period															[NEED TESTING]
@@ -49,7 +49,7 @@
 				auto-credit allocation at end of module (.csv)					[NOT OK]
 
 			Activity specifications
-				name															[OK]
+				name (single word check)										[NOT OK]
 				desc															[OK]
 				subject															[OK]
 									[File isn't verified though ?]

@@ -399,5 +399,15 @@ _helpers.form_listModules = function(modlist)
 	}
 }
 
+_helpers.form_listActivities = function(actlist)
+{
+	var output = '';
+	for (var i = 0; i < actlist.length; i++){
+		output += '<option value="'+actlist[i]._id+'">'+actlist[i].name+'</option>';
+		if (i == actlist.length - 1)
+			return new hbs.SafeString(output);
+	}
+}
+
 return _helpers;
 };

@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var ForumPost = new keystone.List('ForumPost');
+var ForumPost = new keystone.List('ForumPost', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 ForumPost.add({
 	post_id: {type: Number},

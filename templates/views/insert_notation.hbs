@@ -1,37 +1,68 @@
 <script type="text/javascript">
-function addElement() {
+	function increment_checkboxCount(label) {
+		var ni = document.getElementById(label+'_checkbox_count');
+		ni.value = ni.value - 1 + 2;
+	}
 
-  var ni = document.getElementById('form1');
+	function addGrade(label) {
 
-  var numi = document.getElementById('theValue');
+		increment_checkboxCount(label);
+		var ni = document.getElementById(label);
 
-  var num = (document.getElementById('theValue').value -1)+ 2;
+		var newElem = document.createElement('label');
+		var newBox = document.createElement('input');
+		ni.appendChild(newElem);
+		newElem.appendChild(newBox);
 
-  numi.value = num;
+		var checkboxCount = document.getElementById(label+'_checkbox_count').value;
 
-  var newdiv = document.createElement('div');
+		newElem.setAttribute('class', 'checkbox-inline');
+		newBox.setAttribute('type', 'checkbox');
+		newBox.setAttribute('name', label+'_grade');
+		newBox.setAttribute('value', checkboxCount);
+		newElem.innerHTML += checkboxCount;
+	}
 
-  var divIdName = 'my'+num+'Div';
+	function addElement() {
 
-  newdiv.setAttribute('id',divIdName);
-
-  var label = 'name'+num;
-  newdiv.innerHTML = '<div class="form-group">';
-  newdiv.innerHTML += '<label for="'+label+'">'+label+'</label>';
-  newdiv.innerHTML += '<input type="text" class="form-control" name="'+label+'">';
-   newdiv.innerHTML += '</div>';
-  ni.appendChild(newdiv);
-
-}
+		var ni = document.getElementById('form1');
+		var numi = document.getElementById('theValue');
+		var num = (document.getElementById('theValue').value -1)+ 2;
+		numi.value = num;
+		var newdiv = document.createElement('div');
+		var label = 'element'+num;
+		newdiv.setAttribute('id',label);
+		newdiv.setAttribute('class',"form-group");
+		newdiv.innerHTML = '<input type="hidden" value="'+label+'" name="'+label+'" />';
+		newdiv.innerHTML += '<input type="hidden" value="0" id="'+label+'_checkbox_count"/>';
+		newdiv.innerHTML += '<h2>'+label+'</h2>';
+		newdiv.innerHTML += '<label for="'+label+'">Title</label>';
+		newdiv.innerHTML += '<input type="text" class="form-control" name="'+label+'_title">';
+		newdiv.innerHTML += '<label for="'+label+'">Text</label>';
+		newdiv.innerHTML += '<input type="text" class="form-control" name="'+label+'_text">';
+		newdiv.innerHTML += '<label for="'+label+'">Grades</label><br />';
+		newdiv.innerHTML += '<a href="javascript:;" onclick="addGrade(\''+label+'\');">Add Grade</a>';
+		newdiv.innerHTML += '<label class="checkbox-inline"><input type="checkbox" name="'+label+'_grade" value="0">0</label>';
+		ni.appendChild(newdiv);
+	}
 </script>
 
-<input type="hidden" value="0" id="theValue" />
 <div class="container" id="myDiv">
-<p><a href="javascript:;" onclick="addElement();">Add Some Elements</a></p>
-<h2>Insert a new module</h2>
-	<form role="form" method="post">
-	<div id="form1">
-		<button type="submit" class="btn btn-default" action="/admin/module/new">Submit</button>
-	</div>
+	<h2>Insert a new notation</h2>
+
+	<form role="form" method="post" action="/admin/notation/new">
+		<div id="form1">
+			<input type="hidden" value="0" id="theValue" name="nb_elements" />
+			<div class="form-group">
+				<label for="module">Activity:</label>
+				<select class="form-control" name="activity">
+					{{#form_listActivities actlist}}
+						{{this}}
+					{{/form_listActivities}}
+				</select>
+			</div>
+		</div>
+		<p><a href="javascript:;" onclick="addElement();">Add Some Elements</a></p>
+		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
 </div>

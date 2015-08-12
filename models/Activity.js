@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var Activity = new keystone.List('Activity');
+var Activity = new keystone.List('Activity', {
+	track:{ createdAt: true, createdBy: true, updatedAt:true, updatedBy: true }
+});
 
 Activity.add({
 	name: {type: String, required: true, index: true},
