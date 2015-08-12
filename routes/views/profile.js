@@ -14,19 +14,19 @@ function fetch_modules(user, req, res, cb) {
 	var q = Module.model.find()
 		.exec(function (err, q_res){
 			if (err)
-				res.status(500).send(err);
+			res.status(500).send(err);
 			else if (!res)
-				res.status(404).send('not found');
+			res.status(404).send('not found');
 			else {
 				var tab = [];
 				for (var i = 0; i < q_res.length; i++)
-				{
-					tab.push(q_res[i]);
-					if (i == q_res.length - 1)
-					{
-						cb(null, tab);
-					}
-				}
+		{
+			tab.push(q_res[i]);
+			if (i == q_res.length - 1)
+		{
+			cb(null, tab);
+		}
+		}
 			}
 		});
 }
@@ -71,70 +71,70 @@ function checkact (actreg) {
 }
 
 /*function getInActivity(uid, cb) {
-	ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actList) {
-		var i;
-		if (err) {
-			console.error(err);
-			cb(err);
-		}
-		else {
-			console.log(actList);
-			for (i = 0 ; i < actList.length ; i++) {
-				checkact(actList[i]);
-			}
-			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
-				if (err) {
-					console.error(err);
-					cb(err);
-				}
-				else {
-					console.log('qwerty');
-					console.log(actInList);
-					cb(null, actInList);
-				}
-			});
-		}
-	});
-}
+  ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actList) {
+  var i;
+  if (err) {
+  console.error(err);
+  cb(err);
+  }
+  else {
+  console.log(actList);
+  for (i = 0 ; i < actList.length ; i++) {
+  checkact(actList[i]);
+  }
+  ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, actInList) {
+  if (err) {
+  console.error(err);
+  cb(err);
+  }
+  else {
+  console.log('qwerty');
+  console.log(actInList);
+  cb(null, actInList);
+  }
+  });
+  }
+  });
+  }
 
-function getActivitys (uid, cb) {
-	getInActivity(uid, function (err, actInList) {
-		var now = new Date();
-		if (err) {
-			cb(err);
-		}
-		else {
-			Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
-				var i;
-				var j;
-				var check;
-				var Activities = [];
-				if (err) {
-					console.error(err);
-					cb(err);
-				}
-				else {
-					console.log(actList);
-					console.log(actInList);
-					/*for (i = 0 ; i < actList.length ; i++) {
-						if (period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime())
-					}* /
-					for (i = 0 ; i < actList.length ; i++) {
-						check = false;
-						for (j = 0 ; j < actInList.length ; j++) {
-							if (toString(actList[i]._id) == toString(actInList[j].activity)) {
-								console.log((check = true));
-							}
-						}
-						if (!check) {
-							Activities.push(actList[i]);
-						}
-					}
-					cb(null, Activities, actInList);
-				}
-			});
-		}
-	});
+  function getActivitys (uid, cb) {
+  getInActivity(uid, function (err, actInList) {
+  var now = new Date();
+  if (err) {
+  cb(err);
+  }
+  else {
+  Activity.model.find().where('period.begin.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
+  var i;
+  var j;
+  var check;
+  var Activities = [];
+  if (err) {
+  console.error(err);
+  cb(err);
+  }
+  else {
+  console.log(actList);
+  console.log(actInList);
+/*for (i = 0 ; i < actList.length ; i++) {
+if (period.begin.getTime() < now.getTime && period.ends.getTime > now.getTime())
+}* /
+for (i = 0 ; i < actList.length ; i++) {
+check = false;
+for (j = 0 ; j < actInList.length ; j++) {
+if (toString(actList[i]._id) == toString(actInList[j].activity)) {
+console.log((check = true));
+}
+}
+if (!check) {
+Activities.push(actList[i]);
+}
+}
+cb(null, Activities, actInList);
+}
+});
+}
+});
 }*/
 
 function getActivities (uid, cb) {
@@ -143,7 +143,7 @@ function getActivities (uid, cb) {
 			cb(err);
 		}
 		else if (!actList) {
-			cb();
+			cb(null, null, null);
 		}
 		else {
 			ActivityRegistration.model.find({'encours':true}).where({'user':uid}).exec(function (err, ret) {
@@ -151,17 +151,17 @@ function getActivities (uid, cb) {
 					cb(err);
 				}
 				else if (!ret) {
-					cb(null, actList);
+					cb(null, actList, null);
 				}
 				else {
 					var actInList = [];
 					for (var i = 0; i < ret.length; i++) {
 						Activity.model.findById(ret[i].activity)
-							.exec(function (err, q_activity){
-								actInList.push(q_activity);
-							});
-						if (i == ret.length - 1)
-							cb(null, actList, actInList);
+				.exec(function (err, q_activity){
+					actInList.push(q_activity);
+				});
+			if (i == ret.length - 1)
+				cb(null, actList, actInList);
 					}
 				}
 			});
@@ -197,32 +197,32 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 		mod: null,
 		actInList: actInList,
 		actList: actList
-		/*
-		firstname: q_res.name.first,
-		lastname: q_res.name.last,
-		cred_a: 20,//function
-		cred_p: 50,//function
-		mod: fetchModules(q_res, req, res),
-		actInList: actInList,
-		actList: actList
-		//act_past
-		//act_go
-		//to_correct
-		//corrected_by
-		//picture: '',
-		//credits_owned: functionLambda(q_res, req, res)
-		//credits_max:*/
+			/*
+			   firstname: q_res.name.first,
+			   lastname: q_res.name.last,
+			   cred_a: 20,//function
+			   cred_p: 50,//function
+			   mod: fetchModules(q_res, req, res),
+			   actInList: actInList,
+			   actList: actList
+			//act_past
+			//act_go
+			//to_correct
+			//corrected_by
+			//picture: '',
+			//credits_owned: functionLambda(q_res, req, res)
+			//credits_max:*/
 	};
 	fetch_name(q_res, function(err, named){
-			data.name = named;
-			fetch_credits(function(err, credited){
-					data.cred_a = credited.a;
-					data.cred_p = credited.p;
-					fetch_modules(q_res, req, res, function(err, moduled){
-						data.mod = moduled;
-						cb(null, data);
-					});
+		data.name = named;
+		fetch_credits(function(err, credited){
+			data.cred_a = credited.a;
+			data.cred_p = credited.p;
+			fetch_modules(q_res, req, res, function(err, moduled){
+				data.mod = moduled;
+				cb(null, data);
 			});
+		});
 	});
 
 }
@@ -232,8 +232,8 @@ router.get('/test', function (req, res) {
 
 	var objector = {
 		test1: 1,
-		test2: 2,
-		test3: 3
+test2: 2,
+test3: 3
 	};
 	var keys = Object.keys(objector);
 	console.log(keys);
@@ -247,27 +247,34 @@ router.get('/', function (req, res) {
 	var sess = req.session;
 
 	User.model.findOne({'uid': sess.user})
-		.exec(function (err, q_res){
+	.exec(function (err, q_res){
 		if (err)
-			res.status(500).send(err);
+		res.status(500).send(err);
 		else if (!q_res)
-			res.status(404).send('not found');
+		res.status(404).send('not found');
 		else {
-			getActivities(q_res._id, function (err, actList, actInList) {
-				if (err) {
-					console.error(err);
-					res.status(500).send(err);
-				}
-				else if (!actList && !actInList){
+			if (sess.user.isAdmin)
+		view.render('index');
+			else
+	{
+		getActivities(q_res._id, function (err, actList, actInList) {
+			if (err) {
+				console.error(err);
+				res.status(500).send(err);
+			}
+			else if (!actList && !actInList){
+				console.log('no actlist');
+				view.render('index');
+			}
+			else {
+				fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
+					locals.data = fetched;
+					console.log('actlist available');
 					view.render('index');
-				}
-				else {
-					fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
-						locals.data = fetched;
-						view.render('index');
-					});
-				}
-			})
+				});
+			}
+		})
+	}
 		}
 	});
 });

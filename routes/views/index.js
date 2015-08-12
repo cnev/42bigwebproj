@@ -20,9 +20,15 @@ router.get('/', function (req, res) {
 		// Render the view
 		//view.render('index');
 		if (sess.userClass == 'staff' || sess.userClass == 'bocal')
+		{	
+			console.log('im an admin');
 			res.redirect('/admin');
+		}
 		else
+		{
+			console.log('im a student');
 			res.redirect('/profile');
+		}
 		//res.redirect('/profile');
 	}
 	else
