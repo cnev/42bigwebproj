@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var ForumThread = new keystone.List('ForumThread');
+var ForumThread = new keystone.List('ForumThread', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 ForumThread.add({
 	title: {type: String},

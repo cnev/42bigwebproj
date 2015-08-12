@@ -6,7 +6,9 @@ var Types = keystone.Field.Types;
  * ==========
  */
 
-var NotationElement = new keystone.List('NotationElement');
+var NotationElement = new keystone.List('NotationElement', {
+	track: { createdAt: true, createdBy: true, updatedAt: true, updatedBy: true }
+});
 
 NotationElement.add({
 	title: {type: String},
