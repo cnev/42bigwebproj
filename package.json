@@ -17,6 +17,7 @@
     "mongoose": "latest",
     "assert": "latest",
     "password-hash": "latest",
+    "mongodb": "latest",
     "node-schedule": "latest"
   },
   "devDependencies": {

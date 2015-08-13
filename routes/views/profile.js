@@ -2,6 +2,10 @@ var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
 
+var ActDriv = require('../../driver/activityDriver').ActivityDriver;
+
+var ActivityDriver = new ActDriv ();
+
 var router = express.Router();
 
 var User = keystone.list('User');
@@ -268,18 +272,18 @@ router.get('/', function (req, res) {
 			else
 			{
 				console.log('getting activities');
-				getActivities(q_res._id, function (err, actList, actInList) {
+				ActivityDriver.getUserAct (q_res, function (err, actInList) {
 					if (err) {
 						console.error(err);
 						res.status(500).send(err);
 					}
-					else if (!actList && !actInList){
+					else if (!actInList){
 						console.log('no actlist');
 						view.render('index');
 					}
 					else {
 							console.log('actlist is here !');
-						fetch_data(q_res, req, res, actInList, actList, function(err, fetched) {
+						fetch_data(q_res, req, res, actInList, actInList, function(err, fetched) {
 							locals.data = fetched;
 							console.log('actlist available');
 							view.render('index');
