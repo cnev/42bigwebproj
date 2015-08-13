@@ -62,7 +62,7 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 ActivityDriver.prototype.getPastAct = function(cb) {
 	// body...
 	var that = this;
-	that.getActivities(null, 'period.begin.getTime() < now.getTime() + 604800000', function (err, actList) {
+	that.getActivities(null, 'period.end.getTime() < now.getTime()', function (err, actList) {
 		if (err) {
 			cb(err);
 		}
@@ -74,6 +74,15 @@ ActivityDriver.prototype.getPastAct = function(cb) {
 
 ActivityDriver.prototype.getNextAtc = function(cb) {
 	// body...
+	var that = this;
+	that.getActivities(null, 'registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()', function (err, actList) {
+		if (err) {
+			cb(err);
+		}
+		else {
+			cb(null, actList);
+		}
+	})
 };
 
 ActivityDriver.prototype.getModuleAct = function(module, cb) {
