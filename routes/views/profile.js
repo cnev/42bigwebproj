@@ -282,11 +282,18 @@ router.get('/', function (req, res) {
 						view.render('index');
 					}
 					else {
-							console.log('actlist is here !');
-						fetch_data(q_res, req, res, actInList, actInList, function(err, fetched) {
-							locals.data = fetched;
-							console.log('actlist available');
-							view.render('index');
+						ActivityDriver.getPastAct(function (err, actPList) {
+							if (err) {
+								res.status(500).send(err)
+							}
+							else {
+								console.log('actlist is here !');
+								fetch_data(q_res, req, res, actInList, actPList, function(err, fetched) {
+									locals.data = fetched;
+									console.log('actlist available');
+									view.render('index');
+								});
+							}
 						});
 					}
 				});

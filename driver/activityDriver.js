@@ -6,9 +6,9 @@ var ActivityRegistration = keystone.list('ActivityRegistration');
 
 var ActivityDriver = function () {};
 
-ActivityDriver.prototype.getActivities = function (cb) {
+ActivityDriver.prototype.getActivities = function (data, options, cb) {
 	// body...
-	Activity.model.find().exec(function (err, actList) {
+	Activity.model.find(data).where(options).exec(function (err, actList) {
 		if (err) {
 			console.error(err);
 			cb(err);
@@ -26,7 +26,7 @@ ActivityDriver.prototype.getActivities = function (cb) {
 ActivityDriver.prototype.getUserAct = function(user, cb) {
 	// body...
 	var that = this;
-	that.getActivities(function (err, actList) {
+	that.getActivities(null, null, function (err, actList) {
 		if (err) {
 			console.error(err);
 			cb(err);
@@ -61,6 +61,15 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 
 ActivityDriver.prototype.getPastAct = function(cb) {
 	// body...
+	var that = this;
+	that.getActivities(null, 'period.begin.getTime() < now.getTime() + 604800000', function (err, actList) {
+		if (err) {
+			cb(err);
+		}
+		else {
+			cb(null, actList);
+		}
+	});
 };
 
 ActivityDriver.prototype.getNextAtc = function(cb) {
