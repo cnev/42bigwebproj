@@ -47,7 +47,7 @@ exports = module.exports = function(app) {
 	app.use('/logout', require('./views/logout'));
 	app.use('/', middleware.checkAuth, require('./views/index'));
 	app.use('/pititest', middleware.checkAuth, require('./views/pititest'));
-	app.use('/search', middleware.checkAuth, middleware.checkAuth, require('./views/search'));
+	app.use('/search', middleware.checkAuth, require('./views/search'));
 	app.use('/ticket_test', middleware.checkAuth, require('./views/ticket_test'));
 	//app.use('/prepare', middleware.checkAuth, require('./views/prepare'));
 	app.use('/test', middleware.checkAuth, require('./views/testRoute'));
@@ -55,8 +55,8 @@ exports = module.exports = function(app) {
 	app.use('/module', middleware.checkAuth, require('./views/module'));
 	app.use('/forum', middleware.checkAuth, require('./views/forum'));
 	app.use('/profile', middleware.checkAuth, require('./views/profile'));
-	app.use('/admin', middleware.checkAuth, require('./views/admin'));
 	app.use('/peer_correction', middleware.checkAuth, require('./views/peer_correction'));
+	app.use('/admin', middleware.checkAuth, middleware.requireAdmin, require('./views/admin'));
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
 

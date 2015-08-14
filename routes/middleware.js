@@ -111,6 +111,15 @@ exports.testmiddle = function (req, res, next)
 	next();
 }
 
+exports.requireAdmin = function(req, res, next) {
+	if (req.session.isAdmin == true)
+		next();
+	else {
+		req.flash('error', 'Unauthorized access to admin area.');
+		res.redirect('/');
+	}
+}
+
 /*
 exports.forkByUserClass = function(req, res, next)
 {
