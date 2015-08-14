@@ -111,7 +111,7 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 	});
 };
 
-ActivityDriver.prototype.getPastAct = function(cb) {
+ActivityDriver.prototype.getPastAct = function(user, cb) {
 	// body...
 	var that = this;
 	Activity.model.find().where('period.end.getTime() < now.getTime()').exec(function (err, actList) {

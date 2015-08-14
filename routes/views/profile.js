@@ -282,7 +282,7 @@ router.get('/', function (req, res) {
 						view.render('index');
 					}
 					else {
-						ActivityDriver.getPastAct(function (err, actPList) {
+						ActivityDriver.getPastAct(q_res, function (err, actPList) {
 							if (err) {
 								res.status(500).send(err)
 							}
