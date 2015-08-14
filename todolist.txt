@@ -20,11 +20,11 @@
 		Panel Admin
 				add module														[OK]
 				add activity													[OK]
-				add notation													[NOT OK]
-				edit module														[NOT OK]
+				add notation													[OK]
+				edit module														[OK]
 				edit activity													[NOT OK]
 				edit notation													[NOT OK]
-				delete module													[NOT OK]
+				delete module													[OK]
 				delete activity													[NOT OK]
 				delete notation													[NOT OK]
 		Tickets

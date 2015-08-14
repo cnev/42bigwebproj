@@ -51,7 +51,7 @@ router.get('/view/:name', function (req, res) {
 				else
 				{
 					var locals = res.locals;
-					var q2 = Module.model.findOne()
+					var q2 = Module.model.findById(q_res.module)
 						.exec(function (err, q2_res)
 					{
 						if (err)

@@ -7,7 +7,7 @@
 		</div>
 		<div class="form-group">
 			<label for="description">Description:</label>
-			<textarea class="form-control" rows="5" name="description" {{#if edit}}{{addPlaceholder edit.description}}{{/if}}></textarea>
+			<textarea class="form-control" rows="5" name="description">{{#if edit}}{{edit.description}}{{/if}}</textarea>
 		</div>
 		<div class="form-group">
 			<label for="slots">Slots:</label>
@@ -20,16 +20,16 @@
 		</div>
 		<div class="form-group">
 			<label for="registrationends">Ending:</label>
-			<input type="datetime-local" class="form-control" name="registrationends">
+			<input type="datetime-local" class="form-control" name="registrationends" {{#if edit}}{{addDateholder edit.registration.ends}}{{/if}}>
 		</div>
 		<h3>Period</h3>
 		<div class="form-group">
 			<label for="periodbegins">Beginning:</label>
-			<input type="datetime-local" class="form-control" name="periodbegins">
+			<input type="datetime-local" class="form-control" name="periodbegins" {{#if edit}}{{addDateholder edit.period.begins}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="periodends">Ending:</label>
-			<input type="datetime-local" class="form-control" name="periodends"}>
+			<input type="datetime-local" class="form-control" name="periodends"} {{#if edit}}{{addDateholder edit.period.ends}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="credits">Credits:</label>
