@@ -11,11 +11,11 @@ ActivityDriver.prototype.getActivities = function (cb) {
 	Activity.model.find().exec(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else if (!actList || actList.length == 0) {
 			console.error('C\'est completement vide ici.');
-			cb(1);
+			cb(404, 'activity(ies) not found');
 		}
 		else {
 			cb(null, actList);
@@ -28,11 +28,11 @@ ActivityDriver.prototype.getCurrent = function(cb) {
 	Activity.model.find().where('period.begins.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else if (!actList || actList.length == 0) {
 			console.error('C\'est completement vide ici.');
-			cb(1);
+			cb(404, 'activity(ies) not found');
 		}
 		else {
 			cb(null, actList);
@@ -45,11 +45,11 @@ ActivityDriver.prototype.getInscPoss = function(cb) {
 	Activity.model.find().where('registration.begins.getTime() < now.getTime() && registration.ends.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else if (!actList || actList.length == 0) {
 			console.error('C\'est completement vide ici.');
-			cb(1);
+			cb(404, 'activity(ies) not found');
 		}
 		else {
 			cb(null, actList);
@@ -63,11 +63,11 @@ ActivityDriver.prototype.getNextAct = function(cb) {
 	Activity.model.find().where('period.begins.getTime > now.getTime() && registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else if (!actList || actList.length == 0) {
 			console.error('C\'est completement vide ici.');
-			cb(1);
+			cb(404, 'activity(ies) not found');
 		}
 		else {
 			cb(null, actList);
@@ -81,7 +81,7 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 	that.getCurrent(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else {
 			ActivityRegistration.model.find({'user':user, 'encours':true}).exec(function (err, actRList) {
@@ -89,7 +89,7 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 				var j;
 				var actTab = [];
 				if (err) {
-					cb(err);
+					cb(500, err);
 				}
 				else if (!actRList) {
 					console.log("no activities found");
@@ -117,11 +117,11 @@ ActivityDriver.prototype.getPastAct = function(user, cb) {
 	Activity.model.find().where('period.end.getTime() < now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);
-			cb(err);
+			cb(500, err);
 		}
 		else if (!actList || actList.length == 0) {
 			console.error('C\'est completement vide ici.');
-			cb(1);
+			cb(404, 'activity(ies) not found');
 		}
 		else {
 			ActivityRegistration.model.find({'user':user}).exec(function (err, actRList) {
@@ -129,7 +129,7 @@ ActivityDriver.prototype.getPastAct = function(user, cb) {
 				var j;
 				var actTab = [];
 				if (err) {
-					cb(err);
+					cb(500, err);
 				}
 				else if (!actRList) {
 					console.log("no activities found");
@@ -153,6 +153,19 @@ ActivityDriver.prototype.getPastAct = function(user, cb) {
 
 ActivityDriver.prototype.getOne = function(name, cb) {
 	// body...
+	Activity.model.findOne({'name':name}).exec(function (err, activity) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!activity) {
+			console.error('C\'est completement vide ici.');
+			cb(404, 'activity(ies) not found');
+		}
+		else {
+			cb(null, actList);
+		}
+	});
 };
 
 ActivityDriver.prototype.create = function(data, cb) {

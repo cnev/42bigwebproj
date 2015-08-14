@@ -274,17 +274,14 @@ router.get('/', function (req, res) {
 				console.log('getting activities');
 				ActivityDriver.getUserAct (q_res, function (err, actInList) {
 					if (err) {
-						console.error(err);
-						res.status(500).send(err);
-					}
-					else if (!actInList){
-						console.log('no actlist');
-						view.render('index');
+						console.error(actInList);
+						res.status(err).send(actInList);
 					}
 					else {
 						ActivityDriver.getPastAct(q_res, function (err, actPList) {
 							if (err) {
-								res.status(500).send(err)
+								console.error(err);
+								res.status(err).send(actPList)
 							}
 							else {
 								console.log('actlist is here !');

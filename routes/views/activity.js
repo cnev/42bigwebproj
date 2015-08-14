@@ -21,9 +21,7 @@ router.get('/', function (req, res) {
 	};
 	var q = ActivityDriver.getActivities(function (err, q_res) {
 			if (err)
-				res.status(500).send('internal error');
-			else if (!q_res)
-				res.status(404).send('NOPE');
+				res.status(err).send(q_res);
 			else
 			{
 				for (var i = 0; i < q_res.length; i++)
@@ -41,15 +39,10 @@ router.get('/', function (req, res) {
 
 router.get('/view/:name', function (req, res) {
 	console.log(req.params.name);
-	var q = Activity.model.findOne({'name': req.params.name})
-			.exec(function(err, q_res) {
+	var q = ActivityDriver.getOne(req.params.name, function(err, q_res) {
 				if (err)
 				{
-					res.status(500).send('internal error');
-				}
-				else if (!q_res)
-				{
-					res.status(404).send('NOPE');
+					res.status(err).send(q_res);
 				}
 				else
 				{
