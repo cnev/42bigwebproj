@@ -15,3 +15,17 @@
 	<a class="btn btn-info" role="button" href="/admin/activity/new">Add new activity</a>
 </div>
 {{/if}}
+
+<div class="container-fluid">
+	{{#each data.activities}}
+	<div class="col-sm-4">
+		<h4>{{this.name}}</h4>
+		<p>Description : {{this.description}}</br>
+		vous pouvez vous enregistrer au project du {{registration.begins}} au {{registration.ends}}</br>
+		le project durera du {{period.begins}} au {{period.ends}}</br>
+		{{slots.current}}/{{slots.max}}
+		{{displayActivityList this sess.isAdmin}}
+		</p>
+	</div>
+	{{/each}}
+</ul>
