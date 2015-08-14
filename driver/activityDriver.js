@@ -6,9 +6,9 @@ var ActivityRegistration = keystone.list('ActivityRegistration');
 
 var ActivityDriver = function () {};
 
-ActivityDriver.prototype.getActivities = function (data, options, cb) {
+ActivityDriver.prototype.getActivities = function (cb) {
 	// body...
-	Activity.model.find(data).where(options).exec(function (err, actList) {
+	Activity.model.find().exec(function (err, actList) {
 		if (err) {
 			console.error(err);
 			cb(err);
@@ -23,10 +23,62 @@ ActivityDriver.prototype.getActivities = function (data, options, cb) {
 	});
 };
 
+ActivityDriver.prototype.getCurrent = function(cb) {
+	// body...
+	Activity.model.find().where('period.begins.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
+		if (err) {
+			console.error(err);
+			cb(err);
+		}
+		else if (!actList || actList.length == 0) {
+			console.error('C\'est completement vide ici.');
+			cb(1);
+		}
+		else {
+			cb(null, actList);
+		}
+	});
+};
+
+ActivityDriver.prototype.getInscPoss = function(cb) {
+	// body...
+	Activity.model.find().where('registration.begins.getTime() < now.getTime() && registration.ends.getTime() > now.getTime()').exec(function (err, actList) {
+		if (err) {
+			console.error(err);
+			cb(err);
+		}
+		else if (!actList || actList.length == 0) {
+			console.error('C\'est completement vide ici.');
+			cb(1);
+		}
+		else {
+			cb(null, actList);
+		}
+	});
+};
+
+ActivityDriver.prototype.getNextAct = function(cb) {
+	// body...
+	var that = this;
+	Activity.model.find().where('period.begins.getTime > now.getTime() && registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()').exec(function (err, actList) {
+		if (err) {
+			console.error(err);
+			cb(err);
+		}
+		else if (!actList || actList.length == 0) {
+			console.error('C\'est completement vide ici.');
+			cb(1);
+		}
+		else {
+			cb(null, actList);
+		}
+	})
+};
+
 ActivityDriver.prototype.getUserAct = function(user, cb) {
 	// body...
 	var that = this;
-	that.getActivities(null, null, function (err, actList) {
+	that.getCurrent(null, null, function (err, actList) {
 		if (err) {
 			console.error(err);
 			cb(err);
@@ -62,31 +114,41 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 ActivityDriver.prototype.getPastAct = function(cb) {
 	// body...
 	var that = this;
-	that.getActivities(null, 'period.end.getTime() < now.getTime()', function (err, actList) {
+	Activity.model.find().where('period.end.getTime() < now.getTime()').exec(function (err, actList) {
 		if (err) {
+			console.error(err);
 			cb(err);
 		}
+		else if (!actList || actList.length == 0) {
+			console.error('C\'est completement vide ici.');
+			cb(1);
+		}
 		else {
-			cb(null, actList);
+			ActivityRegistration.model.find({'user':user}).exec(function (err, actRList) {
+				var i;
+				var j;
+				var actTab = [];
+				if (err) {
+					cb(err);
+				}
+				else if (!actRList) {
+					console.log("no activities found");
+					cb();
+				}
+				else {
+					console.log(actRList);
+					for (i = 0 ; i < actRList.length ; i++) {
+						for (j = 0 ; j < actList.length ; j++) {
+							if (actRList[i].activity.toString() == actList[j]._id.toString())
+								actTab.push(actList[j]);
+						}
+					}
+					console.log(actTab);
+					cb(null, actTab);
+				}
+			});
 		}
 	});
-};
-
-ActivityDriver.prototype.getNextAtc = function(cb) {
-	// body...
-	var that = this;
-	that.getActivities(null, 'registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()', function (err, actList) {
-		if (err) {
-			cb(err);
-		}
-		else {
-			cb(null, actList);
-		}
-	})
-};
-
-ActivityDriver.prototype.getModuleAct = function(module, cb) {
-	// body...
 };
 
 exports.ActivityDriver = ActivityDriver;

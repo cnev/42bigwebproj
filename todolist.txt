@@ -95,6 +95,7 @@
 
 Mickael
 	Enregistrer la date/heure de chaque post/thread (modeles)
+	Realiser la liste des drivers en fonction des models et des besoins
 	Refonte du ActInList/ActList
 		pastActivities,pastModules = si inscription effectuee && periode terminee
 		curActivities,curModules = si inscription possible || inscription effectuee && periode en cours
