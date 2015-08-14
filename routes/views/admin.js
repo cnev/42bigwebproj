@@ -29,7 +29,6 @@ router.post('/module/new', function (req, res) {
 		res.redirect('/admin/module/new');
 	}
 	else {
-		console.log(req.body);
 		var add_q = new Module.model({
 			name: req.body.name,
 			description: req.body.description,
@@ -53,12 +52,59 @@ router.post('/module/new', function (req, res) {
 				res.status(500).send(err);
 			}
 			else {
-				console.log(q_saved);
 				req.flash('info', req.body.name+' was successfully added to the module list !');
 				res.redirect('/module');
 			}
 		});
 	}
+});
+
+router.get('/module/edit/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	Module.model.findOne()
+	.where('name', req.params.name)
+	.exec(function (err, req_ret){
+		if (err || !req_ret){
+			req.flash('error', 'error finding module to edit');
+			res.redirect('/module');
+		}
+		else {
+			locals.edit = req_ret;
+			view.render('insert_module');
+		}
+	});
+});
+
+router.post('/module/edit/:name', function (req, res) {
+
+	Module.model.update({'name': req.params.name},
+		{
+			name: req.body.name,
+			description: req.body.description,
+			slots: {
+				max: req.body.slots,
+				current: 0
+			},
+			registration: {
+				begins: new Date(req.body.registrationbegins),
+				ends: new Date(req.body.registrationends)
+			},
+			period: {
+				begins: new Date(req.body.periodbegins),
+				ends: new Date(req.body.periodends)
+			},
+			credits: req.body.credits
+		},
+		{'multi':false})
+	.exec(function (err,result){
+		Module.model.findOne()
+		.where('name', req.params.name)
+		.exec(function (err, bob){
+			res.status(bob);
+		});
+	});
 });
 
 router.get('/activity/new', function (req, res){
@@ -235,4 +281,5 @@ router.post('/notation/new', function (req, res) {
 	}
 	//res.status(200).send(req.body);
 });
+
 module.exports = router;

@@ -60,7 +60,7 @@ router.get('/view/:name', function (req, res) {
 		else
 		{
 			res.locals.result = result;
-			view.render('view_module')
+			view.render('view_module');
 			/*
 			var print = '';
 			print += '<div>';

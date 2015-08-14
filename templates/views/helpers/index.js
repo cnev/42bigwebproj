@@ -409,5 +409,23 @@ _helpers.form_listActivities = function(actlist)
 	}
 }
 
+_helpers.addPlaceholder = function(val)
+{
+	var output = 'value="';
+	output += val;
+	output += '"';
+	return new hbs.SafeString(output);
+}
+
+_helpers.addDateholder = function(val)
+{
+	var date = new Date(val);
+	var output = 'value="';
+	console.log(date.toUTCString());
+	console.log(date.toISOString());
+	output += date.toISOString().substr(0,16)+'"';
+	return new hbs.SafeString(output);
+}
+
 return _helpers;
 };

@@ -159,4 +159,65 @@ router.get('/allocate/:activity', function (req, res) {
 	});
 });
 
+function fetchCorrections(tab, activity, i, cb){
+	tab.push(activity);
+	cb(null,i);
+}
+
+function pushCorrection(ret, activity, i, cb){
+	User.model.findById(activity.user)
+	.exec(function (err, user){
+		Activity.model.findById(activity.activity)
+		.exec(function (err, act){
+			var obj = {
+				activity: act,
+				peer: user
+			};
+			console.log('obj');
+			console.log(obj);
+			console.log('endof obj');
+			ret.push(obj);
+			cb(null, i);
+		});
+	});
+}
+
+function displayCorrections(req, res, view){
+	var locals = res.locals;
+
+	var tab = locals.activities;
+	locals.corrections = [];
+
+	for (var i = 0; i < tab.length; i++){
+		pushCorrection(locals.corrections, tab[i], i, function (err, q_i){
+			if (q_i == tab.length - 1)
+				view.render('correction_overview');
+		})
+	}
+}
+
+router.get('/',function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	locals.activities = [];
+
+	User.model.findOne()
+	.where('uid', req.session.user)
+	.exec(function (err, user){
+		ActivityRegistration.model.find()
+		.where('user', user)
+		.exec(function (err, activities) {
+			for (var i = 0; i < activities.length; i++) {
+				if (activities[i].peers.length > 0) {
+					fetchCorrections(locals.activities, activities[i], i, function (err, ret){
+						if (ret == activities.length - 1)
+							displayCorrections(req, res, view);
+					});
+				}
+			}
+		})
+	})
+
+});
+
 module.exports = router;
