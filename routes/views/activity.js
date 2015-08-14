@@ -1,7 +1,12 @@
 var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
-var Activity = keystone.list('Activity');
+
+var ActDriv = require('../../driver/activityDriver').ActivityDriver;
+var ActivityDriver = new ActDriv ();
+
+//var Activity = keystone.list('Activity');
+
 var ActivityRegistration = keystone.list('ActivityRegistration');
 var Module = keystone.list('Module');
 var User = keystone.list('User');
@@ -14,9 +19,7 @@ router.get('/', function (req, res) {
 	locals.data = {
 		activities: []
 	};
-	var q = Activity.model.find()
-		.sort('name')
-		.exec(function (err, q_res) {
+	var q = ActivityDriver.getActivities(function (err, q_res) {
 			if (err)
 				res.status(500).send('internal error');
 			else if (!q_res)

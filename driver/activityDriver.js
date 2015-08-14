@@ -78,7 +78,7 @@ ActivityDriver.prototype.getNextAct = function(cb) {
 ActivityDriver.prototype.getUserAct = function(user, cb) {
 	// body...
 	var that = this;
-	that.getCurrent(null, null, function (err, actList) {
+	that.getCurrent(function (err, actList) {
 		if (err) {
 			console.error(err);
 			cb(err);
@@ -149,6 +149,14 @@ ActivityDriver.prototype.getPastAct = function(cb) {
 			});
 		}
 	});
+};
+
+ActivityDriver.prototype.getOne = function(name, cb) {
+	// body...
+};
+
+ActivityDriver.prototype.create = function(data, cb) {
+	// body...
 };
 
 exports.ActivityDriver = ActivityDriver;
