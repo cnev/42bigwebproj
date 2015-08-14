@@ -1,6 +1,6 @@
 {{!< default}}
 
-<div class="containers-fluid">
+<div class="container-fluid">
 {{#if data.modules}}
 	<ul class="list-group">
 		{{#each data.modules}}
@@ -12,14 +12,14 @@
 
 
 {{#if sess.isAdmin}}
-<div class="containers-fluid">
+<div class="container-fluid">
 	<a class="btn btn-info" role="button" href="/admin/module/new">Add new module</a>
 </div>
 {{/if}}
 
-<div class="list-group">
+<div class="container-fluid" id="testingoverflow">
 	{{#each data.modules}}
-	<div class="list-group-item">
+	<div class="col-sm-4">
 		<h4>{{this.name}}</h4>
 		<p>Description : {{this.description}}</br>
 		Ce module donne {{this.credits}} credits.</br>

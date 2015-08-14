@@ -27,8 +27,7 @@ router.get('/', function (req, res) {
 			begins: new Date(2015, 07, 14, 8, 42, 0, 0),
 			ends: new Date(2015, 08, 16, 23, 42, 0, 0)
 		},
-		credits: 42,
-		ObjectId: "55afb685477535fe144ed041"
+		credits: 42
 	});
 	add_mod.save(function (err, q_saved){
 		if (err){
@@ -37,9 +36,7 @@ router.get('/', function (req, res) {
 		}
 		else {
 			console.log(q_saved);
-			to_send += '<p>module ModuleTest successfully added</p>'
-
-
+			to_send += '<p>module ModuleTest successfully added</p>';
 			var add_a = new Activity.model({
 				name: "Twins",
 				description: "The first activity you're going to work on!",
@@ -62,7 +59,7 @@ router.get('/', function (req, res) {
 				},
 				req_corrections: 1,
 				auto_group: false,
-				module: ObjectId("55afb685477535fe144ed041"),
+				module: add_mod,
 				type: 'project'
 			});
 			add_a.save(function (err, q_saved) {
@@ -73,16 +70,13 @@ router.get('/', function (req, res) {
 				}
 				else {
 					console.log(q_saved);
-					to_send += '<p>activity Twins successfully added</p>'
-
+					to_send += '<p>activity Twins successfully added</p>';
 					res.status(200).send(to_send);
 				}
 			});
 
 		}
 	});
-
-
 });
 
 module.exports = router;

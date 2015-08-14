@@ -102,9 +102,52 @@ router.post('/module/edit/:name', function (req, res) {
 		Module.model.findOne()
 		.where('name', req.params.name)
 		.exec(function (err, bob){
-			res.status(bob);
+			req.flash('info', 'Module successfully edited !');
+			res.redirect('/module/view/'+req.params.name);
 		});
 	});
+});
+
+router.get('/module/delete/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	Module.model.findOne()
+	.where('name', req.params.name)
+	.exec(function (err, req_ret){
+		if (err || !req_ret){
+			req.flash('error', 'error finding module to delete');
+			res.redirect('/module');
+		}
+		else {
+			locals.confirm_text = 'Are you sure you want to delete this module?';
+			locals.name = req.params.name;
+			locals.isModule = true;
+			view.render('confirm_action');
+		}
+	});
+});
+
+router.post('/module/delete/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	if (req.body.answer == 'yes') {
+		Module.model.findOne()
+		.where('name', req.params.name)
+		.remove(function (err){
+			if (err){
+				req.flash('error', 'Error deleting module ...');
+				res.redirect('/module');
+			} else {
+				req.flash('info', 'Module was successfully deleted !');
+				res.redirect('/module');
+			}
+		});
+	} else {
+		req.flash('info', 'Module was not deleted because you said NO');
+		res.redirect('/module');
+	}
 });
 
 router.get('/activity/new', function (req, res){
@@ -175,6 +218,48 @@ router.post('/activity/new', function (req, res) {
 				res.redirect('/activity');
 			}
 		});
+	}
+});
+
+router.get('/activity/delete/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	Activity.model.findOne()
+	.where('name', req.params.name)
+	.exec(function (err, req_ret){
+		if (err || !req_ret){
+			req.flash('error', 'error finding module to delete');
+			res.redirect('/module');
+		}
+		else {
+			locals.confirm_text = 'Are you sure you want to delete this activity?';
+			locals.name = req.params.name;
+			locals.isActivity = true;
+			view.render('confirm_action');
+		}
+	});
+});
+
+router.post('/activity/delete/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	if (req.body.answer == 'yes') {
+		Activity.model.findOne()
+		.where('name', req.params.name)
+		.remove(function (err){
+			if (err){
+				req.flash('error', 'Error deleting activity ...');
+				res.redirect('/module');
+			} else {
+				req.flash('info', 'Activity was successfully deleted !');
+				res.redirect('/module');
+			}
+		});
+	} else {
+		req.flash('info', 'Activity was not deleted because you said NO');
+		res.redirect('/module');
 	}
 });
 
