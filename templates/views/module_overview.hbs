@@ -1,0 +1,18 @@
+{{!< default}}
+
+{{#if sess.isAdmin}}
+<div class="container-fluid">
+	<a class="btn btn-info" role="button" href="/admin/module/new">Add new module</a>
+</div>
+{{/if}}
+
+<div class="container-fluid">
+	{{#each data.modules}}
+	<div class="col-sm-3">
+		<div class="panel panel-default">
+		<div class="panel-heading" id="text-center">Panel Heading</div>
+		<div class="panel-body" id="text-center">Panel Content</div>
+		</div>
+	</div>
+	{{/each}}
+</ul>
