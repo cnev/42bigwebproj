@@ -3,38 +3,44 @@
 	<form role="form" method="post">
 		<div class="form-group">
 			<label for="name">Module name:</label>
-			<input type="text" class="form-control" name="name" placeholder="The module's name">
+			<input type="text" class="form-control" name="name" {{#if edit}}{{addPlaceholder edit.name}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="description">Description:</label>
-			<textarea class="form-control" rows="5" name="description"></textarea>
+			<textarea class="form-control" rows="5" name="description" {{#if edit}}{{addPlaceholder edit.description}}{{/if}}></textarea>
 		</div>
 		<div class="form-group">
 			<label for="slots">Slots:</label>
-			<input type="number" class="form-control" name="slots">
+			<input type="number" class="form-control" name="slots" {{#if edit}}{{addPlaceholder edit.slots.max}}{{/if}}>
 		</div>
 		<h3>Registrations</h3>
 		<div class="form-group">
 			<label for="registrationbegins">Beginning:</label>
-			<input type="date" class="form-control" name="registrationbegins">
+			<input type="datetime-local" class="form-control" name="registrationbegins" {{#if edit}}{{addDateholder edit.registration.begins}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="registrationends">Ending:</label>
-			<input type="date" class="form-control" name="registrationends">
+			<input type="datetime-local" class="form-control" name="registrationends">
 		</div>
 		<h3>Period</h3>
 		<div class="form-group">
 			<label for="periodbegins">Beginning:</label>
-			<input type="date" class="form-control" name="periodbegins">
+			<input type="datetime-local" class="form-control" name="periodbegins">
 		</div>
 		<div class="form-group">
 			<label for="periodends">Ending:</label>
-			<input type="date" class="form-control" name="periodends">
+			<input type="datetime-local" class="form-control" name="periodends"}>
 		</div>
 		<div class="form-group">
 			<label for="credits">Credits:</label>
-			<input type="number" class="form-control" name="credits">
+			<input type="number" class="form-control" name="credits" {{#if edit}}{{addPlaceholder edit.credits}}{{/if}}>
 		</div>
-		<button type="submit" class="btn btn-default" action="/admin/module/new">Submit</button>
+		<button type="submit" class="btn btn-default"
+			{{#if edit}}
+				action="/admin/module/edit/{{edit.name}}"
+			{{else}}
+				action="/admin/module/new"
+			{{/if}}
+		>Submit</button>
 	</form>
 </div>
