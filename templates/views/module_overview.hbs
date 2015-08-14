@@ -1,33 +1,18 @@
 {{!< default}}
 
-<div class="container-fluid">
-{{#if data.modules}}
-	<ul class="list-group">
-		{{#each data.modules}}
-			<li class="list-group-item">{{displayModuleList this sess.isAdmin}}</li>
-		{{/each}}
-	</ul>
-{{/if}}
-</div>
-
-
 {{#if sess.isAdmin}}
 <div class="container-fluid">
 	<a class="btn btn-info" role="button" href="/admin/module/new">Add new module</a>
 </div>
 {{/if}}
 
-<div class="container-fluid" id="testingoverflow">
+<div class="container-fluid">
 	{{#each data.modules}}
-	<div class="col-sm-4">
-		<h4>{{this.name}}</h4>
-		<p>Description : {{this.description}}</br>
-		Ce module donne {{this.credits}} credits.</br>
-		vous pouvez vous enregistrer au project du {{registration.begins}} au {{registration.ends}}</br>
-		le project durera du {{period.begins}} au {{period.ends}}</br>
-		{{slots.current}}/{{slots.max}}
-		{{displayModuleList this sess.isAdmin}}
-		</p>
+	<div class="col-sm-3">
+		<div class="panel panel-default">
+		<div class="panel-heading" id="text-center">Panel Heading</div>
+		<div class="panel-body" id="text-center">Panel Content</div>
+		</div>
 	</div>
 	{{/each}}
 </ul>
