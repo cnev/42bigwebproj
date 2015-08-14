@@ -170,6 +170,38 @@ ActivityDriver.prototype.getOne = function(name, cb) {
 
 ActivityDriver.prototype.create = function(data, cb) {
 	// body...
+	var add_q = new Activity.model({
+		name: data.name,
+		description: data.description,
+		subject: data.subject,
+		slots: {
+			max: data.slots,
+			current: 0
+		},
+		registration: {
+			begins: new Date(data.registrationbegins),
+			ends: new Date(data.registrationends)
+		},
+		period: {
+			begins: new Date(data.periodbegins),
+			ends: new Date(data.periodends)
+		},
+		req_corrections: data.reqcorrections,
+		auto_group: data.autogroup,
+		module: data.module,
+		type: data.type
+	});
+	add_q.save(function (err, q_saved) {
+		if (err) {
+			console.log("FAIL !");
+			console.error(err);
+			cb(500, err);
+		}
+		else {
+			console.log(q_saved);
+			cb(null, data.name + ' was successfully added to the activity list !');
+		}
+	});
 };
 
 exports.ActivityDriver = ActivityDriver;

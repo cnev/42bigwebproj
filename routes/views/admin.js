@@ -3,6 +3,10 @@ var session = require('express-session');
 var keystone = require('keystone');
 var router = express.Router();
 
+var ActDriv = require('../../driver/activityDriver').ActivityDriver;
+
+var ActivityDriver = new ActDriv ();
+
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
 var Notation = keystone.list('Notation');
@@ -185,36 +189,15 @@ router.post('/activity/new', function (req, res) {
 	}
 	else {
 		console.log(req.body);
-		var add_q = new Activity.model({
-			name: req.body.name,
-			description: req.body.description,
-			subject: req.body.subject,
-			slots: {
-				max: req.body.slots,
-				current: 0
-			},
-			registration: {
-				begins: new Date(req.body.registrationbegins),
-				ends: new Date(req.body.registrationends)
-			},
-			period: {
-				begins: new Date(req.body.periodbegins),
-				ends: new Date(req.body.periodends)
-			},
-			req_corrections: req.body.reqcorrections,
-			auto_group: req.body.autogroup,
-			module: req.body.module,
-			type: req.body.type
-		});
-		add_q.save(function (err, q_saved) {
+		ActivityDriver.create(req.body, function (err, q_saved) {
 			if (err) {
 				console.log("FAIL !");
-				console.error(err);
-				res.status(500).send(err);
+				console.error(q_saved);
+				res.status(err).send(q_saved);
 			}
 			else {
 				console.log(q_saved);
-				req.flash('info', req.body.name+' was successfully added to the activity list !');
+				req.flash('info', q_saved);
 				res.redirect('/activity');
 			}
 		});
