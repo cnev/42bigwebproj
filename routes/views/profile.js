@@ -267,7 +267,7 @@ router.get('/', function (req, res) {
 		else if (!q_res)
 		res.status(404).send('not found');
 		else {
-			if (sess.user.isAdmin)
+			if (sess.isAdmin)
 				view.render('index');
 			else
 			{
