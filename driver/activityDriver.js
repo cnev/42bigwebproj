@@ -18,12 +18,12 @@ ActivityDriver.prototype.getActivities = function (cb) {
 			cb(404, 'activity(ies) not found');
 		}
 		else {
-			cb(null, actList);
+			cb(200, actList);
 		}
 	});
 };
 
-ActivityDriver.prototype.getCurrent = function(cb) {
+ActivityDriver.prototype.getCurrent = function (cb) {
 	// body...
 	Activity.model.find().where('period.begins.getTime() < now.getTime() && period.ends.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
@@ -35,12 +35,12 @@ ActivityDriver.prototype.getCurrent = function(cb) {
 			cb(404, 'activity(ies) not found');
 		}
 		else {
-			cb(null, actList);
+			cb(200, actList);
 		}
 	});
 };
 
-ActivityDriver.prototype.getInscPoss = function(cb) {
+ActivityDriver.prototype.getInscPoss = function (cb) {
 	// body...
 	Activity.model.find().where('registration.begins.getTime() < now.getTime() && registration.ends.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
@@ -52,12 +52,12 @@ ActivityDriver.prototype.getInscPoss = function(cb) {
 			cb(404, 'activity(ies) not found');
 		}
 		else {
-			cb(null, actList);
+			cb(200, actList);
 		}
 	});
 };
 
-ActivityDriver.prototype.getNextAct = function(cb) {
+ActivityDriver.prototype.getNextAct = function (cb) {
 	// body...
 	var that = this;
 	Activity.model.find().where('period.begins.getTime > now.getTime() && registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()').exec(function (err, actList) {
@@ -70,12 +70,12 @@ ActivityDriver.prototype.getNextAct = function(cb) {
 			cb(404, 'activity(ies) not found');
 		}
 		else {
-			cb(null, actList);
+			cb(200, actList);
 		}
 	})
 };
 
-ActivityDriver.prototype.getUserAct = function(user, cb) {
+ActivityDriver.prototype.getUserAct = function (user, cb) {
 	// body...
 	var that = this;
 	that.getCurrent(function (err, actList) {
@@ -92,8 +92,8 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 					cb(500, err);
 				}
 				else if (!actRList) {
-					console.log("no activities found");
-					cb();
+					console.log('No activities found');
+					cb(404, 'No Activities Found');
 				}
 				else {
 					console.log(actRList);
@@ -104,14 +104,14 @@ ActivityDriver.prototype.getUserAct = function(user, cb) {
 						}
 					}
 					console.log(actTab);
-					cb(null, actTab);
+					cb(202, actTab);
 				}
 			});
 		}
 	});
 };
 
-ActivityDriver.prototype.getPastAct = function(user, cb) {
+ActivityDriver.prototype.getPastAct = function (user, cb) {
 	// body...
 	var that = this;
 	Activity.model.find().where('period.end.getTime() < now.getTime()').exec(function (err, actList) {
@@ -132,8 +132,8 @@ ActivityDriver.prototype.getPastAct = function(user, cb) {
 					cb(500, err);
 				}
 				else if (!actRList) {
-					console.log("no activities found");
-					cb();
+					console.log('No activities found');
+					cb(404, 'No activities found');
 				}
 				else {
 					console.log(actRList);
@@ -144,14 +144,14 @@ ActivityDriver.prototype.getPastAct = function(user, cb) {
 						}
 					}
 					console.log(actTab);
-					cb(null, actTab);
+					cb(202, actTab);
 				}
 			});
 		}
 	});
 };
 
-ActivityDriver.prototype.getOne = function(name, cb) {
+ActivityDriver.prototype.getOne = function (name, cb) {
 	// body...
 	Activity.model.findOne({'name':name}).exec(function (err, activity) {
 		if (err) {
@@ -160,15 +160,15 @@ ActivityDriver.prototype.getOne = function(name, cb) {
 		}
 		else if (!activity) {
 			console.error('C\'est completement vide ici.');
-			cb(404, 'activity(ies) not found');
+			cb(404, 'activity not found');
 		}
 		else {
-			cb(null, actList);
+			cb(200, activity);
 		}
 	});
 };
 
-ActivityDriver.prototype.create = function(data, cb) {
+ActivityDriver.prototype.create = function (data, cb) {
 	// body...
 	var add_q = new Activity.model({
 		name: data.name,
@@ -199,7 +199,7 @@ ActivityDriver.prototype.create = function(data, cb) {
 		}
 		else {
 			console.log(q_saved);
-			cb(null, data.name + ' was successfully added to the activity list !');
+			cb(201, data.name + ' was successfully added to the activity list !');
 		}
 	});
 };

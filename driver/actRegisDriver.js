@@ -5,44 +5,41 @@ var ActRegis = keystone.list('ActivityRegistration');
 
 var ActRegisDriver = function () {};
 
-ActRegisDriver.prototype.getActivities = function (f_data, w_data, i_data, cb) {
+ActRegisDriver.prototype.getActivities = function (user, cb) {
 	// body...
-	if (w_data && i_data) {
-		ActRegis.model.find(f_data).where(w_data).in(i_data).exec(function (err, actRList) {
-			if (err) {
-				console.error(err);
-				cb(err);
-			}
-			else if (!actRList || actRList.length == 0) {
-				console.error('C\'est completement vide ici.');
-				cb(1);
-			}
-			else {
-				cb(null, actRList);
-			}
-		});
-	}
-	else if (i_data) {
-		cb('"where" not set, cannot use "in"');
-	}
-	else {
-		ActRegis.model.find(f_data).where(w_data).exec(function (err, actRList) {
-			if (err) {
-				console.error(err);
-				cb(err);
-			}
-			else if (!actRList || actRList.length == 0) {
-				console.error('C\'est completement vide ici.');
-				cb(1);
-			}
-			else {
-				cb(null, actRList);
-			}
-		});
-	}
+	ActRegis.model.find().where({'user': user, 'encours': true}).exec(function (err, actRList) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!actRList || actRList.length == 0) {
+			console.error('C\'est completement vide ici.');
+			cb(404, 'No activities found for user ' + user);
+		}
+		else {
+			cb(null, actRList);
+		}
+	});
 };
 
-ActRegisDriver.prototype.getOneActivity = function(activity, user, cb) {
+ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
+	// body...
+	ActRegis.model.findOne({'user': user, 'activity': activity}).exec(function (err, actR) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!actR) {
+			console.error('C\'est completement vide ici.');
+			cb(404, 'No such activity found for user ' + user);			
+		}
+		else {
+			cb(null, actR);
+		}
+	});
+};
+
+ActRegisDriver.prototype.register = function (data, cb) {
 	// body...
 };
 
