@@ -20,14 +20,21 @@ router.get('/', function (req, res) {
 		activities: []
 	};
 	var q = ActivityDriver.getActivities(function (err, q_res) {
-			if (err)
+			if (err == 500) {
 				res.status(err).send(q_res);
+			}
+			else if (err == 404) {
+				res.status(err).send(q_res);
+			}
 			else
 			{
-				for (var i = 0; i < q_res.length; i++)
+				for (var i = 0; i < q_res.length; i++) {
 					locals.data.activities.push(q_res[i]);
-					locals.data.path = req.route.path;
-				view.render('activity_overview');
+					if (i == q_res.length - 1) {
+						locals.data.path = req.route.path;
+						view.render('activity_overview');
+					}
+				}
 				//temporary display
 				/*var to_send = '';
 				for (var i = 0; i < locals.data.activities.length; i++)
@@ -40,8 +47,10 @@ router.get('/', function (req, res) {
 router.get('/view/:name', function (req, res) {
 	console.log(req.params.name);
 	var q = ActivityDriver.getOne(req.params.name, function(err, q_res) {
-				if (err)
-				{
+				if (err == 500) {
+					res.status(err).send(q_res);
+				}
+				else if (err == 404) {
 					res.status(err).send(q_res);
 				}
 				else

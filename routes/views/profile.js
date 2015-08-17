@@ -267,21 +267,21 @@ router.get('/', function (req, res) {
 		else if (!q_res)
 		res.status(404).send('not found');
 		else {
-			if (sess.user.isAdmin)
+			if (sess.isAdmin)
 				view.render('index');
 			else
 			{
 				console.log('getting activities');
 				ActivityDriver.getUserAct (q_res, function (err, actInList) {
-					if (err) {
-						console.error(actInList);
-						res.status(err).send(actInList);
+					console.log('first drive : '+err);
+					if (err == 500) {
+
 					}
 					else {
 						ActivityDriver.getPastAct(q_res, function (err, actPList) {
-							if (err) {
-								console.error(err);
-								res.status(err).send(actPList)
+							console.log('first drive : '+err);
+							if (err == 500) {
+
 							}
 							else {
 								console.log('actlist is here !');

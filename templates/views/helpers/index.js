@@ -399,6 +399,23 @@ _helpers.form_listModules = function(modlist)
 	}
 }
 
+_helpers.form_listModules_checkSelected = function(modlist, module){
+	var output = '';
+	var selected = ' selected ';
+	console.log(module);
+	for (var i = 0; i < modlist.length; i++){
+		if (module.name == modlist[i].name){
+			output += '<option value="'+modlist[i]._id+'"'+selected+'>'+modlist[i].name+'</option>';
+		}
+		else {
+			console.log('gotchapa '+modlist[i].name);
+			output += '<option value="'+modlist[i]._id+'">'+modlist[i].name+'</option>';
+		}
+		if (i == modlist.length - 1)
+			return new hbs.SafeString(output);
+	}
+}
+
 _helpers.form_listActivities = function(actlist)
 {
 	var output = '';

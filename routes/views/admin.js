@@ -29,38 +29,38 @@ router.get('/module/new', function (req, res) {
 
 router.post('/module/new', function (req, res) {
 	if (!req.body) {// || !req.body.submit){
-		req.flash('error', 'form error');
-		res.redirect('/admin/module/new');
-	}
-	else {
-		var add_q = new Module.model({
-			name: req.body.name,
-			description: req.body.description,
-			slots: {
-				max: req.body.slots,
-				current: 0
-			},
-			registration: {
-				begins: new Date(req.body.registrationbegins),
-				ends: new Date(req.body.registrationends)
-			},
-			period: {
-				begins: new Date(req.body.periodbegins),
-				ends: new Date(req.body.periodends)
-			},
-			credits: req.body.credits
-		});
-		add_q.save(function (err, q_saved){
-			if (err){
-				console.error(err);
-				res.status(500).send(err);
-			}
-			else {
-				req.flash('info', req.body.name+' was successfully added to the module list !');
-				res.redirect('/module');
-			}
-		});
-	}
+	req.flash('error', 'form error');
+	res.redirect('/admin/module/new');
+}
+else {
+	var add_q = new Module.model({
+		name: req.body.name,
+		description: req.body.description,
+		slots: {
+			max: req.body.slots,
+			current: 0
+		},
+		registration: {
+			begins: new Date(req.body.registrationbegins),
+			ends: new Date(req.body.registrationends)
+		},
+		period: {
+			begins: new Date(req.body.periodbegins),
+			ends: new Date(req.body.periodends)
+		},
+		credits: req.body.credits
+	});
+	add_q.save(function (err, q_saved){
+		if (err){
+			console.error(err);
+			res.status(500).send(err);
+		}
+		else {
+			req.flash('info', req.body.name+' was successfully added to the module list !');
+			res.redirect('/module');
+		}
+	});
+}
 });
 
 router.get('/module/edit/:name', function (req, res) {
@@ -84,32 +84,139 @@ router.get('/module/edit/:name', function (req, res) {
 router.post('/module/edit/:name', function (req, res) {
 
 	Module.model.update({'name': req.params.name},
-		{
-			name: req.body.name,
-			description: req.body.description,
-			slots: {
-				max: req.body.slots,
-				current: 0
-			},
-			registration: {
-				begins: new Date(req.body.registrationbegins),
-				ends: new Date(req.body.registrationends)
-			},
-			period: {
-				begins: new Date(req.body.periodbegins),
-				ends: new Date(req.body.periodends)
-			},
-			credits: req.body.credits
+	{
+		name: req.body.name,
+		description: req.body.description,
+		slots: {
+			max: req.body.slots,
+			current: 0
 		},
-		{'multi':false})
+		registration: {
+			begins: new Date(req.body.registrationbegins),
+			ends: new Date(req.body.registrationends)
+		},
+		period: {
+			begins: new Date(req.body.periodbegins),
+			ends: new Date(req.body.periodends)
+		},
+		credits: req.body.credits
+	},
+	{'multi':false})
 	.exec(function (err,result){
 		Module.model.findOne()
 		.where('name', req.params.name)
 		.exec(function (err, bob){
 			req.flash('info', 'Module successfully edited !');
-			res.redirect('/module/view/'+req.params.name);
+			res.redirect('/module/view/'+req.body.name);
 		});
 	});
+});
+
+function setLocals_activityEdit(locals, req_ret, cb) {
+	locals.edit = req_ret;
+	if (locals.edit.type == 'project')
+		locals.project_selected = true;
+	else if (locals.edit.type == 'td')
+		locals.td_selected = true;
+	else
+		locals.exam_selected = true;
+	locals.autogroup_true = (locals.edit.auto_group == true) ? true : false;
+	Module.model.find().exec(function (err, q_res){
+		locals.modlist = q_res;
+		Module.model.findById(locals.edit.module).exec(function (err, q2_res){
+			locals.module = q2_res;
+			cb(null, true);
+		});
+
+	});
+}
+
+router.get('/activity/edit/:name', function (req, res) {
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+
+	Activity.model.findOne()
+	.where('name', req.params.name)
+	.exec(function (err, req_ret){
+		if (err || !req_ret){
+			req.flash('error', 'error finding activity to edit');
+			res.redirect('/activity');
+		}
+		else {
+			setLocals_activityEdit(locals, req_ret, function (err, ok){
+				view.render('insert_activity');
+			})
+		}
+	});
+});
+
+router.post('/activity/edit/:name', function (req, res) {
+
+	Activity.model.update({'name': req.params.name},
+	{
+		name: req.body.name,
+		description: req.body.description,
+		subject: req.body.subject,
+		slots: {
+			max: req.body.slots,
+			current: 0
+		},
+		registration: {
+			begins: new Date(req.body.registrationbegins),
+			ends: new Date(req.body.registrationends)
+		},
+		period: {
+			begins: new Date(req.body.periodbegins),
+			ends: new Date(req.body.periodends)
+		},
+		req_corrections: req.body.reqcorrections,
+		auto_group: req.body.autogroup,
+		module: req.body.module,
+		type: req.body.type
+	},
+	{'multi':false})
+	.exec(function (err,result){
+		Activity.model.findOne()
+		.where('name', req.params.name)
+		.exec(function (err, bob){
+			req.flash('info', 'Activity successfully edited !');
+			res.redirect('/activity/view/'+req.body.name);
+		});
+	});
+/*
+	var add_q = new Activity.model({
+		name: data.name,
+		description: data.description,
+		subject: data.subject,
+		slots: {
+			max: data.slots,
+			current: 0
+		},
+		registration: {
+			begins: new Date(data.registrationbegins),
+			ends: new Date(data.registrationends)
+		},
+		period: {
+			begins: new Date(data.periodbegins),
+			ends: new Date(data.periodends)
+		},
+		req_corrections: data.reqcorrections,
+		auto_group: data.autogroup,
+		module: data.module,
+		type: data.type
+	});
+	add_q.save(function (err, q_saved) {
+		if (err) {
+			console.log("FAIL !");
+			console.error(err);
+			cb(500, err);
+		}
+		else {
+			console.log(q_saved);
+			cb(null, data.name + ' was successfully added to the activity list !');
+		}
+	});
+*/
 });
 
 router.get('/module/delete/:name', function (req, res) {
@@ -161,47 +268,47 @@ router.get('/activity/new', function (req, res){
 	locals.modlist = [];
 
 	var q = Module.model.find()
-		.sort('name')
-		.exec(function(err, q_res){
-			for (var i = 0; i < q_res.length; i++){
-				var data = {
-					name: q_res[i].name,
-					_id: q_res[i]._id
-				}
-				locals.modlist.push(data);
-				if (i == q_res.length - 1)
-					view.render('insert_activity');
+	.sort('name')
+	.exec(function(err, q_res){
+		for (var i = 0; i < q_res.length; i++){
+			var data = {
+				name: q_res[i].name,
+				_id: q_res[i]._id
 			}
-		});
+			locals.modlist.push(data);
+			if (i == q_res.length - 1)
+				view.render('insert_activity');
+		}
+	});
 });
 
 function fetch_moduleId(name){
 	Module.model.findOne({'name': name})
-		.exec(function (err, module){
-			return (module._id);
-		});
+	.exec(function (err, module){
+		return (module._id);
+	});
 }
 
 router.post('/activity/new', function (req, res) {
 	if (!req.body) {// || !req.body.submit){
-		req.flash('error', 'form error');
-		res.redirect('/admin/activity/new');
-	}
-	else {
-		console.log(req.body);
-		ActivityDriver.create(req.body, function (err, q_saved) {
-			if (err) {
-				console.log("FAIL !");
-				console.error(q_saved);
-				res.status(err).send(q_saved);
-			}
-			else {
-				console.log(q_saved);
-				req.flash('info', q_saved);
-				res.redirect('/activity');
-			}
-		});
-	}
+	req.flash('error', 'form error');
+	res.redirect('/admin/activity/new');
+}
+else {
+	console.log(req.body);
+	ActivityDriver.create(req.body, function (err, q_saved) {
+		if (err) {
+			console.log("FAIL !");
+			console.error(q_saved);
+			res.status(err).send(q_saved);
+		}
+		else {
+			console.log(q_saved);
+			req.flash('info', q_saved);
+			res.redirect('/activity');
+		}
+	});
+}
 });
 
 router.get('/activity/delete/:name', function (req, res) {
@@ -212,7 +319,7 @@ router.get('/activity/delete/:name', function (req, res) {
 	.where('name', req.params.name)
 	.exec(function (err, req_ret){
 		if (err || !req_ret){
-			req.flash('error', 'error finding module to delete');
+			req.flash('error', 'error finding activity to delete');
 			res.redirect('/module');
 		}
 		else {
@@ -322,31 +429,31 @@ function build_contents(req, res, cb)
 router.post('/notation/new', function (req, res) {
 
 	if (!req.body){// || !req.body.submit){
-		req.flash('error', 'form error');
-		res.redirect('/admin/notation/new');
-	}
-	else{
-		build_contents(req, res, function (err, content_res){
-			console.log('content_res');
-			console.log(content_res);
-			console.log('end of content_res');
-			var add_q = new Notation.model({
-				activity: req.body.activity,
-				contents: content_res
-			});
-			add_q.save(function (err, q_saved) {
-				if (err) {
-					console.error(err);
-					res.status(500).send(err);
-				}
-				else {
-					console.log(q_saved);
-					req.flash('info', 'New notation added to the list !');
-					res.redirect('/');
-				}
-			});
+	req.flash('error', 'form error');
+	res.redirect('/admin/notation/new');
+}
+else{
+	build_contents(req, res, function (err, content_res){
+		console.log('content_res');
+		console.log(content_res);
+		console.log('end of content_res');
+		var add_q = new Notation.model({
+			activity: req.body.activity,
+			contents: content_res
 		});
-	}
+		add_q.save(function (err, q_saved) {
+			if (err) {
+				console.error(err);
+				res.status(500).send(err);
+			}
+			else {
+				console.log(q_saved);
+				req.flash('info', 'New notation added to the list !');
+				res.redirect('/');
+			}
+		});
+	});
+}
 	//res.status(200).send(req.body);
 });
 

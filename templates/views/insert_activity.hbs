@@ -1,67 +1,73 @@
 `<div class="container">
 	<h2>Insert a new activity</h2>
-	<form role="form" method="post" action="/admin/activity/new">
+	<form role="form" method="post">
 		<div class="form-group">
 			<label for="name">Activity name:</label>
-			<input type="text" class="form-control" name="name" placeholder="The activity's name">
+			<input type="text" class="form-control" name="name" {{#if edit}}{{addPlaceholder edit.name}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="description">Description:</label>
-			<textarea class="form-control" rows="5" name="description"></textarea>
+			<textarea class="form-control" rows="5" name="description">{{#if edit}}{{edit.description}}{{/if}}</textarea>
 		</div>
 		<div class="form-group">
 			<label for="subject">Subject file:</label>
-			<input type="text" class="form-control" name="subject" placeholder="path to file in /public">
+			<input type="text" class="form-control" name="subject" {{#if edit}}{{addPlaceholder edit.subject}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="slots">Slots:</label>
-			<input type="number" class="form-control" name="slots">
+			<input type="number" class="form-control" name="slots" {{#if edit}}{{addPlaceholder edit.slots.max}}{{/if}}>
 		</div>
 		<h3>Registrations</h3>
 		<div class="form-group">
 			<label for="registrationbegins">Beginning:</label>
-			<input type="date" class="form-control" name="registrationbegins">
+			<input type="datetime-local" class="form-control" name="registrationbegins" {{#if edit}}{{addDateholder edit.registration.begins}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="registrationends">Ending:</label>
-			<input type="date" class="form-control" name="registrationends">
+			<input type="datetime-local" class="form-control" name="registrationends"{{#if edit}}{{addDateholder edit.registration.ends}}{{/if}}>
 		</div>
 		<h3>Period</h3>
 		<div class="form-group">
 			<label for="periodbegins">Beginning:</label>
-			<input type="date" class="form-control" name="periodbegins">
+			<input type="datetime-local" class="form-control" name="periodbegins"{{#if edit}}{{addDateholder edit.period.begins}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="periodends">Ending:</label>
-			<input type="date" class="form-control" name="periodends">
+			<input type="datetime-local" class="form-control" name="periodends"{{#if edit}}{{addDateholder edit.period.ends}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="reqcorrections">Required corrections:</label>
-			<input type="number" class="form-control" name="reqcorrections">
+			<input type="number" class="form-control" name="reqcorrections" {{#if edit}}{{addPlaceholder edit.req_corrections}}{{/if}}>
 		</div>
 		<div class="form-group">
 			<label for="autogroup">Auto-Groups:</label>
 			<select class="form-control" name="autogroup">
-				<option value="true">True</option>
-				<option value="true">False</option>
+				<option value="true" {{#if autogroup_true}}selected{{/if}}>True</option>
+				<option value="false" {{#unless autogroup_true}}selected{{/unless}}>False</option>
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="module">Module:</label>
 			<select class="form-control" name="module">
-				{{#form_listModules modlist}}
+				{{#form_listModules_checkSelected modlist module}}
 					{{this}}
-				{{/form_listModules}}
+				{{/form_listModules_checkSelected}}
 			</select>
 		</div>
 		<div class="form-group">
 			<label for="type">Type:</label>
 			<select class="form-control" name="type">
-				<option value="project">Project</option>
-				<option value="td">TD</option>
-				<option value="exam">Exam</option>
+				<option value="project" {{#if project_selected}}selected{{/if}}>Project</option>
+				<option value="td" {{#if td_selected}}selected{{/if}}>TD</option>
+				<option value="exam" {{#if exam_selected}}selected{{/if}}>Exam</option>
 			</select>
 		</div>
-		<button type="submit" class="btn btn-default" action="/admin/module/new">Submit</button>
+		<button type="submit" class="btn btn-default"
+			{{#if edit}}
+				action="/admin/activity/edit/{{edit.name}}"
+			{{else}}
+				action="/admin/activity/new"
+			{{/if}}
+		>Submit</button>
 	</form>
 </div>
