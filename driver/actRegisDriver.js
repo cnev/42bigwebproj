@@ -33,7 +33,7 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 		}
 		else if (!actR) {
 			console.error('C\'est completement vide ici.');
-			cb(404, 'No such activity found for user ' + user);			
+			cb(404, 'No such activity found for user ' + user);
 		}
 		else {
 			cb(200, actR);
@@ -79,7 +79,7 @@ ActRegisDriver.prototype.register = function (activity, user, cb) {
 ActRegisDriver.prototype.preRegister = function(activity, user, cb) {
 	// body...
 	var that = this;
-	User.findOne({'uid':user}).exec(function (err, usr) {
+	User.model.findOne({'uid':user}).exec(function (err, usr) {
 		if (err) {
 			console.error(err);
 			cb(500, err);
@@ -88,7 +88,7 @@ ActRegisDriver.prototype.preRegister = function(activity, user, cb) {
 			cb(404, 'User Not Found');
 		}
 		else {
-			Activity.findOne({'name':activity}).exec(function (err, act) {
+			Activity.model.findOne({'name':activity}).exec(function (err, act) {
 				if (err) {
 					console.error(err);
 					cb(500, err);

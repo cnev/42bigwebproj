@@ -85,6 +85,7 @@ router.get('/view/:name', function (req, res) {
 });
 
 router.get('/register/:name', function (req, res) {
+	var locals = res.locals;
 	console.log('route: '+req.route.path);
 	var view = new keystone.View(req, res);
 	console.log(req.params.name);

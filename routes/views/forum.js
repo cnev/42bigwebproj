@@ -64,20 +64,36 @@ router.post('/thread/new', function (req, res){
 			})
 		}
 	});
-
 });
+
+function pushPost(posts, id, i, cb){
+	ForumPost.model.findById(id).exec(function (err, post){
+		posts.push(post);
+		cb(null, i);
+	})
+}
+
+function fetchPosts(posts, thread, cb){
+	for (var i = 0; i < thread.posts.length; i++){
+		pushPost(posts, thread.posts[i], i, function (err, q_i){
+			if (q_i == thread.posts.length - 1)
+				cb(null, 1);
+		});
+	}
+}
 
 router.get('/view/:id', function (req, res){
 
-	// var view = new keystone.View(req, res);
+	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	var thread_list = ForumThread.model.findById(req.params.id)
 		.exec(function (err, result)
 		{
-			locals.posts = result.posts;
-			view.render(forum_thread);
+			locals.posts = [];
+			fetchPosts(locals.posts, result, function (err, ok){
+				view.render('forum_thread');
+			});
 		});
-	//
 });
 
 
