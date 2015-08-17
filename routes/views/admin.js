@@ -233,7 +233,7 @@ router.get('/module/delete/:name', function (req, res) {
 		else {
 			locals.confirm_text = 'Are you sure you want to delete this module?';
 			locals.name = req.params.name;
-			locals.isModule = true;
+			locals.isDelModule = true;
 			view.render('confirm_action');
 		}
 	});
@@ -325,7 +325,7 @@ router.get('/activity/delete/:name', function (req, res) {
 		else {
 			locals.confirm_text = 'Are you sure you want to delete this activity?';
 			locals.name = req.params.name;
-			locals.isActivity = true;
+			locals.isDelActivity = true;
 			view.render('confirm_action');
 		}
 	});

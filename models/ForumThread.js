@@ -11,12 +11,14 @@ var ForumThread = new keystone.List('ForumThread', {
 });
 
 ForumThread.add({
+
 	title: {type: String},
-	tags: {type: Types.Relationship, ref: 'ForumTag', many: true},
+	author: {type: Types.Relationship, ref: 'User'},
+	category: {type: Types.Relationship, ref: 'ForumCategory'},
 	posts: {type: Types.Relationship, ref: 'ForumPost', many: true},
 	nb_posts: {type: Number, default: 0},
-	pinned: {type: Types.Boolean},
-	author : {type: String}
+	pinned: {type: Types.Boolean, default: false}
+
 });
 
 ForumThread.register();

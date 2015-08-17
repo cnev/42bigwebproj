@@ -116,12 +116,10 @@ router.get('/register/:name', function (req, res) {
 								res.status(500).send(err);
 							else if (!q2_res)
 							{
-								test = "<form action='/activity/register/" + req.params.name + "' method='POST'>";
-								test += "<ul>";
-								test += "<li><input type='submit' name='answer' value='yes'></li>";
-								test += "<li><input type='submit' name='answer' value='no'></li>";
-								test += "</ul>";
-								res.status(200).send(test);
+								locals.confirm_text = 'Are you sure you want to register to this activity?';
+								locals.name = req.params.name;
+								locals.isRegActivity = true;
+								view.render('confirm_action');
 							}
 							else
 							{

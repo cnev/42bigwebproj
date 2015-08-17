@@ -1,5 +1,5 @@
 
-{{#if isActivity}}
+{{#if isDelActivity}}
 <div class="container">
 	<h2>{{confirm_text}}</h2><br />
 	<form action="/admin/activity/delete/{{name}}" method="POST">
@@ -9,10 +9,20 @@
 </div>
 {{/if}}
 
-{{#if isModule}}
+{{#if isDelModule}}
 <div class="container">
 	<h2>{{confirm_text}}</h2><br />
 	<form action="/admin/module/delete/{{name}}" method="POST">
+		<button type="submit" name='answer' class="btn btn-default" value="yes">YES</button>
+		<button type="submit" name='answer' class="btn btn-default" value="no">NO</button>
+	</form>
+</div>
+{{/if}}
+
+{{#if isRegActivity}}
+<div class="container">
+	<h2>{{confirm_text}}</h2><br />
+	<form action="/module/register/{{name}}" method="POST">
 		<button type="submit" name='answer' class="btn btn-default" value="yes">YES</button>
 		<button type="submit" name='answer' class="btn btn-default" value="no">NO</button>
 	</form>

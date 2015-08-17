@@ -11,10 +11,9 @@ var ForumPost = new keystone.List('ForumPost', {
 });
 
 ForumPost.add({
-	post_id: {type: Number},
-	author: {type: String},
-	date: {type: Types.Date},
-	message: {type: Types.Textarea}	
+	author: {type: Types.Relationship, ref: 'User'},
+	message: {type: Types.Textarea},
+	reply_of: {type: Types.Relationship, ref: 'ForumPost'}
 });
 
 ForumPost.register();

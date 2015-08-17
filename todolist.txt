@@ -22,10 +22,10 @@
 				add activity													[OK]
 				add notation													[OK]
 				edit module														[OK]
-				edit activity													[NOT OK]
+				edit activity													[OK]
 				edit notation													[NOT OK]
 				delete module													[OK]
-				delete activity													[NOT OK]
+				delete activity													[OK]
 				delete notation													[NOT OK]
 		Tickets
 			Student:

@@ -444,5 +444,16 @@ _helpers.addDateholder = function(val)
 	return new hbs.SafeString(output);
 }
 
+_helpers.forumCategoryList = function(list){
+	if (!list)
+		return ('');
+	var output = '';
+	for (var i = 0; i < list.length; i++){
+		output += '<option value="'+list[i]._id+'">'+list[i].name+'</option>';
+		if (i == list.length - 1)
+			return new hbs.SafeString(output);
+	}
+}
+
 return _helpers;
 };

@@ -1,11 +1,31 @@
 {{!< default}}
 
-<div class="containers-fluid">
+<div class="container">
 	<ul class="list-group">
-	<li>test</li>
+	{{#each threads}}
+		<li>{{this.title}}</li>
+	{{/each}}
 	</ul>
 </div>
 
-<p>
-{{tags}}
-</p>
+<div class="container">
+	<form role="form" method='post' action="/forum/thread/new">
+		<h2>Open a new thread</h2>
+		<div class="form-group">
+			<label for="title">Thread title:</label>
+			<input type="text" class="form-control" name="title">
+		</div>
+		<div class="form-group">
+			<label for="category">Category:</label>
+			<select class="form-control" name="category">
+				{{#forumCategoryList categorylist}}
+					{{this}}
+				{{/forumCategoryList}}
+			</select>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" rows="5" name="message"></textarea>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+</div>
