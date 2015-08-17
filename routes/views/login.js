@@ -4,6 +4,10 @@ var ldap = require('ldapjs');
 var keystone = require('keystone');
 var passhash = require('password-hash');
 
+var UsrDriv = require('../../driver/userDriver').UserDriver;
+
+var UserDriver = new UsrDriv ();
+
 var router = express.Router();
 var User = keystone.list('User');
 
@@ -54,13 +58,13 @@ router.post('/', function (req, res)
 			{
 				if (err)
 				{
-					req.flash('error', 'Wrong password !');
-					res.status(501).redirect('/login');
+					req.flash('error', 'Wrong User / Password !');
+					res.status(401).redirect('/login');
 				}
 				else
 				{
 					var logger = entry.object;
-					User.model.findOne({'uid':logger.uid}).exec(function (err, usr) {
+					/*User.model.findOne({'uid':logger.uid}).exec(function (err, usr) {
 						if (err) {
 							console.error(err);
 							res.status(500).send(err);
@@ -95,6 +99,10 @@ router.post('/', function (req, res)
 						else if (passhash.verify(req.body.password, usr.password)) {
 							req.flash('error', 'Wrong password !');
 							res.status(501).redirect('/login');
+						}*/
+					UserDriver.toLog(logger, req.body.password, function (code, usr) {
+						if (code == 500) {
+							res.status(code).send(user);
 						}
 						else {
 							var sess = req.session;

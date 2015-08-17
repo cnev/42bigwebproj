@@ -59,7 +59,6 @@ ActivityDriver.prototype.getInscPoss = function (cb) {
 
 ActivityDriver.prototype.getNextAct = function (cb) {
 	// body...
-	var that = this;
 	Activity.model.find().where('period.begins.getTime > now.getTime() && registration.ends.getTime() < now.getTime() + 604800000 && registration.begins.getTime() > now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);
@@ -78,10 +77,9 @@ ActivityDriver.prototype.getNextAct = function (cb) {
 ActivityDriver.prototype.getUserAct = function (user, cb) {
 	// body...
 	var that = this;
-	that.getCurrent(function (err, actList) {
-		if (err) {
-			console.error(err);
-			cb(500, err);
+	that.getCurrent(function (code, actList) {
+		if (code != 200) {
+			cb(code, actList);
 		}
 		else {
 			ActivityRegistration.model.find({'user':user, 'encours':true}).exec(function (err, actRList) {
@@ -113,7 +111,6 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 
 ActivityDriver.prototype.getPastAct = function (user, cb) {
 	// body...
-	var that = this;
 	Activity.model.find().where('period.end.getTime() < now.getTime()').exec(function (err, actList) {
 		if (err) {
 			console.error(err);

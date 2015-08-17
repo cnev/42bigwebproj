@@ -17,7 +17,7 @@ ActRegisDriver.prototype.getActivities = function (user, cb) {
 			cb(404, 'No activities found for user ' + user);
 		}
 		else {
-			cb(null, actRList);
+			cb(200, actRList);
 		}
 	});
 };
@@ -34,7 +34,7 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 			cb(404, 'No such activity found for user ' + user);			
 		}
 		else {
-			cb(null, actR);
+			cb(200, actR);
 		}
 	});
 };

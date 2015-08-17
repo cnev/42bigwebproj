@@ -273,14 +273,14 @@ router.get('/', function (req, res) {
 			{
 				console.log('getting activities');
 				ActivityDriver.getUserAct (q_res, function (err, actInList) {
-					if (err) {
-						console.error(actInList);
+					if (err == 500 || err == 404) {
+						console.error('MyError1 ' + actInList);
 						res.status(err).send(actInList);
 					}
 					else {
 						ActivityDriver.getPastAct(q_res, function (err, actPList) {
-							if (err) {
-								console.error(err);
+							if (err == 500 || err == 404) {
+								console.error('MyError2' + err);
 								res.status(err).send(actPList)
 							}
 							else {
