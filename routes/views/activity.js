@@ -2,8 +2,12 @@ var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
 var Activity = keystone.list('Activity');
+
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
+var AcrRDrv = require('../../driver/actRegisDriver').ActRegisDriver;
+
 var ActivityDriver = new ActDriv ();
+var ActRegisDriver = new AcrRDrv ();
 
 //var Activity = keystone.list('Activity');
 
@@ -141,38 +145,19 @@ router.post('/register/:name', function (req, res) {
 	else if (req.body.answer == 'yes')
 	{
 		console.log("answer is yes");
-		var search_user, search_model;
-			var user_q = User.model.findOne({'uid': req.session.user})
-			.exec(function (err, user_q_res) {
-				search_user = user_q_res._id;
-				var model_q = Activity.model.findOne({'name': req.params.name})
-				.exec(function (err, model_q_res) {
-					search_model = model_q_res._id;
-					var q2 = ActivityRegistration.model.findOne({'user': search_user})
-					.where('activity', search_model)
-					.exec(function (err, q2_res) {
-						if (err)
-							res.status(500).send(err);
-						else if (!q2_res)
-						{
-							var add_q = new ActivityRegistration.model({
-								user: search_user,
-								activity: search_model,
-								encours: true
-							});
-							add_q.save(function (err, saved){
-								req.flash('info', 'You are now registered to this activity !');
-								res.redirect('/activity');
-							});
-						}
-						else
-						{
-							req.flash('error', 'You are already registered to this activity !');
-							res.redirect('/activity');
-						}
-					});
-				});
-			});
+		ActRegisDriver.preRegister(req.params.name, req.session.user, function (code, actR) {
+			if (code == 201) {
+				req.flash('info', 'You are now registered to this activity !');
+				res.redirect('/activity');
+			}
+			else if (code == 304) {
+				req.flash('error', 'You are already registered to this activity !');
+				res.redirect('/activity');
+			}
+			else {
+				res.status(code).send(actR);
+			}
+		});
 	}
 	else
 		res.redirect('/activity');

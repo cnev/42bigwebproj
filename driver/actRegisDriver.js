@@ -2,6 +2,8 @@ var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
 var ActRegis = keystone.list('ActivityRegistration');
+var Activity = keystone.list('Activity');
+var User = keystone.list('User');
 
 var ActRegisDriver = function () {};
 
@@ -39,8 +41,69 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	});
 };
 
-ActRegisDriver.prototype.register = function (data, cb) {
+ActRegisDriver.prototype.register = function (activity, user, cb) {
 	// body...
+	var that = this;
+	that.getOneActivity(activity, user, function (code, actR) {
+		if (code == 500) {
+			cb(code, actR);
+		}
+		else if (code == 200) {
+			cb(304, actR);
+		}
+		else {
+			var newActR = new ActRegis.model({
+				user: user,
+				activity: activity,
+				encours: true
+			});
+			newActR.save(function (err, cActR) {
+				if (err) {
+					console.error(err);
+					cb(500, err);
+				}
+				else {
+					cb(201, cActR);
+				}
+			});
+		}
+	});
+};
+
+
+/*if (model_q_res.registration.ends.getTime() < now.getTime()) {
+	req.flash('error', 'Registrations are over, you cannot register to this activity anymore !');
+	res.redirect('/activity/view/'+req.params.name);
+}*/
+
+ActRegisDriver.prototype.preRegister = function(activity, user, cb) {
+	// body...
+	var that = this;
+	User.findOne({'uid':user}).exec(function (err, usr) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!usr) {
+			cb(404, 'User Not Found');
+		}
+		else {
+			Activity.findOne({'name':activity}).exec(function (err, act) {
+				if (err) {
+					console.error(err);
+					cb(500, err);
+				}
+				else if (!act) {
+					cb(404, 'Activity Not Found');
+				}
+				else {
+					that.register(act, usr, function (code, actR) {
+						cb(code, actR);
+					});
+				}
+			});
+		}
+	});
 };
 
 exports.ActRegisDriver = ActRegisDriver;
