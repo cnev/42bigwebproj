@@ -1,7 +1,7 @@
 var express = require('express');
 var session = require('express-session');
 var keystone = require('keystone');
-
+var Activity = keystone.list('Activity');
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
 var ActivityDriver = new ActDriv ();
 

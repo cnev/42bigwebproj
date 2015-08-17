@@ -297,7 +297,7 @@ router.post('/activity/new', function (req, res) {
 else {
 	console.log(req.body);
 	ActivityDriver.create(req.body, function (err, q_saved) {
-		if (err) {
+		if (err == 500) {
 			console.log("FAIL !");
 			console.error(q_saved);
 			res.status(err).send(q_saved);

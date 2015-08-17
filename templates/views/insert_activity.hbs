@@ -49,9 +49,15 @@
 		<div class="form-group">
 			<label for="module">Module:</label>
 			<select class="form-control" name="module">
+				{{#if edit}}
 				{{#form_listModules_checkSelected modlist module}}
 					{{this}}
 				{{/form_listModules_checkSelected}}
+				{{else}}
+				{{#form_listModules modlist module}}
+					{{this}}
+				{{/form_listModules}}
+				{{/if}}
 			</select>
 		</div>
 		<div class="form-group">
