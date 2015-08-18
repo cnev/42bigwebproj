@@ -1,0 +1,3 @@
+mongoexport -d test -c forumcategories --type=csv -f name -o exports.csv
+
+mongoimport -d test -c forumcategories --type=csv --headerline exports.csv

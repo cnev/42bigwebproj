@@ -12,6 +12,7 @@ var Correction = new keystone.List('Correction', {
 
 Correction.add({
 	name: { type: Types.Name, required: true, index: true },
+	deleted: {type: Boolean, default: false}
 });
 
 /**

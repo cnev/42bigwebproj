@@ -2,13 +2,13 @@
 		Forum
 			Etudiant:
 				new thread														[OK]
-				new post														[NOT OK]
+				new post														[OK]
 				view thread														[OK]
 				edit own posts													[NOT OK]
 			Admin:
-				new thread														[NOT OK]
-				new post														[NOT OK]
-				view thread														[NOT OK]
+				new thread														[OK]
+				new post														[OK]
+				view thread														[OK]
 				edit ANY post													[NOT OK]
 				delete post														[NOT OK]
 		Connexion ldap															[OK]

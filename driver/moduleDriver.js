@@ -2,6 +2,9 @@ var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
 var Module = keystone.list('Module');
+var ModReg = keystone.list('ModuleRegistration');
+var Activity = keystone.list('Activity');
+var ActReg = keystone.list('ActivityRegistration');
 
 var ModuleDriver = function () {};
 
@@ -54,14 +57,27 @@ ModuleDriver.prototype.getByName = function (name, cb) {
 	});
 };
 
+ModuleDriver.prototype.save = function (module, cb) {
+	// body...
+	module.save(function (err, q_saved) {
+		if (err || !q_saved) {
+			console.error(err);
+			cb(500, err);
+		}
+		else {
+			cb(201, module);
+		}
+	})
+};
+
 ModuleDriver.prototype.create = function (data, cb) {
 	// body...
 	var that = this;
-	that.getOne(data.name, function (code, ret) {
-		if (code == 500) {
-			cb(code, ret);
+	that.getOne(data.name, function (code1, ret) {
+		if (code1 == 500) {
+			cb(code1, ret);
 		}
-		else if (code != 404) {
+		else if (code1 != 404) {
 			cb(403, 'This module already exist, you cannot create it twice. Try to update it instead.');
 		}
 		else {
@@ -82,23 +98,67 @@ ModuleDriver.prototype.create = function (data, cb) {
 				},
 				credits: data.credits
 			});
-			add_q.save(function (err, q_saved){
-				if (err){
-					console.error(err);
-					cb(500, err);
+			that.save(add_q, function (code2, module) {
+				if (code2 != 201) {
+					cb(code2, module);
 				}
 				else {
-					cb(201, data.name+' was successfully added to the module list !');
+					cb(code2, module.name+' was successfully added to the module list !');
 				}
 			});
 		}
 	});
 };
 
-ModuleDriver.prototype.update = function (module, data, cb) {
+ModuleDriver.prototype.update = function (name, data, cb) {
 	// body...
 	var that = this;
-	that.getOne()
+	var setDel = data.deleted ? true : false;
+	var preset = {
+		name: data.name,
+		description: data.description,
+		slots: {
+			max: data.slots,
+			current: 0
+		},
+		registration: {
+			begins: new Date(data.registrationbegins),
+			ends: new Date(data.registrationends)
+		},
+		period: {
+			begins: new Date(data.periodbegins),
+			ends: new Date(data.periodends)
+		},
+		credits: data.credits,
+		deleted: setDel
+	};
+	Module.model.update({'name':name}, preset, {'multi':false}).exec(function (err, result) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else {
+			that.getByName(data.name, function (code, module) {
+				cb(code, module);
+			});
+		}
+	});
+};
+
+ModuleDriver.prototype.delete = function (name, cb) {
+	// body...
+	var that = this;
+	that.getByName(name, function (code1, module1) {
+		if (code1 != 200) {
+			cb(code1, module1);
+		}
+		else {
+			module1.deleted = true;
+			that.update(name, module1, function (code2, module2) {
+				cb(code2, module2);
+			});
+		}
+	});
 };
 
 exports.ModuleDriver = ModuleDriver;

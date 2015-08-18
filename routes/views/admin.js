@@ -13,6 +13,8 @@ var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
 var Notation = keystone.list('Notation');
 var NotationElement = keystone.list('NotationElement');
+var Ticket = keystone.list('Ticket');
+var TicketCategory = keystone.list('TicketCategory');
 
 router.get('/', function (req, res) {
 
@@ -72,32 +74,15 @@ router.get('/module/edit/:name', function (req, res) {
 
 router.post('/module/edit/:name', function (req, res) {
 
-	Module.model.update({'name': req.params.name},
-	{
-		name: req.body.name,
-		description: req.body.description,
-		slots: {
-			max: req.body.slots,
-			current: 0
-		},
-		registration: {
-			begins: new Date(req.body.registrationbegins),
-			ends: new Date(req.body.registrationends)
-		},
-		period: {
-			begins: new Date(req.body.periodbegins),
-			ends: new Date(req.body.periodends)
-		},
-		credits: req.body.credits
-	},
-	{'multi':false})
-	.exec(function (err,result){
-		Module.model.findOne()
-		.where('name', req.params.name)
-		.exec(function (err, bob){
+	ModuleDriver.update(req.params.name, req.body, function (code, module) {
+		if (code != 200) {
+			req.flash('error', module);
+			res.redirect('/module/view/'+req.params.name);
+		}
+		else {
 			req.flash('info', 'Module successfully edited !');
-			res.redirect('/module/view/'+req.body.name);
-		});
+			res.redirect('/module/view/' + module.name);
+		}
 	});
 });
 
@@ -418,32 +403,67 @@ function build_contents(req, res, cb)
 router.post('/notation/new', function (req, res) {
 
 	if (!req.body){// || !req.body.submit){
-	req.flash('error', 'form error');
-	res.redirect('/admin/notation/new');
-}
-else{
-	build_contents(req, res, function (err, content_res){
-		console.log('content_res');
-		console.log(content_res);
-		console.log('end of content_res');
-		var add_q = new Notation.model({
-			activity: req.body.activity,
-			contents: content_res
+		req.flash('error', 'form error');
+		res.redirect('/admin/notation/new');
+	}
+	else {
+		build_contents(req, res, function (err, content_res){
+			console.log('content_res');
+			console.log(content_res);
+			console.log('end of content_res');
+			var add_q = new Notation.model({
+				activity: req.body.activity,
+				contents: content_res
+			});
+			add_q.save(function (err, q_saved) {
+				if (err) {
+					console.error(err);
+					res.status(500).send(err);
+				}
+				else {
+					console.log(q_saved);
+					req.flash('info', 'New notation added to the list !');
+					res.redirect('/');
+				}
+			});
 		});
-		add_q.save(function (err, q_saved) {
-			if (err) {
-				console.error(err);
-				res.status(500).send(err);
-			}
-			else {
-				console.log(q_saved);
-				req.flash('info', 'New notation added to the list !');
-				res.redirect('/');
-			}
-		});
+	}	//res.status(200).send(req.body);
+});
+
+router.get('/ticket', function (req, res){
+	var view = new keystone.View(req, res);
+
+	Ticket.model.find()
+	.sort('updatedAt')
+	.exec(function (err, tickets){
+		res.locals.admin = true;
+		res.locals.tickets = tickets;
+		res.locals.admin_id = req.session.user_id;
+		view.render('ticket_overview');
 	});
-}
-	//res.status(200).send(req.body);
+});
+
+router.get('/ticket/view/:id', function (req, res){
+	Ticket.model.findById(req.params.id)
+	.exec(function (err, ticket){
+		if (err) {
+			res.status(err).send(err);
+		} else if (!ticket) {
+			req.flash('error', 'ticket not found');
+			res.redirect('/admin/ticket');
+		} else {
+			if (ticket.state == 'locked') {
+				req.flash('error', 'this ticket is locked !');
+				res.redirect('/admin/ticket');
+			} else {
+				ticket.state = 'locked';
+				ticket.save(function (err, saved) {
+					req.flash('info', 'this ticket is now locked !');
+					res.redirect('/admin/ticket');
+				})
+			}
+		}
+	});
 });
 
 module.exports = router;

@@ -17,7 +17,8 @@ ForumThread.add({
 	category: {type: Types.Relationship, ref: 'ForumCategory'},
 	posts: {type: Types.Relationship, ref: 'ForumPost', many: true},
 	nb_posts: {type: Number, default: 0},
-	pinned: {type: Types.Boolean, default: false}
+	pinned: {type: Types.Boolean, default: false},
+	deleted: {type: Boolean, default: false}
 
 });
 

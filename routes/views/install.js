@@ -79,4 +79,8 @@ router.get('/', function (req, res) {
 	});
 });
 
+router.get('/ticketCategory', function (req, res){
+
+});
+
 module.exports = router;

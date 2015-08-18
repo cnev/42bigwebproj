@@ -13,7 +13,8 @@ var NotationElement = new keystone.List('NotationElement', {
 NotationElement.add({
 	title: {type: String},
 	text: {type: Types.Textarea},
-	grades: {type: Number, many: true}
+	grades: {type: Number, many: true},
+	deleted: {type: Boolean, default: false}
 });
 
 

@@ -33,7 +33,8 @@ Activity.add({
 	req_corrections: {type: Types.Number},
 	auto_group: {type: Types.Boolean},
 	module: {type: Types.Relationship, ref: 'Module'},
-	type: {type: Types.Select, options: 'project, exam, td'}
+	type: {type: Types.Select, options: 'project, exam, td'},
+	deleted: {type: Boolean, default: false}
 });
 
 /**
