@@ -14,8 +14,16 @@ var ForumPost = keystone.list('ForumPost');
 
 function pushPost(posts, id, i, cb){
 	ForumPost.model.findById(id).exec(function (err, post){
-		posts.push(post);
-		cb(null, i);
+		ForumPost.model.find()
+		.where('reply_of', id)
+		.exec(function (err, replies){
+			var data = {
+				post: post,
+				nb_replies: replies.length
+			};
+			posts.push(data);
+			cb(null, i);
+		});
 	})
 }
 
@@ -68,7 +76,7 @@ router.post('/thread/new', function (req, res){
 					thread.save(function (err, thread_saved){
 						if (err){
 							res.status(err).send(thread_saved);
-						}else{
+						} else {
 							req.flash('info', 'new thread !');
 							res.redirect('/forum');
 						}
@@ -82,11 +90,13 @@ router.post('/thread/new', function (req, res){
 router.get('/view/thread/:id', function (req, res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	console.log('wat?');
 	ForumThread.model.findById(req.params.id)
 	.exec(function (err, result) {
-		if (err){
+		if (err) {
 			res.status(500).send(result);
+		} else if (!result) {
+			req.flash('error', 'thread not found');
+			res.redirect('/forum');
 		} else {
 			locals.threadId = req.params.id;
 			locals.posts = [];
@@ -101,11 +111,27 @@ router.get('/view/post/:id', function (req, res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	ForumPost.model.findById(req.params.id)
-	.exec(function (err, result)
-	{
-		locals.postId = req.params.id;
-		locals.post = result;
-		view.render('forum_post');
+	.exec(function (err, result) {
+		if (err) {
+			res.status(err).send(err);
+		} else if (!result) {
+			req.flash('error', 'post not found');
+			res.redirect('/forum');
+		} else {
+			locals.postId = req.params.id;
+				locals.post = result;
+				ForumPost.model.find()
+				.where('reply_of', req.params.id)
+				.sort('createdAt')
+				.exec(function (err, replies){
+					if (err){
+						res.status(err).send(err);
+					} else {
+						locals.replies = replies;
+						view.render('forum_post');
+					}
+				});
+		}
 	});
 })
 
@@ -154,16 +180,23 @@ router.post('/reply/post/:id', function (req, res){
 				if (err){
 					res.status(err).send(post_saved);
 				} else {
-					ForumThread.model.findById(req.params.id).exec(function (err, thread){
-						thread.nb_posts = thread.nb_posts + 1;
-						thread.save(function (err, thread_saved){
-							if (err){
-								res.status(err).send(thread_saved);
-							}else{
-								req.flash('info', 'new post in the thread !');
-								res.redirect('/forum/view/thread/'+req.params.id);
-							}
-						});
+					ForumThread.model.findOne()
+					.where('posts').in([req.params.id])
+					.exec(function (err, thread){
+						if (err) {
+							res.status(err).send(thread);
+						} else {
+							thread.nb_posts = thread.nb_posts + 1;
+							thread.save(function (err, thread_saved){
+								if (err){
+									res.status(err).send(thread_saved);
+								}else{
+									req.flash('info', 'new post in the thread !');
+									res.redirect('/forum/view/post/'+req.params.id);
+								}
+							});
+						}
+
 					});
 				}
 			});

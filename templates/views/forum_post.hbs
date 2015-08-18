@@ -4,8 +4,16 @@
 </div>
 
 <div class="container">
+	<h5>Replies to this post:</h5>
+	{{#each replies}}
+		<h6>Written by {{this.author}}</h6>
+		{{this.message}}
+	{{/each}}
+</div>
+
+<div class="container">
 	<form action="/forum/reply/post/{{postId}}" method="POST">
-		<h2>Reply in this thread</h2>
+		<h2>Reply to this post</h2>
 		<div class="form-group">
 			<textarea class="form-control" rows="5" name="message"></textarea>
 		</div>

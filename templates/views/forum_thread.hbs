@@ -1,7 +1,11 @@
 <div class="container">
 	<ul class="list-group">
 	{{#each posts}}
-		<li>{{this.message}} <a href="/forum/view/post/{{this._id}}" class="btn btn-info" role="button">Reply</a></li>
+		<li>
+			<p>{{this.post.message}}</p>
+			<p>{{this.nb_replies}} replies. Press Reply to view them.</p>
+			<a href="/forum/view/post/{{this.post._id}}" class="btn btn-info" role="button">Reply</a>
+		</li>
 	{{/each}}
 	</ul>
 </div>
