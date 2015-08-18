@@ -107,6 +107,7 @@ router.post('/', function (req, res)
 						else {
 							var sess = req.session;
 							sess.user = req.body.username;
+							sess.user_id = usr;
 							sess.pw = usr.password;
 							sess.dn = entry.object.dn;
 							sess.logged = true;
