@@ -12,8 +12,23 @@ var ForumCategory = keystone.list('ForumCategory');
 var ForumThread = keystone.list('ForumThread');
 var ForumPost = keystone.list('ForumPost');
 
-router.get('/', function (req, res) {
+function pushPost(posts, id, i, cb){
+	ForumPost.model.findById(id).exec(function (err, post){
+		posts.push(post);
+		cb(null, i);
+	})
+}
 
+function fetchPosts(posts, thread, cb){
+	for (var i = 0; i < thread.posts.length; i++){
+		pushPost(posts, thread.posts[i], i, function (err, q_i){
+			if (q_i == thread.posts.length - 1)
+				cb(null, 1);
+		});
+	}
+}
+
+router.get('/', function (req, res) {
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
 	locals.threads = [];
@@ -31,14 +46,12 @@ router.get('/', function (req, res) {
 });
 
 router.post('/thread/new', function (req, res){
-	console.log(req.body);
-
 	UserDriver.getByUid(req.session.user, function (err, user){
 		if (err != 200){
 			res.status(err).send(user);
 		} else {
 			var post = new ForumPost.model({
-				author: user,
+				author: user.uid,
 				message: req.body.message,
 			});
 			post.save(function (err, post_saved){
@@ -47,7 +60,7 @@ router.post('/thread/new', function (req, res){
 				} else {
 					var thread = new ForumThread.model({
 						title: req.body.title,
-						author: user,
+						author: user.uid,
 						category: req.body.category,
 						posts: post,
 						nb_posts: 1
@@ -61,41 +74,102 @@ router.post('/thread/new', function (req, res){
 						}
 					});
 				}
-			})
+			});
 		}
 	});
 });
 
-function pushPost(posts, id, i, cb){
-	ForumPost.model.findById(id).exec(function (err, post){
-		posts.push(post);
-		cb(null, i);
-	})
-}
-
-function fetchPosts(posts, thread, cb){
-	for (var i = 0; i < thread.posts.length; i++){
-		pushPost(posts, thread.posts[i], i, function (err, q_i){
-			if (q_i == thread.posts.length - 1)
-				cb(null, 1);
-		});
-	}
-}
-
-router.get('/view/:id', function (req, res){
-
+router.get('/view/thread/:id', function (req, res){
 	var view = new keystone.View(req, res);
 	var locals = res.locals;
-	var thread_list = ForumThread.model.findById(req.params.id)
-		.exec(function (err, result)
-		{
+	console.log('wat?');
+	ForumThread.model.findById(req.params.id)
+	.exec(function (err, result) {
+		if (err){
+			res.status(500).send(result);
+		} else {
+			locals.threadId = req.params.id;
 			locals.posts = [];
 			fetchPosts(locals.posts, result, function (err, ok){
 				view.render('forum_thread');
 			});
-		});
+		}
+	});
 });
 
+router.get('/view/post/:id', function (req, res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	ForumPost.model.findById(req.params.id)
+	.exec(function (err, result)
+	{
+		locals.postId = req.params.id;
+		locals.post = result;
+		view.render('forum_post');
+	});
+})
+
+router.post('/reply/thread/:id', function (req, res){
+	UserDriver.getByUid(req.session.user, function (err, user){
+		if (err != 200){
+			res.status(err).send(user);
+		} else {
+			var post = new ForumPost.model({
+				author: user.uid,
+				message: req.body.message,
+			});
+			post.save(function (err, post_saved){
+				if (err){
+					res.status(err).send(post_saved);
+				} else {
+					ForumThread.model.findById(req.params.id).exec(function (err, thread){
+						thread.nb_posts = thread.nb_posts + 1;
+						thread.posts.push(post);
+						thread.save(function (err, thread_saved){
+							if (err){
+								res.status(err).send(thread_saved);
+							}else{
+								req.flash('info', 'new post in the thread !');
+								res.redirect('/forum/view/thread/'+req.params.id);
+							}
+						});
+					});
+				}
+			});
+		}
+	});
+});
+
+router.post('/reply/post/:id', function (req, res){
+	UserDriver.getByUid(req.session.user, function (err, user){
+		if (err != 200){
+			res.status(err).send(user);
+		} else {
+			var post = new ForumPost.model({
+				author: user.uid,
+				message: req.body.message,
+				reply_of: req.params.id
+			});
+			post.save(function (err, post_saved){
+				if (err){
+					res.status(err).send(post_saved);
+				} else {
+					ForumThread.model.findById(req.params.id).exec(function (err, thread){
+						thread.nb_posts = thread.nb_posts + 1;
+						thread.save(function (err, thread_saved){
+							if (err){
+								res.status(err).send(thread_saved);
+							}else{
+								req.flash('info', 'new post in the thread !');
+								res.redirect('/forum/view/thread/'+req.params.id);
+							}
+						});
+					});
+				}
+			});
+		}
+	});
+});
 
 
 module.exports = router;

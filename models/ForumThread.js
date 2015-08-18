@@ -13,7 +13,7 @@ var ForumThread = new keystone.List('ForumThread', {
 ForumThread.add({
 
 	title: {type: String},
-	author: {type: Types.Relationship, ref: 'User'},
+	author: {type: String},
 	category: {type: Types.Relationship, ref: 'ForumCategory'},
 	posts: {type: Types.Relationship, ref: 'ForumPost', many: true},
 	nb_posts: {type: Number, default: 0},

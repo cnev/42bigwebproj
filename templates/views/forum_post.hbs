@@ -1,13 +1,10 @@
 <div class="container">
-	<ul class="list-group">
-	{{#each posts}}
-		<li>{{this.message}} <a href="/forum/view/post/{{this._id}}" class="btn btn-info" role="button">Reply</a></li>
-	{{/each}}
-	</ul>
+	<h6>Written by {{post.author}}</h6>
+	{{post.message}}
 </div>
 
 <div class="container">
-	<form action="/forum/reply/thread/{{threadId}}" method="POST">
+	<form action="/forum/reply/post/{{postId}}" method="POST">
 		<h2>Reply in this thread</h2>
 		<div class="form-group">
 			<textarea class="form-control" rows="5" name="message"></textarea>
