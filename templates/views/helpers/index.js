@@ -455,5 +455,16 @@ _helpers.forumCategoryList = function(list){
 	}
 }
 
+_helpers.ticketCategoryList = function(list){
+	if (!list)
+		return ('');
+	var output = '';
+	for (var i = 0; i < list.length; i++){
+		output += '<option value="'+list[i]._id+'">'+list[i].name+'</option>';
+		if (i == list.length - 1)
+			return new hbs.SafeString(output);
+	}
+}
+
 return _helpers;
 };

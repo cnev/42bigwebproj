@@ -1,0 +1,10 @@
+<div class="container">
+	{{#each tickets}}
+		<h4>{{this.title}}</h4>
+		<p>{{this.state}}</p>
+		<p>written by {{this.author}}</p>
+		<p>{{this.content}}</p>
+		<p>{{this.priority}}</p>
+	{{/each}}
+	<a href="/ticket/new" class="btn btn-danger" role="button">Open a ticket</a>
+</div>

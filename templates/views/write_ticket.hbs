@@ -1,0 +1,22 @@
+<div class="container">
+	<form action="/ticket/new" method="POST">
+		<h2>Write a ticket</h2>
+		<div class="form-group">
+			<label for="title">Ticket title</label>
+			<input type="text" class="form-control" name="title">
+		</div>
+		<div class="form-group">
+			<label for="contents">Your problem:</label>
+			<textarea class="form-control" rows="5" name="contents"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="category">Category:</label>
+			<select class="form-control" name="category">
+				{{#ticketCategoryList categorylist}}
+					{{this}}
+				{{/ticketCategoryList}}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+</div>
