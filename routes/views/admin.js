@@ -72,32 +72,15 @@ router.get('/module/edit/:name', function (req, res) {
 
 router.post('/module/edit/:name', function (req, res) {
 
-	Module.model.update({'name': req.params.name},
-	{
-		name: req.body.name,
-		description: req.body.description,
-		slots: {
-			max: req.body.slots,
-			current: 0
-		},
-		registration: {
-			begins: new Date(req.body.registrationbegins),
-			ends: new Date(req.body.registrationends)
-		},
-		period: {
-			begins: new Date(req.body.periodbegins),
-			ends: new Date(req.body.periodends)
-		},
-		credits: req.body.credits
-	},
-	{'multi':false})
-	.exec(function (err,result){
-		Module.model.findOne()
-		.where('name', req.params.name)
-		.exec(function (err, bob){
+	ModuleDriver.update(req.params.name, req.body, function (code, module) {
+		if (code != 200) {
+			req.flash('error', module);
+			res.redirect('/module/view/'+req.params.name);
+		}
+		else {
 			req.flash('info', 'Module successfully edited !');
-			res.redirect('/module/view/'+req.body.name);
-		});
+			res.redirect('/module/view/' + module.name);
+		}
 	});
 });
 
