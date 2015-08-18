@@ -4,8 +4,10 @@ var keystone = require('keystone');
 var router = express.Router();
 
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
+var ModDriv = require('../../driver/moduleDriver').ModuleDriver;
 
 var ActivityDriver = new ActDriv ();
+var ModuleDriver = new ModDriv ();
 
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
@@ -29,38 +31,25 @@ router.get('/module/new', function (req, res) {
 
 router.post('/module/new', function (req, res) {
 	if (!req.body) {// || !req.body.submit){
-	req.flash('error', 'form error');
-	res.redirect('/admin/module/new');
-}
-else {
-	var add_q = new Module.model({
-		name: req.body.name,
-		description: req.body.description,
-		slots: {
-			max: req.body.slots,
-			current: 0
-		},
-		registration: {
-			begins: new Date(req.body.registrationbegins),
-			ends: new Date(req.body.registrationends)
-		},
-		period: {
-			begins: new Date(req.body.periodbegins),
-			ends: new Date(req.body.periodends)
-		},
-		credits: req.body.credits
-	});
-	add_q.save(function (err, q_saved){
-		if (err){
-			console.error(err);
-			res.status(500).send(err);
-		}
-		else {
-			req.flash('info', req.body.name+' was successfully added to the module list !');
-			res.redirect('/module');
-		}
-	});
-}
+		req.flash('error', 'form error');
+		res.redirect('/admin/module/new');
+	}
+	else {
+		ModuleDriver.create(req.body, function (code, doc){
+			if (code == 500) {
+				res.status(500).send(doc);
+			}
+			else {
+				if (code != 201) {
+					req.flash('error', doc);
+				}
+				else {
+					req.flash('info', doc);
+				}
+				res.redirect('/module');
+			}
+		});
+	}
 });
 
 router.get('/module/edit/:name', function (req, res) {

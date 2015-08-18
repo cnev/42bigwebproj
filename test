@@ -47,3 +47,5 @@ db.modules.insert({_id:ObjectId("55afb685477535fe144ed041"),
 		credits: 42})
 
 db.activityregistrations.find().where('user', 55cb1acbb301356b86623a52)
+
+db.users.update({"_id" : ObjectId("55b8d125e4537d9a19bebd4f")}, {"_id" : ObjectId("55b8d125e4537d9a19bebd4f"), "uid" : "msorin", "password" : "$2a$10$ywy3o7FexH5kUCBxBiV/r.d5OXwjb6GJDw3j42QD.tTqZw6ZP3o5O", "email" : "msorin@student.42.fr", "uidNumber" : 5514, "gidNumber" : 4207, "isStaff" : { "bocalStudent" : true, "bocalStaff" : true }, "name" : { "first" : "Mickael", "last" : "SORIN" }, "__v" : 0}, {'upsert':true})

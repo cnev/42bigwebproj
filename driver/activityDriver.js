@@ -167,36 +167,47 @@ ActivityDriver.prototype.getOne = function (name, cb) {
 
 ActivityDriver.prototype.create = function (data, cb) {
 	// body...
-	var add_q = new Activity.model({
-		name: data.name,
-		description: data.description,
-		subject: data.subject,
-		slots: {
-			max: data.slots,
-			current: 0
-		},
-		registration: {
-			begins: new Date(data.registrationbegins),
-			ends: new Date(data.registrationends)
-		},
-		period: {
-			begins: new Date(data.periodbegins),
-			ends: new Date(data.periodends)
-		},
-		req_corrections: data.reqcorrections,
-		auto_group: data.autogroup,
-		module: data.module,
-		type: data.type
-	});
-	add_q.save(function (err, q_saved) {
-		if (err) {
-			console.log("FAIL !");
-			console.error(err);
-			cb(500, err);
+	var that = this;
+	that.getOne(data.name, function (code, ret) {
+		if (code == 500) {
+			cb(code, ret);
+		}
+		else if (code != 404) {
+			cb(403, {'err':'This activity already exist, you cannot create it twice. Try to update it instead.'})
 		}
 		else {
-			console.log(q_saved);
-			cb(201, data.name + ' was successfully added to the activity list !');
+			var add_q = new Activity.model({
+				name: data.name,
+				description: data.description,
+				subject: data.subject,
+				slots: {
+					max: data.slots,
+					current: 0
+				},
+				registration: {
+					begins: new Date(data.registrationbegins),
+					ends: new Date(data.registrationends)
+				},
+				period: {
+					begins: new Date(data.periodbegins),
+					ends: new Date(data.periodends)
+				},
+				req_corrections: data.reqcorrections,
+				auto_group: data.autogroup,
+				module: data.module,
+				type: data.type
+			});
+			add_q.save(function (err, q_saved) {
+				if (err) {
+					console.log("FAIL !");
+					console.error(err);
+					cb(500, err);
+				}
+				else {
+					console.log(q_saved);
+					cb(201, data.name + ' was successfully added to the activity list !');
+				}
+			});
 		}
 	});
 };
