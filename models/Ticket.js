@@ -12,9 +12,8 @@ var Ticket = new keystone.List('Ticket', {
 
 Ticket.add({
 	title: { type: String, initial: 'title', required: true },
-	state: { type: Types.Select, options: 'new, open, close', default: 'open' },
-	author: { type: Types.Relationship, ref: 'User' },
-	publishedDate: { type: Types.Date, default: Date.now },
+	state: { type: Types.Select, options: 'open, locked, closed', default: 'open' },
+	author: { type: String },
 	content: { type: Types.Textarea },
 	category: { type: Types.Relationship, ref: 'TicketCategory' },
 	priority: { type: Types.Select, options: 'Non Important, Normal, Important, Urgent, Over 9000', default: 'Normal' }
