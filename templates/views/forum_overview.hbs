@@ -3,7 +3,7 @@
 <div class="container">
 	<ul class="list-group">
 	{{#each threads}}
-		<li><a href="/forum/view/thread/{{this._id}}">{{this.title}}</a></li>
+		<a href="/forum/view/thread/{{this._id}}" class="list-group-item">{{this.title}}</a>
 	{{/each}}
 	</ul>
 </div>
@@ -24,6 +24,7 @@
 			</select>
 		</div>
 		<div class="form-group">
+			<label for="message">Message:</label>
 			<textarea class="form-control" rows="5" name="message"></textarea>
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>

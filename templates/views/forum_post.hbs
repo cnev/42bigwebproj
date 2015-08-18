@@ -1,14 +1,22 @@
 <div class="container">
-	<h6>Written by {{post.author}}</h6>
-	{{post.message}}
-</div>
+	<ul class="list-group">
+		<li class="list-group-item panel panel-default">
+			<div class="panel-heading">{{post.author}}</div>
+			<div class="panel-body">{{post.message}}</div>
+		</li>
 
-<div class="container">
-	<h5>Replies to this post:</h5>
-	{{#each replies}}
-		<h6>Written by {{this.author}}</h6>
-		{{this.message}}
-	{{/each}}
+		<li class="list-group-item panel panel-default">
+			<div class="panel-heading">Replies to this post:</div>
+				<ul class="list-group">
+				{{#each replies}}
+					<li class="list-group-item panel panel-default">
+						<div class="panel-heading">{{this.author}}</div>
+						<div class="panel-body">{{this.message}}</div>
+					</li>
+				{{/each}}
+				</ul>
+		</li>
+	</ul>
 </div>
 
 <div class="container">

@@ -1,11 +1,64 @@
+<!--
+in data
+
+{ __v: 2,
+_id: 55d33081906d416f0ab8e3fe,
+author: 'mde-jesu',
+createdAt: Tue Aug 18 2015 15:17:53 GMT+0200 (CEST),
+title: 'test',
+updatedAt: Tue Aug 18 2015 15:20:06 GMT+0200 (CEST),
+pinned: false,
+nb_posts: 4,
+posts: 
+	[ 55d33081906d416f0ab8e3fd,
+	55d3308a906d416f0ab8e3ff,
+	55d330d6906d416f0ab8e402 ] }
+
+posts
+[
+	{post: 
+		{ updatedAt: Tue Aug 18 2015 15:17:53 GMT+0200 (CEST),
+		createdAt: Tue Aug 18 2015 15:17:53 GMT+0200 (CEST),
+		author: 'mde-jesu',
+		message: '',
+		_id: 55d33081906d416f0ab8e3fd,
+		__v: 0 },
+		nb_replies: 0 },
+
+	{ post: 
+		{ updatedAt: Tue Aug 18 2015 15:18:02 GMT+0200 (CEST),
+		createdAt: Tue Aug 18 2015 15:18:02 GMT+0200 (CEST),
+		author: 'mde-jesu',
+		message: 'coucou\r\n',
+		_id: 55d3308a906d416f0ab8e3ff,
+		__v: 0 },
+		nb_replies: 1 },
+	{ post: 
+		{
+		updatedAt: Tue Aug 18 2015 15:19:18 GMT+0200 (CEST),
+		createdAt: Tue Aug 18 2015 15:19:18 GMT+0200 (CEST),
+		author: 'mde-jesu',
+		message: 'testset\r\nvmc\'psmv\'pes \r\n\'piserbn\r\n\'sb \r\npo[;kjsbv\r\n',
+		_id: 55d330d6906d416f0ab8e402,
+		__v: 0 },
+		nb_replies: 0 } ]
+-->
+
+<div class="page-header">
+	<h1 class="text-center "><b>Thread: {{data.title}}</b></h1>
+</div>
+
 <div class="container">
 	<ul class="list-group">
 	{{#each posts}}
-		<li>
-			<p>{{this.post.message}}</p>
-			<p>{{this.nb_replies}} replies. Press Reply to view them.</p>
-			<a href="/forum/view/post/{{this.post._id}}" class="btn btn-info" role="button">Reply</a>
-		</li>
+		<a href="/forum/view/post/{{this.post._id}}" class="list-group-item">
+			<h2>{{this.post.message}}</h2>
+			<p>
+			<div>{{this.nb_replies}} replies </div>
+			<div>updatedAt {{this.post.updatedAt}}</div>
+			<div>createdAt {{this.post.createdAt}}</div>
+			</p>
+		</a>
 	{{/each}}
 	</ul>
 </div>

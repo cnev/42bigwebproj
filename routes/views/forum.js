@@ -46,7 +46,6 @@ router.get('/', function (req, res) {
 		ForumThread.model.find()
 		.sort('createdAt')
 		.exec(function (err, threads){
-			console.log(threads);
 			locals.threads = threads;
 			view.render('forum_overview');
 		});
@@ -100,6 +99,7 @@ router.get('/view/thread/:id', function (req, res){
 		} else {
 			locals.threadId = req.params.id;
 			locals.posts = [];
+			locals.data = result;
 			fetchPosts(locals.posts, result, function (err, ok){
 				view.render('forum_thread');
 			});
