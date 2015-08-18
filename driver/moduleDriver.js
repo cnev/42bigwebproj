@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectId;
 var Module = keystone.list('Module');
 var ModReg = keystone.list('ModuleRegistration');
 var Activity = keystone.list('Activity');
-var ActReg = keystone.list('AtcivityRegistration');
+var ActReg = keystone.list('ActivityRegistration');
 
 var ModuleDriver = function () {};
 
