@@ -25,7 +25,8 @@ Module.add({
 		begins: {type: Types.Date},
 		ends: {type: Types.Date}
 	},
-	credits: {type: Types.Number}
+	credits: {type: Types.Number},
+	deleted: {type: Boolean, default: false}
 });
 
 

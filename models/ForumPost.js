@@ -13,7 +13,8 @@ var ForumPost = new keystone.List('ForumPost', {
 ForumPost.add({
 	author: {type: String},
 	message: {type: Types.Textarea},
-	reply_of: {type: Types.Relationship, ref: 'ForumPost'}
+	reply_of: {type: Types.Relationship, ref: 'ForumPost'},
+	deleted: {type: Boolean, default: false}
 });
 
 ForumPost.register();

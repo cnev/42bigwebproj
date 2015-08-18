@@ -12,7 +12,8 @@ ProjectGroup.add({
 	activity: {type: Types.Relationship, ref: 'Activity'},
 	assigned: {type: Types.Boolean, default: false},
 	correctors: {type: Types.Relationship, ref:'User', many: true},
-	corrections_done: {type: Number, default: 0}
+	corrections_done: {type: Number, default: 0},
+	deleted: {type: Boolean, default: false}
 });
 
 ProjectGroup.register();

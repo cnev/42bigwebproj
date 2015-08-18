@@ -2,6 +2,9 @@ var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
 var Module = keystone.list('Module');
+var ModReg = keystone.list('ModuleRegistration');
+var Activity = keystone.list('Activity');
+var ActReg = keystone.list('AtcivityRegistration');
 
 var ModuleDriver = function () {};
 
@@ -110,6 +113,7 @@ ModuleDriver.prototype.create = function (data, cb) {
 ModuleDriver.prototype.update = function (name, data, cb) {
 	// body...
 	var that = this;
+	var setDel = data.deleted ? true : false;
 	var preset = {
 		name: data.name,
 		description: data.description,
@@ -125,7 +129,8 @@ ModuleDriver.prototype.update = function (name, data, cb) {
 			begins: new Date(data.periodbegins),
 			ends: new Date(data.periodends)
 		},
-		credits: data.credits
+		credits: data.credits,
+		deleted: setDel
 	};
 	Module.model.update({'name':name}, preset, {'multi':false}).exec(function (err, result) {
 		if (err) {
@@ -135,6 +140,22 @@ ModuleDriver.prototype.update = function (name, data, cb) {
 		else {
 			that.getByName(data.name, function (code, module) {
 				cb(code, module);
+			});
+		}
+	});
+};
+
+ModuleDriver.prototype.delete = function (name, cb) {
+	// body...
+	var that = this;
+	that.getByName(name, function (code1, module1) {
+		if (code1 != 200) {
+			cb(code1, module1);
+		}
+		else {
+			module1.deleted = true;
+			that.update(name, module1, function (code2, module2) {
+				cb(code2, module2);
 			});
 		}
 	});
