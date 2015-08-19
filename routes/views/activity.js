@@ -154,7 +154,7 @@ router.post('/register/:name', function (req, res) {
 				console.log('preACRDRV');
 				ActRegisDriver.preRegister(req.params.name, req.session.user, members, function (code, actR) {
 					console.log('postACRDRV');
-					if (code == 201) {
+					if (code == 200) {
 						req.flash('info', 'You are now registered to this activity !');
 						res.redirect('/activity');
 					}

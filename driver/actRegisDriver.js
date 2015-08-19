@@ -45,23 +45,46 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	});
 };
 
+function validateUser(activity, members, i, cb) {
+	console.log('member: '+i);
+	console.log(member[i]);
+	ActRegis.model.findOne()
+	.where('activity', activity)
+	.where('members').in([members[i]])
+	.exec(function (code, actR) {
+		if (code == 500) {
+			console.log('PAF');
+			cb(code, i, "ERROR");
+		}
+		else if (code == 200) {
+			console.log('KNIFE');
+			cb(409, i, 'One or more members already is/are registered to this activity.');
+		}
+		else {
+			console.log("PORO");
+			cb(200, i, "OK");
+		}
+	});
+}
+
 ActRegisDriver.prototype.validateGroup = function(activity, members, cb) {
 	var that = this;
 	var tmp;
+	var ok = true;
 	for (var i = 0 ; i < members.length; i++) {
-		tmp = members[i];
-		that.getOneActivity(activity, tmp, function (code, actR) {
-			if (code == 500) {
-				cb(code, actR);
+		validateUser(activity, members, i, function (code, i, actR){
+			if (code == 500 || code == 409) {
+				ok = false;
+			} else if (i == members.length - 1) {
+				if (ok) {
+					cb(200, null);
+				} else {
+					cb(code, actR);
+				}
 			}
-			else if (code == 200) {
-				cb(409, 'One or more members already is/are registered to this activity.');
-			}
-			if (tmp == members[members.length - 1])
-				cb(200, null);
-		})
+		});
 	}
-}
+};
 /*
 that.getOneActivity(activity, owner, function (code, ret) {
 		var i;
@@ -122,6 +145,7 @@ ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 			cb(409, actR);
 		}
 		else if (code == 200) {
+			console.log("PANDA");
 			var newActR = new ActRegis.model({
 				owner: owner,
 				members: members,
@@ -167,6 +191,7 @@ ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb
 					cb(404, 'Activity Not Found');
 				}
 				else {
+					console.log('WABBIT');
 					that.register(act, usr, members, function (code, actR) {
 						cb(code, actR);
 					});
