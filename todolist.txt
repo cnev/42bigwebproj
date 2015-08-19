@@ -117,24 +117,28 @@ Matthias
 			contenu: Liste/Tableau/???, une activite par element
 
 	[templates/views/view_module.hbs]
+		dates a faire
 		un bloc centre, une fiche:
 			titre: <nom du module>
 			<admin only>: Boutons 'editer' et 'supprimer'
 			contenu: tous les elements du modele
 
 	[templates/views/view_activity.hbs]
+		dates a faire
 		un bloc centre, une fiche:
 			titre: <nom de l'activite>
 			<admin only>: Boutons 'editer' et 'supprimer'
 			contenu: tous les elements du modele
 
-	[templates/views/forum_overview.hbs]
+	[OK][templates/views/forum_overview.hbs]
 		toutes les threads
 		panneau nouveau thread
 
-	[templates/views/forum_thread.hbs]
+	[OK][templates/views/forum_thread.hbs]
 		tous les posts du thread concerne
 		panneau nouveau post
+
+	[TO_END][templates/views/forum_posts.hbs]
 
 Chandara
 	Implementation des baremes (controleurs, modeles)
