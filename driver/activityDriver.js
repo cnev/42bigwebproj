@@ -82,7 +82,8 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 			cb(code, actList);
 		}
 		else {
-			ActivityRegistration.model.find({'encours':true})
+			ActivityRegistration.model.find()
+			.where('encours', true)
 			.where('members').in([user])
 			.exec(function (err, actRList) {
 				var i;
@@ -124,6 +125,7 @@ ActivityDriver.prototype.getPastAct = function (user, cb) {
 		}
 		else {
 			ActivityRegistration.model.find()
+			.where('encours', true)
 			.where('members').in([user])
 			.exec(function (err, actRList) {
 				var i;

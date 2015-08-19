@@ -147,16 +147,18 @@ router.post('/register/:name', function (req, res) {
 	else {
 		console.log('preUSRDRV');
 		UserDriver.getUsers(req.body.members, function (err, members){
-			if (err) {
+			if (err == 500) {
 				res.status(err).send(err);
 			} else {
+				console.log(members);
 				console.log('preACRDRV');
 				ActRegisDriver.preRegister(req.params.name, req.session.user, members, function (code, actR) {
-					if (code == 201) {
+					console.log('postACRDRV');
+					if (code == 200) {
 						req.flash('info', 'You are now registered to this activity !');
 						res.redirect('/activity');
 					}
-					else if (code == 304) {
+					else if (code == 409) {
 						req.flash('error', 'You are already registered to this activity !');
 						res.redirect('/activity');
 					}
