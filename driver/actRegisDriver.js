@@ -47,7 +47,7 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 
 function validateUser(activity, members, i, cb) {
 	console.log('member: '+i);
-	console.log(member[i]);
+	console.log(members[i]);
 	ActRegis.model.findOne()
 	.where('activity', activity)
 	.where('members').in([members[i]])
@@ -56,13 +56,13 @@ function validateUser(activity, members, i, cb) {
 			console.log('PAF');
 			cb(code, i, "ERROR");
 		}
-		else if (code == 200) {
-			console.log('KNIFE');
-			cb(409, i, 'One or more members already is/are registered to this activity.');
-		}
-		else {
+		else if (code == 404) {
 			console.log("PORO");
 			cb(200, i, "OK");
+		}
+		else {
+			console.log('KNIFE');
+			cb(409, i, 'One or more members already is/are registered to this activity.');
 		}
 	});
 }
@@ -75,7 +75,8 @@ ActRegisDriver.prototype.validateGroup = function(activity, members, cb) {
 		validateUser(activity, members, i, function (code, i, actR){
 			if (code == 500 || code == 409) {
 				ok = false;
-			} else if (i == members.length - 1) {
+			}
+			if (i == members.length - 1) {
 				if (ok) {
 					cb(200, null);
 				} else {
