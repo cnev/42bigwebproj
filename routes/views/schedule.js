@@ -14,9 +14,9 @@ router.get('/', function (req, res) {
 		console.log('this prints on '+date.toLocaleString());
 	});
 	var job_end_activities = schedule.scheduleJob('*/1 * * * *', function() {
-		ActRegisDriver.end_activities(function (err, end){
-
-		});
+		//ActRegisDriver.end_activities(function (err, end){
+		console.log('end_activities NOT YET IMPLEMENTED');
+		//});
 	});
 	req.flash('info', 'schedule is ON');
 	res.redirect('/admin');

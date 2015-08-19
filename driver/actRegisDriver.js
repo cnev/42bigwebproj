@@ -93,7 +93,6 @@ ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 	});
 };
 
-
 /*if (model_q_res.registration.ends.getTime() < now.getTime()) {
 	req.flash('error', 'Registrations are over, you cannot register to this activity anymore !');
 	res.redirect('/activity/view/'+req.params.name);
