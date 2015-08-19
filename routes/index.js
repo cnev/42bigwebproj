@@ -57,6 +57,7 @@ exports = module.exports = function(app) {
 	app.use('/profile', middleware.checkAuth, require('./views/profile'));
 	app.use('/peer_correction', middleware.checkAuth, require('./views/peer_correction'));
 	app.use('/ticket', middleware.checkAuth, require('./views/ticket'));
+	app.use('/schedule', middleware.checkAuth, require('./views/schedule'));
 	app.use('/admin', middleware.checkAuth, middleware.requireAdmin, require('./views/admin'));
 	// NOTE: To protect a route so that only admins can see it, use the requireUser middleware:
 	// app.get('/protected', middleware.requireUser, routes.views.protected);
