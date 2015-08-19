@@ -45,21 +45,34 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	});
 };
 
-ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
-	// body...
+ActRegisDriver.prototype.validateGroup = function(activity, members, cb) {
 	var that = this;
-	that.getOneActivity(activity, owner, function (code, ret) {
+	var tmp;
+	for (var i = 0 ; i < members.length; i++) {
+		tmp = members[i];
+		that.getOneActivity(activity, tmp, function (code, actR) {
+			if (code == 500) {
+				cb(code, actR);
+			}
+			else if (code == 200) {
+				cb(409, 'One or more members already is/are registered to this activity.');
+			}
+			if (tmp == members[members.length - 1])
+				cb(200, null);
+		})
+	}
+}
+/*
+that.getOneActivity(activity, owner, function (code, ret) {
 		var i;
 		var got = 0;
+		var newActR;
+		var stock = [];
+		var tmp;
 		if (code == 200) {
 			cb(409, 'You already are registered to that activity.');
 		}
 		else {
-			var newActR = new ActRegis.model({
-				owner: owner,
-				activity: activity,
-				encours: true
-			});
 			for (i = 0 ; i < members.length ; i++) {
 				that.getOneActivity(activity, members[i], function (code, actR) {
 					if (code == 500) {
@@ -71,26 +84,61 @@ ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 						got = -1;
 					}
 					else {
-						newActR.members.push(members[i]);
+						stock.push(members[i]);
+						if (stock.length == members.length) {
+							var newActR = new ActRegis.model({
+								owner: owner,
+								members: stock,
+								activity: activity,
+								encours: true
+							});
+							newActR.save(function (err, cActR) {
+								if (err) {
+									console.error(err);
+									cb(500, err);
+								}
+								else {
+									cb(201, cActR);
+								}
+							});
+						}
 					}
 					if (got == -1) {
 						return ;
 					}
-					else if (newActR.members.length == members.length) {
-						newActR.save(function (err, cActR) {
-							if (err) {
-								console.error(err);
-								cb(500, err);
-							}
-							else {
-								cb(201, cActR);
-							}
-						});
-					}
 				});
 			}
 		}
-	});
+	});*/
+ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
+	// body...
+	var that = this;
+	//console.log(members);
+	that.validateGroup(activity, members, function (code, actR){
+		console.log('postvalidate');
+		if (code == 500)
+			cb(500, 'REGISTRATION ERROR');
+		else if (code == 409) {
+			cb(409, actR);
+		}
+		else if (code == 200) {
+			var newActR = new ActRegis.model({
+				owner: owner,
+				members: members,
+				activity: activity,
+				encours: true
+			});
+			newActR.save(function (err, cActR) {
+				if (err) {
+					console.error(err);
+					cb(500, err);
+				}
+				else {
+					cb(201, cActR);
+				}
+			});
+		}
+	})
 };
 
 /*if (model_q_res.registration.ends.getTime() < now.getTime()) {

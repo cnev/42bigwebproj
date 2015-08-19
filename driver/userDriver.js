@@ -80,7 +80,7 @@ UserDriver.prototype.getUsers = function (uidTab, cb) {
 	var i;
 	var got = [];
 	var failGet = [];
-	for (i = 0 ; i < uidTab ; i++) {
+	for (i = 0 ; i < uidTab.length ; i++) {
 		that.getByUid(uidTab[i], function (code, ret) {
 			if (code != 200) {
 				failGet.push(ret);
