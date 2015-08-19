@@ -20,11 +20,23 @@
 </div>
 
 <div class="container">
-	<form action="/forum/reply/post/{{postId}}" method="POST">
-		<h2>Reply to this post</h2>
+	<form method="POST">
+		{{#if edit}}
+			<h2>Edit this post</h2>
+		{{else}}
+			<h2>Reply to this post</h2>
+		{{/if}}
 		<div class="form-group">
-			<textarea class="form-control" rows="5" name="message"></textarea>
+			<textarea class="form-control" rows="5" name="message">{{#if edit}}{{edit.message}}{{/if}}</textarea>
 		</div>
-		<button type="submit" class="btn btn-default">Submit</button>
+		<button type="submit" class="btn btn-default"
+			{{#if edit}}
+				action="/forum/edit/post/{{postId}}"
+			{{else}}
+				action="/forum/reply/post/{{postId}}"
+			{{/if}}
+		>Submit</button>
 	</form>
 </div>
+
+

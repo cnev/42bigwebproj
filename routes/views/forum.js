@@ -191,7 +191,7 @@ router.post('/reply/post/:id', function (req, res){
 								if (err){
 									res.status(err).send(thread_saved);
 								}else{
-									req.flash('info', 'new post in the thread !');
+									req.flash('info', 'reply ok !');
 									res.redirect('/forum/view/post/'+req.params.id);
 								}
 							});
@@ -204,6 +204,39 @@ router.post('/reply/post/:id', function (req, res){
 	});
 });
 
+router.get('/edit/post/:id', function (req, res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	ForumPost.model.findById(req.params.id)
+	.exec(function (err, result) {
+		if (err) {
+			res.status(err).send(err);
+		} else if (!result) {
+			req.flash('error', 'post not found');
+			res.redirect('/forum');
+		} else {
+
+			locals.postId = req.params.id;
+			locals.post = result;
+			ForumPost.model.find()
+			.where('reply_of', req.params.id)
+			.sort('createdAt')
+			.exec(function (err, replies){
+				if (err){
+					res.status(err).send(err);
+				} else {
+					locals.replies = replies;
+					locals.edit = result;
+					view.render('forum_post');
+				}
+			});
+		}
+	});
+});
+
+router.post('/edit/post/:id', function (req, res){
+
+});
 
 module.exports = router;
 
