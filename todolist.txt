@@ -116,15 +116,13 @@ Matthias
 			<admin only>: Bouton 'new X'
 			contenu: Liste/Tableau/???, une activite par element
 
-	[templates/views/view_module.hbs]
-		dates a faire
+	[OK][templates/views/view_module.hbs]
 		un bloc centre, une fiche:
 			titre: <nom du module>
 			<admin only>: Boutons 'editer' et 'supprimer'
 			contenu: tous les elements du modele
 
-	[templates/views/view_activity.hbs]
-		dates a faire
+	[OK][templates/views/view_activity.hbs]
 		un bloc centre, une fiche:
 			titre: <nom de l'activite>
 			<admin only>: Boutons 'editer' et 'supprimer'
