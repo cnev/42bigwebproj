@@ -6,10 +6,12 @@ var ActivityRegistration = new keystone.List('ActivityRegistration', {
 });
 
 ActivityRegistration.add({
-	user: {type: Types.Relationship, ref: 'User'},
-	group: {type: Types.Relationship, ref: 'ProjectGroup'},
+	owner: {type: Types.Relationship, ref: 'User'},
+	members: {type: Types.Relationship, ref: 'User', many: true},
+	activity: {type: Types.Relationship, ref: 'Activity'},
 	encours: {type: Boolean, default: true},
 	peers: {type: Types.Relationship, ref: 'User', many: true},
+	corrections_done: {type: Types.Relationship, ref: 'Correction', many: true},
 	deleted: {type: Boolean, default: false}
 });
 

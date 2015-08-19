@@ -81,7 +81,7 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 		if (code != 200) {
 			cb(code, actList);
 		}
-		else {
+		else {/*
 			ActivityRegistration.model.find({'user':user, 'encours':true}).exec(function (err, actRList) {
 				var i;
 				var j;
@@ -105,6 +105,7 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 					cb(202, actTab);
 				}
 			});
+*/
 		}
 	});
 };
