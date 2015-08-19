@@ -4,12 +4,12 @@
 				new thread														[OK]
 				new post														[OK]
 				view thread														[OK]
-				edit own posts													[NOT OK]
+				edit own posts													[OK]
 			Admin:
 				new thread														[OK]
 				new post														[OK]
 				view thread														[OK]
-				edit ANY post													[NOT OK]
+				edit ANY post													[OK]
 				delete post														[NOT OK]
 		Connexion ldap															[OK]
 		Annuaire

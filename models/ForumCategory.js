@@ -5,6 +5,7 @@ var ForumCategory = new keystone.List('ForumCategory');
 
 ForumCategory.add({
 	name: {type: String},
+	//module
 	deleted: {type: Boolean, default: false}
 });
 

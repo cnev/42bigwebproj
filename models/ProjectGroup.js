@@ -6,7 +6,6 @@ var ProjectGroup = new keystone.List('ProjectGroup', {
 });
 
 ProjectGroup.add({
-	
 	owner: {type: Types.Relationship, ref: 'User'},
 	members: {type: Types.Relationship, ref: 'User', many: true},
 	activity: {type: Types.Relationship, ref: 'Activity'},

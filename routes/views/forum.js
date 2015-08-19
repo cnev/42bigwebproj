@@ -127,6 +127,7 @@ router.get('/view/post/:id', function (req, res){
 					if (err){
 						res.status(err).send(err);
 					} else {
+						console.log('view/post GET');
 						locals.replies = replies;
 						view.render('forum_post');
 					}
@@ -191,12 +192,11 @@ router.post('/reply/post/:id', function (req, res){
 								if (err){
 									res.status(err).send(thread_saved);
 								}else{
-									req.flash('info', 'new post in the thread !');
+									req.flash('info', 'reply ok !');
 									res.redirect('/forum/view/post/'+req.params.id);
 								}
 							});
 						}
-
 					});
 				}
 			});
@@ -204,7 +204,65 @@ router.post('/reply/post/:id', function (req, res){
 	});
 });
 
+router.get('/edit/post/:id', function (req, res){
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	ForumPost.model.findById(req.params.id)
+	.exec(function (err, post) {
+		if (err) {
+			res.status(err).send(err);
+		} else if (!post) {
+			req.flash('error', 'post not found');
+			res.redirect('/forum');
+		} else {
+			if (req.session.isAdmin == false && post.author != req.session.user) {
+				req.flash('error', 'you cannot edit this post !');
+				res.redirect('/forum/view/post/'+req.params.id);
+			} else {
+				locals.postId = req.params.id;
+				locals.post = post;
+				ForumPost.model.find()
+				.where('reply_of', req.params.id)
+				.sort('createdAt')
+				.exec(function (err, replies){
+					if (err){
+						res.status(err).send(err);
+					} else {
+						locals.replies = replies;
+						locals.edit = post;
+						view.render('forum_post');
+					}
+				});
+			}
+		}
+	});
+});
+
+router.post('/edit/post/:id', function (req, res){
+	ForumPost.model.findById(req.params.id)
+	.exec(function (err, post){
+		if (err) {
+			res.status(err).send(err);
+		} else if (!post) {
+			req.flash('error', 'post not found');
+			res.redirect('/forum');
+		} else {
+			if (req.session.isAdmin == false && post.author != req.session.user) {
+				req.flash('error', 'you cannot edit this post !');
+				res.redirect('/forum/view/post/'+req.params.id);
+			} else {
+				post.message = req.body.message;
+				post.save(function (err, post_saved){
+					if (err) {
+						res.status(err).send(err);
+					} else {
+						req.flash('info', 'edit ok !');
+						res.redirect('/forum/view/post/'+req.params.id);
+					}
+				});
+			}
+		}
+	});
+});
 
 module.exports = router;
-
-
