@@ -36,6 +36,14 @@
 			<input type="datetime-local" class="form-control" name="periodends"{{#if edit}}{{addDateholder edit.period.ends}}{{/if}}>
 		</div>
 		<div class="form-group">
+			<label for="mingroupsize">Minimum group size:</label>
+			<input type="number" class="form-control" name="mingroupsize" {{#if edit}}{{addPlaceholder edit.group_size.min}}{{/if}}>
+		</div>
+		<div class="form-group">
+			<label for="maxgroupsize">Maximum group size:</label>
+			<input type="number" class="form-control" name="maxgroupsize" {{#if edit}}{{addPlaceholder edit.group_size.max}}{{/if}}>
+		</div>
+		<div class="form-group">
 			<label for="reqcorrections">Required corrections:</label>
 			<input type="number" class="form-control" name="reqcorrections" {{#if edit}}{{addPlaceholder edit.req_corrections}}{{/if}}>
 		</div>

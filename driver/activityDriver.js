@@ -81,8 +81,10 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 		if (code != 200) {
 			cb(code, actList);
 		}
-		else {/*
-			ActivityRegistration.model.find({'user':user, 'encours':true}).exec(function (err, actRList) {
+		else {
+			ActivityRegistration.model.find({'encours':true})
+			.where('members').in([user])
+			.exec(function (err, actRList) {
 				var i;
 				var j;
 				var actTab = [];
@@ -105,7 +107,6 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 					cb(202, actTab);
 				}
 			});
-*/
 		}
 	});
 };
@@ -122,7 +123,9 @@ ActivityDriver.prototype.getPastAct = function (user, cb) {
 			cb(404, 'activity(ies) not found');
 		}
 		else {
-			ActivityRegistration.model.find({'user':user}).exec(function (err, actRList) {
+			ActivityRegistration.model.find()
+			.where('members').in([user])
+			.exec(function (err, actRList) {
 				var i;
 				var j;
 				var actTab = [];
@@ -192,6 +195,10 @@ ActivityDriver.prototype.create = function (data, cb) {
 				period: {
 					begins: new Date(data.periodbegins),
 					ends: new Date(data.periodends)
+				},
+				group_size: {
+					min: req.body.mingroupsize,
+					max: req.body.maxgroupsize
 				},
 				req_corrections: data.reqcorrections,
 				auto_group: data.autogroup,

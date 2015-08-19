@@ -143,6 +143,10 @@ router.post('/activity/edit/:name', function (req, res) {
 			begins: new Date(req.body.periodbegins),
 			ends: new Date(req.body.periodends)
 		},
+		group_size: {
+			min: req.body.mingroupsize,
+			max: req.body.maxgroupsize
+		},
 		req_corrections: req.body.reqcorrections,
 		auto_group: req.body.autogroup,
 		module: req.body.module,

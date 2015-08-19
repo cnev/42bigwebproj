@@ -142,15 +142,15 @@ router.get('/register/:name', function (req, res) {
 
 router.post('/register/:name', function (req, res) {
 	var view = new keystone.View(req, res);
-	if (!req.body || !req.body.answer)
+	if (!req.body)
 		res.status(500).send('httpshitstorm');
-	else if (req.body.answer == 'yes')
-	{
-		console.log("answer is yes");
+	else {
+		console.log('preUSRDRV');
 		UserDriver.getUsers(req.body.members, function (err, members){
 			if (err) {
 				res.status(err).send(err);
 			} else {
+				console.log('preACRDRV');
 				ActRegisDriver.preRegister(req.params.name, req.session.user, members, function (code, actR) {
 					if (code == 201) {
 						req.flash('info', 'You are now registered to this activity !');
@@ -167,8 +167,6 @@ router.post('/register/:name', function (req, res) {
 			}
 		});
 	}
-	else
-		res.redirect('/activity');
 });
 
 module.exports = router;
