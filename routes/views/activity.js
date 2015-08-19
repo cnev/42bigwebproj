@@ -5,9 +5,11 @@ var Activity = keystone.list('Activity');
 
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
 var AcrRDrv = require('../../driver/actRegisDriver').ActRegisDriver;
+var UsrDrv = require('../../driver/userDriver').UserDriver;
 
 var ActivityDriver = new ActDriv ();
 var ActRegisDriver = new AcrRDrv ();
+var UserDriver = new UsrDrv ();
 
 //var Activity = keystone.list('Activity');
 
@@ -121,10 +123,9 @@ router.get('/register/:name', function (req, res) {
 								res.status(500).send(err);
 							else if (!q2_res)
 							{
-								locals.confirm_text = 'Are you sure you want to register to this activity?';
+								locals.group_size = model_q_res.group_size.max;
 								locals.name = req.params.name;
-								locals.isRegActivity = true;
-								view.render('confirm_action');
+								view.render('create_projectgroup');
 							}
 							else
 							{
@@ -141,27 +142,31 @@ router.get('/register/:name', function (req, res) {
 
 router.post('/register/:name', function (req, res) {
 	var view = new keystone.View(req, res);
-	if (!req.body || !req.body.answer)
+	if (!req.body)
 		res.status(500).send('httpshitstorm');
-	else if (req.body.answer == 'yes')
-	{
-		console.log("answer is yes");
-		ActRegisDriver.preRegister(req.params.name, req.session.user, function (code, actR) {
-			if (code == 201) {
-				req.flash('info', 'You are now registered to this activity !');
-				res.redirect('/activity');
-			}
-			else if (code == 304) {
-				req.flash('error', 'You are already registered to this activity !');
-				res.redirect('/activity');
-			}
-			else {
-				res.status(code).send(actR);
+	else {
+		console.log('preUSRDRV');
+		UserDriver.getUsers(req.body.members, function (err, members){
+			if (err) {
+				res.status(err).send(err);
+			} else {
+				console.log('preACRDRV');
+				ActRegisDriver.preRegister(req.params.name, req.session.user, members, function (code, actR) {
+					if (code == 201) {
+						req.flash('info', 'You are now registered to this activity !');
+						res.redirect('/activity');
+					}
+					else if (code == 304) {
+						req.flash('error', 'You are already registered to this activity !');
+						res.redirect('/activity');
+					}
+					else {
+						res.status(code).send(actR);
+					}
+				});
 			}
 		});
 	}
-	else
-		res.redirect('/activity');
 });
 
 module.exports = router;

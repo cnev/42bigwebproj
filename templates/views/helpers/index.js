@@ -476,5 +476,20 @@ _helpers.ticketHandlerButton = function(ticket, admin_id){
 		return new hbs.SafeString('<a href="/admin/ticket/view/'+ticket._id+'" class="btn btn-info" role="button">Handle this</a>');
 }
 
+_helpers.projectgroup_registration = function(size) {
+	var output = '';
+	for (var i = 0; i < size; i++){
+		output += '<div class="form-group"';
+		//output += '<label for="uid'+i+'">Member #'+i+'</label>';
+		//output += '<input type="text" name="uid'+i+'">';
+		output += '<label for="members">Member #'+i+'</label>';
+		output += '<input type="text" name="members">';
+		output += '</div>';
+		if (i == size - 1)
+			return new hbs.SafeString(output);
+	}
+
+}
+
 return _helpers;
 };

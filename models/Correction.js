@@ -11,7 +11,10 @@ var Correction = new keystone.List('Correction', {
 });
 
 Correction.add({
-	name: { type: Types.Name, required: true, index: true },
+	peer: {type: Types.Relationship, ref: 'User'},
+	done: {type: Boolean, default: false},
+	final_grade: {type: Types.Number},
+	gradesByElement: {type: Types.Number, many: true},
 	deleted: {type: Boolean, default: false}
 });
 

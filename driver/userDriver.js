@@ -74,4 +74,26 @@ UserDriver.prototype.toLog = function (logger, pass, cb) {
 	});
 };
 
+UserDriver.prototype.getUsers = function (uidTab, cb) {
+	// body...
+	var that = this;
+	var i;
+	var got = [];
+	var failGet = [];
+	for (i = 0 ; i < uidTab ; i++) {
+		that.getByUid(uidTab[i], function (code, ret) {
+			if (code != 200) {
+				failGet.push(ret);
+			}
+			else {
+				got.push(ret);
+			}
+			if ((got.length + failGet.length) == uidTab.length) {
+				console.error(failGet);
+				cb(200, got);
+			}
+		});
+	}
+};
+
 exports.UserDriver = UserDriver;
