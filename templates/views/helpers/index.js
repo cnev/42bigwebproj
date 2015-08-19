@@ -5,6 +5,7 @@ var keystone = require('keystone');
 var cloudinary = require('cloudinary');
 var express = require('express');
 var session = require('express-session');
+var dateForm = require("date-format-lite")
 // Declare Constants
 var CLOUDINARY_HOST = 'http://res.cloudinary.com';
 
@@ -383,10 +384,34 @@ _helpers.displayActivityList = function(activity, isAdmin)
 {
 	var output = '';
 	var admin = (isAdmin) ? '/admin' : '';
-	output += '<a class="btn btn-info" role="button" href="'+admin+'/activity/view/'+activity.name+'">'+activity.name+'</a>';
+	output += '<a class="btn btn-default pull-left" role="button" href="'+admin+'/activity/view/'+activity.name+'">'+activity.name+'</a>';
 	if (!isAdmin)
-		output += '<a class="btn btn-info" role="button" href="/activity/register/'+activity.name+'">Register ?</a>';
+		output += '<a class="btn btn-default pull-right" role="button" href="/activity/register/'+activity.name+'">Register ?</a>';
 	return new hbs.SafeString(output);
+}
+
+_helpers.ActivityViewRef = function(activity, isAdmin)
+{
+	var output = '';
+	var admin = (isAdmin) ? '/admin' : '';
+	output += admin+'/activity/view/'+activity.name;
+	return new hbs.SafeString(output);
+}
+
+_helpers.ActivityRegisterRef = function(activity, isAdmin)
+{
+	var output = '';
+	var admin = (isAdmin) ? '/admin' : '';
+	if (!isAdmin)
+	{
+		output += '/activity/register/'+activity.name;
+		return new hbs.SafeString(output);
+	}
+}
+
+_helpers.DateForm = function(dd)
+{
+	return new hbs.SafeString(dd.date("DD-MM-YYYY mm:hh"))
 }
 
 _helpers.form_listModules = function(modlist)

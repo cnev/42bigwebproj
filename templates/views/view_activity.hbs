@@ -17,8 +17,8 @@
 		<li class="list-group-item"><a href="/files/subjects/{{result.activity.subject}}">Link to subject</a></li>
 		<li class="list-group-item">{{result.activity.slots.current}}/{{result.activity.slots.max}}</li>
 		<li class="list-group-item"><a href="/module/view/{{result.module.name}}">{{result.module.name}}</a></li>
-		<li class="list-group-item">{{result.activity.registration.begins}} --> {{result.activity.registration.ends}}</li>
-		<li class="list-group-item">{{result.activity.period.begins}} --> {{result.activity.period.ends}}</li>
+		<li class="list-group-item">{{DateForm result.activity.registration.begins}} --> {{DateForm result.activity.registration.ends}}</li>
+		<li class="list-group-item">{{DateForm result.activity.period.begins}} --> {{DateForm result.activity.period.ends}}</li>
 		<li class="list-group-item">{{result.activity.type}}</li>
 		<li class="list-group-item">{{result.activity.req_corrections}}</li>
 	</ul>

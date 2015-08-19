@@ -1,31 +1,33 @@
 {{!< default}}
 
-<div class="containers-fluid">
-{{#if data.activities}}
-	<ul class="list-group">
-		{{#each data.activities}}
-			<li class="list-group-item">{{displayActivityList this sess.isAdmin}}</li>
-		{{/each}}
-	</ul>
-{{/if}}
-</div>
-
 {{#if sess.isAdmin}}
 <div class="containers-fluid">
 	<a class="btn btn-info" role="button" href="/admin/activity/new">Add new activity</a>
 </div>
 {{/if}}
 
-<div class="container-fluid">
+<div><p></p></div>
+
+<div class="container-fluid row">
 	{{#each data.activities}}
 	<div class="col-sm-4">
-		<h4>{{this.name}}</h4>
-		<p>Description : {{this.description}}</br>
-		vous pouvez vous enregistrer au project du {{registration.begins}} au {{registration.ends}}</br>
-		le project durera du {{period.begins}} au {{period.ends}}</br>
-		{{slots.current}}/{{slots.max}}
-		{{displayActivityList this sess.isAdmin}}
-		</p>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<p class="text-center">
+					<a class="btn btn-default" href="{{ActivityViewRef this sess.isAdmin}}">{{this.name}}</a>
+					<a class="btn btn-default" href="{{ActivityRegisterRef this sess.isAdmin}}">Register</a>
+				</p>
+			</div>
+			<div class="panel-body">
+				<h4>Description :</h4>
+				<p>{{this.description}}</br></br>
+				vous pouvez vous enregistrer au project du {{registration.begins}} au {{registration.ends}}</br>
+				le project durera du {{period.begins}} au {{period.ends}}</br>
+				{{slots.current}}/{{slots.max}}
+				</p>
+				<!-- {{displayActivityList this sess.isAdmin}} -->
+			</div>
+		</div>
 	</div>
 	{{/each}}
 </ul>

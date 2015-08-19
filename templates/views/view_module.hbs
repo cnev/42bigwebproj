@@ -15,8 +15,8 @@
 	<ul class="list-group">
 		<li class="list-group-item">{{result.description}}</li>
 		<li class="list-group-item">{{result.credits}}</li>
-		<li class="list-group-item">{{result.period.begins}} --> {{result.period.ends}}</li>
-		<li class="list-group-item">{{result.registration.begins}} --> {{result.registration.ends}}</li>
+		<li class="list-group-item">{{DateForm result.period.begins}} --> {{DateForm result.period.ends}}</li>
+		<li class="list-group-item">{{DateForm result.registration.begins}} --> {{DateForm result.registration.ends}}</li>
 		<li class="list-group-item">{{result.slots.current}}/{{result.slots.max}}</li>
 	</ul>
 </div>

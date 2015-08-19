@@ -104,13 +104,13 @@ Mickael
 	Autologin (hash de randomstring, integre dans l'entree de la collection User ?)
 
 Matthias
-	[templates/views/module_overview.hbs]
+	[OK][templates/views/module_overview.hbs]
 		un bloc centre
 			titre: Liste des modules
 			<admin only>: Bouton 'new X'
 			contenu: Liste/Tableau/???, un module par element
 
-	[templates/views/activity_overview.hbs]
+	[OK][templates/views/activity_overview.hbs]
 		un bloc centre
 			titre: Liste des activites
 			<admin only>: Bouton 'new X'

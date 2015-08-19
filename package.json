@@ -18,6 +18,7 @@
     "assert": "latest",
     "password-hash": "latest",
     "mongodb": "latest",
+    "date-format-lite": "latest",
     "node-schedule": "latest"
   },
   "devDependencies": {

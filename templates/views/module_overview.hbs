@@ -6,37 +6,39 @@
 </div>
 {{/if}}
 
+<div><p></p></div>
+
 <div class="container-fluid row">
 	{{#each data.modules}}
 	<div class="col-sm-3">
 		<div class="panel panel-default">
-		<div class="panel-heading">
-			<p class="text-center">
-				<a href="/module/view/{{this.name}}">{{this.name}}</a>
-			</p>
-		</div>
-		<div class="panel-body">
-			<p class="text-center">
-				<div class="row">
+			<div class="panel-heading">
+				<p class="text-center">
+					<a class="btn btn-default" href="/module/view/{{this.name}}">{{this.name}}</a>
+				</p>
+			</div>
+			<div class="panel-body">
+				<p class="text-center">
 					<h4>Registration</h4>
-					<div class="col-sm-6">
-						Begins: {{this.registration.begins}}
+					<div class="row">
+						<div class="col-sm-6">
+							Begins: {{this.registration.begins}}
+						</div>
+						<div class="col-sm-6">
+							Ends: {{this.registration.ends}}
+						</div>
 					</div>
-					<div class="col-sm-6">
-						Ends: {{this.registration.ends}}
-					</div>
-				</div>
-				<div class="row">
 					<h4>Period</h4>
-					<div class="col-sm-6">
-						Begins: {{this.period.begins}}
+					<div class="row">
+						<div class="col-sm-6">
+							Begins: {{this.period.begins}}
+						</div>
+						<div class="col-sm-6">
+							Ends: {{this.period.ends}}
+						</div>
 					</div>
-					<div class="col-sm-6">
-						Ends: {{this.period.ends}}
-					</div>
-				</div>
-			</p>
-		</div>
+				</p>
+			</div>
 		</div>
 	</div>
 	{{/each}}
