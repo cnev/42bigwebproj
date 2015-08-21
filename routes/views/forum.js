@@ -265,4 +265,31 @@ router.post('/edit/post/:id', function (req, res){
 	});
 });
 
+router.get('/delete/post/:id', function (req, res){
+	ForumPost.model.findById(req.params.id)
+	.exec(function (err, post){
+		if (err) {
+			res.status(500).send('/delete/post error');
+		} else if (!post){
+			req.flash('error', 'post not found');
+			res.redirect('/forum');
+		} else {
+			if (req.session.isAdmin != true && req.session.user_id != post.author) {
+				req.flash('error', 'you cannot delete this post, you are not its author !');
+				res.redirect('/forum');
+			} else {
+				post.remove(function (err, deleted){
+					if (err) {
+						req.flash('error', '/delete/post error');
+						res.redirect('/forum');
+					} else {
+						req.flash('info', 'post deleted !');
+						res.redirect('/forum');
+					}
+				});
+			}
+		}
+	});
+});
+
 module.exports = router;

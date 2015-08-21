@@ -40,24 +40,24 @@
 
 		M/A/N
 			Module specifications
-				name (single word check)										[NOT OK]
+				name															[OK]
 				desc															[OK]
-				registration													[NEED TESTING]
-				period															[NEED TESTING]
+				registration													[OK]
+				period															[OK]
 				credit															[OK]
 				added forum category											[NOT OK]
 				auto-credit allocation at end of module (.csv)					[NOT OK]
 
 			Activity specifications
-				name (single word check)										[NOT OK]
+				name															[OK]
 				desc															[OK]
 				subject															[OK]
 									[File isn't verified though ?]
-				registration													[NEED TESTING]
-				period															[NEED TESTING]
-				register by variable group size									[NOT OK]
+				registration													[OK]
+				period															[OK]
+				register by variable group size									[OK]
 									[@Chandara: modifications sur Activity/ModuleRegistration]
-				number of peers													[NOT OK]
+				number of peers													[OK]
 				link to existing module											[OK]
 				type (proj, td, exam)											[OK]
 
@@ -104,39 +104,7 @@ Mickael
 	Autologin (hash de randomstring, integre dans l'entree de la collection User ?)
 
 Matthias
-	[OK][templates/views/module_overview.hbs]
-		un bloc centre
-			titre: Liste des modules
-			<admin only>: Bouton 'new X'
-			contenu: Liste/Tableau/???, un module par element
 
-	[OK][templates/views/activity_overview.hbs]
-		un bloc centre
-			titre: Liste des activites
-			<admin only>: Bouton 'new X'
-			contenu: Liste/Tableau/???, une activite par element
-
-	[OK][templates/views/view_module.hbs]
-		un bloc centre, une fiche:
-			titre: <nom du module>
-			<admin only>: Boutons 'editer' et 'supprimer'
-			contenu: tous les elements du modele
-
-	[OK][templates/views/view_activity.hbs]
-		un bloc centre, une fiche:
-			titre: <nom de l'activite>
-			<admin only>: Boutons 'editer' et 'supprimer'
-			contenu: tous les elements du modele
-
-	[OK][templates/views/forum_overview.hbs]
-		toutes les threads
-		panneau nouveau thread
-
-	[OK][templates/views/forum_thread.hbs]
-		tous les posts du thread concerne
-		panneau nouveau post
-
-	[OK][templates/views/forum_posts.hbs]
 
 Chandara
 	Implementation des baremes (controleurs, modeles)

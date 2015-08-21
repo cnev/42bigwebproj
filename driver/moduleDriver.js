@@ -73,7 +73,7 @@ ModuleDriver.prototype.save = function (module, cb) {
 ModuleDriver.prototype.create = function (data, cb) {
 	// body...
 	var that = this;
-	that.getOne(data.name, function (code1, ret) {
+	that.getByName(data.name, function (code1, ret) {
 		if (code1 == 500) {
 			cb(code1, ret);
 		}
