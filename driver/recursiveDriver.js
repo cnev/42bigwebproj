@@ -89,7 +89,7 @@ RecursiveDriver.prototype.delActByMod = function(modId, cb) {
 	});
 };
 
-RecursiveDriver.prototype.delModReg = function (mrid, cb) {
+RecursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
 	// body...
 	ModReg.model.findById(mrid).exec(function (err, modReg) {
 		if (err) {
@@ -100,8 +100,7 @@ RecursiveDriver.prototype.delModReg = function (mrid, cb) {
 			cb(404, 'ModuleRegistration Not Found');
 		}
 		else {
-			modReg.deleted = true;
-			modReg.save(function (err) {
+			modReg.remove(function (err) {
 				if (err) {
 					console.error(err);
 					cb(500, err);
@@ -130,12 +129,11 @@ RecursiveDriver.prototype.delModRegByMod = function (modId, cb) {
 		}
 		else {
 			for (i = 0 ; i < modList.length ; i++) {
-				that.delModReg(modList[i]._id, function (code, ret) {
-					done++;
+				that.delModReg(modList[i]._id, (i + 1), function (code, ret, nb) {
 					if (code != 200) {
 						faildel.push(ret);
 					}
-					if (done == modList.length) {
+					if (nb == modList.length) {
 						console.error(faildel);
 						cb(200, 'ModuleRegistration deleted');
 					}
@@ -148,7 +146,7 @@ RecursiveDriver.prototype.delModRegByMod = function (modId, cb) {
 RecursiveDriver.prototype.delModule = function (name, cb) {
 	// body...
 	var that = this;
-	Module.model.findOne({'name':name, 'deleted':false}).exec(function (err, module) {
+	Module.model.findOne({'name':name}).exec(function (err, module) {
 		if (err) {
 			console.error(err);
 			cb(500, err);
