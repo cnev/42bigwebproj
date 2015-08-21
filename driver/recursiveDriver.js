@@ -16,9 +16,65 @@ var Ticket = keystone.list('Ticket');
 var TktCat = keystone.list('TicketCategory');
 var User = keystone.list('User');
 
-var RecursiveDriver = function (argument) {};
+var IncursiveDriver = function () {};
 
-RecursiveDriver.prototype.delActivity = function (name, cb) {
+IncursiveDriver.prototype.delNotByAct = function(first_argument) {
+	// body...
+};
+
+IncursiveDriver.prototype.delActReg = function(arid, nb, cb) {
+	// body...
+	ActReg.model.findById(arid).exec(function (err, actreg) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!actreg) {
+			cb(404, 'ActivityRegistration Not Found');
+		}
+		else {
+			actreg.remove(function (err) {
+				if (err) {
+					console.error(err);
+					cb(500, err);
+				}
+				else {
+					cb(200, 'ActivityRegistration deleted');
+				}
+			});
+		}
+	})
+};
+
+IncursiveDriver.prototype.delActRgByAct = function(act, cb) {
+	// body...
+	ActReg.model.find().where('activity', act).exec(function (err, actregs) {
+		var i;
+		var faildel = [];
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!actregs || !actregs.length) {
+			cb(200, 'Nothing to do');
+		}
+		else {
+			for (i = 0 ; i < actregs.length ; i++) {
+				that.delActReg(actregs[i]._id, (i + 1), function (code, ret, nb) {
+					if (code != 200) {
+						faildel.push(ret);
+					}
+					if (nb == actregs.length) {
+						console.error(faildel);
+						cb(200, 'ActivityRegistrations deleted');
+					}
+				})
+			}
+		}
+	})
+};
+
+IncursiveDriver.prototype.delActivity = function (name, cb) {
 	// body...
 	var that = this;
 	Activity.model.findOne({'name':name, 'deleted':false}).exec(function (err, activity) {
@@ -40,8 +96,7 @@ RecursiveDriver.prototype.delActivity = function (name, cb) {
 							cb(code2, c2err);
 						}
 						else {
-							activity.deleted = true;
-							activity.save(function (err) {
+							activity.remove(function (err) {
 								if (err) {
 									console.error(err);
 									cb(500, err);
@@ -58,12 +113,11 @@ RecursiveDriver.prototype.delActivity = function (name, cb) {
 	});
 };
 
-RecursiveDriver.prototype.delActByMod = function(modId, cb) {
+IncursiveDriver.prototype.delActByMod = function(modId, cb) {
 	// body...
 	var that = this;
 	Activity.model.find().where('module', modId).exec(function (err, activities) {
 		var i;
-		var done = 0;
 		var faildel = [];
 		if (err) {
 			console.error(err);
@@ -74,12 +128,11 @@ RecursiveDriver.prototype.delActByMod = function(modId, cb) {
 		}
 		else {
 			for (i = 0 ; i < activities.length ; i++) {
-				that.delActivity(activities[i].name, function (code, ret) {
-					done++;
+				that.delActivity(activities[i].name, (i + 1), function (code, ret, nb) {
 					if (code != 200) {
 						faildel.push(ret);
 					}
-					if (done == activities.length) {
+					if (nb == activities.length) {
 						console.error(faildel);
 						cb(200, 'Activities deleted');
 					}
@@ -89,7 +142,7 @@ RecursiveDriver.prototype.delActByMod = function(modId, cb) {
 	});
 };
 
-RecursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
+IncursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
 	// body...
 	ModReg.model.findById(mrid).exec(function (err, modReg) {
 		if (err) {
@@ -113,12 +166,11 @@ RecursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
 	});
 };
 
-RecursiveDriver.prototype.delModRegByMod = function (modId, cb) {
+IncursiveDriver.prototype.delModRegByMod = function (modId, cb) {
 	// body...
 	var that = this;
 	ModReg.model.find().where('module', modId).exec(function (err, modList) {
 		var i;
-		var done = 0;
 		var faildel = [];
 		if (err) {
 			console.error(err);
@@ -143,7 +195,7 @@ RecursiveDriver.prototype.delModRegByMod = function (modId, cb) {
 	});
 };
 
-RecursiveDriver.prototype.delModule = function (name, cb) {
+IncursiveDriver.prototype.delModule = function (name, cb) {
 	// body...
 	var that = this;
 	Module.model.findOne({'name':name}).exec(function (err, module) {
@@ -166,8 +218,7 @@ RecursiveDriver.prototype.delModule = function (name, cb) {
 							cb(code2, c2err);
 						}
 						else {
-							module.deleted = true;
-							module.save(function (err) {
+							module.remove(function (err) {
 								if (err) {
 									console.error(err);
 									cb(500, err);
