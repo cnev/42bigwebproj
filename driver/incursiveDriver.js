@@ -18,32 +18,107 @@ var User = keystone.list('User');
 
 var IncursiveDriver = function () {};
 
-IncursiveDriver.prototype.delNotByAct = function(first_argument) {
+IncursiveDriver.prototype.delNotElem = function(neid, nb, cb) {
 	// body...
-};
-
-IncursiveDriver.prototype.delActReg = function(arid, nb, cb) {
-	// body...
-	ActReg.model.findById(arid).exec(function (err, actreg) {
+	NotElem.model.findById(neid).remove(function (err) {
 		if (err) {
 			console.error(err);
 			cb(500, err);
 		}
-		else if (!actreg) {
-			cb(404, 'ActivityRegistration Not Found');
+		else {
+			cb(200, 'NotationElement deleted');
+		}
+	});
+};
+
+IncursiveDriver.prototype.delNotElemTab = function(notElemTab, cb) {
+	// body...
+	var i;
+	var faildel = [];
+	for (i = 0 ; i < notElemTab.length ; i++) {
+		that.delNotElem(notElemTab[i], (i + 1), function (code, ret, nb) {
+			if (code != 200) {
+				faildel.push(ret);
+			}
+			if (nb = notElemTab.length) {
+				console.log(faildel);
+				cb(200, 'NotationElements deleted');
+			}
+		});
+	}
+};
+
+IncursiveDriver.prototype.delNotation = function(nid, nb, cb) {
+	// body...
+	var that = this;
+	Notation.model.findById(nid).exec(function (err, notation) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!notation) {
+			cb(404, 'Notation Not Found');
 		}
 		else {
-			actreg.remove(function (err) {
-				if (err) {
-					console.error(err);
-					cb(500, err);
+			that.delNotElemTab(notation.contents, function (code, value) {
+				if (code != 200) {
+					cb(code, value);
 				}
 				else {
-					cb(200, 'ActivityRegistration deleted');
+					notation.remove(function (err) {
+						if (err) {
+							console.error(err);
+							cb(500, err);
+						}
+						else {
+							cb(200, 'Notation deleted');
+						}
+					});
 				}
 			});
 		}
-	})
+	});
+};
+
+IncursiveDriver.prototype.delNotByAct = function(act, cb) {
+	// body...
+	Notation.model.find().where('activity', act).exec(function (err, notations) {
+		var i;
+		var faildel = [];
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else if (!actregs || !actregs.length) {
+			cb(200, 'Nothing to do');
+		}
+		else {
+			for (i = 0 ; i < actregs.length ; i++) {
+				that.delNotation(notations[i]._id, (i + 1), function (code, ret, nb) {
+					if (code != 200) {
+						faildel.push(ret);
+					}
+					if (nb == notations.length) {
+						console.error(faildel);
+						cb(200, 'Notations deleted');
+					}
+				});
+			}
+		}
+	});
+};
+
+IncursiveDriver.prototype.delActReg = function(arid, nb, cb) {
+	// body...
+	ActReg.model.findById(arid).remove(function (err) {
+		if (err) {
+			console.error(err);
+			cb(500, err);
+		}
+		else {
+			cb(200, 'ActivityRegistration deleted');
+		}
+	});
 };
 
 IncursiveDriver.prototype.delActRgByAct = function(act, cb) {
@@ -68,10 +143,10 @@ IncursiveDriver.prototype.delActRgByAct = function(act, cb) {
 						console.error(faildel);
 						cb(200, 'ActivityRegistrations deleted');
 					}
-				})
+				});
 			}
 		}
-	})
+	});
 };
 
 IncursiveDriver.prototype.delActivity = function (name, cb) {
@@ -144,24 +219,13 @@ IncursiveDriver.prototype.delActByMod = function(modId, cb) {
 
 IncursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
 	// body...
-	ModReg.model.findById(mrid).exec(function (err, modReg) {
+	ModReg.model.findById(mrid).remove(function (err) {
 		if (err) {
 			console.error(err);
 			cb(500, err);
 		}
-		else if (!modReg) {
-			cb(404, 'ModuleRegistration Not Found');
-		}
 		else {
-			modReg.remove(function (err) {
-				if (err) {
-					console.error(err);
-					cb(500, err);
-				}
-				else {
-					cb(200, 'ModuleRegistration deleted');
-				}
-			});
+			cb(200, 'ModuleRegistration deleted');
 		}
 	});
 };
