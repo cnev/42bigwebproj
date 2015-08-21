@@ -65,7 +65,7 @@ UserDriver.prototype.toLog = function (logger, pass, cb) {
 	that.getByUid(logger.uid, function (code1, user) {
 		if (code1 == 404) {
 			that.create(logger, pass, function (code2, usrc) {
-				cb(code2, usr)
+				cb(code2, usrc)
 			});
 		}
 		else {

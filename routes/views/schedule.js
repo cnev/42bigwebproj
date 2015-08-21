@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
 	});
 	var job_end_activities = schedule.scheduleJob('*/1 * * * *', function() {
 		//ActRegisDriver.end_activities(function (err, end){
-		console.log('end_activities NOT YET IMPLEMENTED');
+		console.log(Math.random().toString(36)+Math.random().toString(36)+Math.random().toString(36)+Math.random().toString(36));
 		//});
 	});
 	req.flash('info', 'schedule is ON');

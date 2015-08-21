@@ -10,7 +10,7 @@
 				new post														[OK]
 				view thread														[OK]
 				edit ANY post													[OK]
-				delete post														[NOT OK]
+				delete post														[OK]
 		Connexion ldap															[OK]
 		Annuaire
 			search by
@@ -56,7 +56,6 @@
 				registration													[OK]
 				period															[OK]
 				register by variable group size									[OK]
-									[@Chandara: modifications sur Activity/ModuleRegistration]
 				number of peers													[OK]
 				link to existing module											[OK]
 				type (proj, td, exam)											[OK]
@@ -104,7 +103,9 @@ Mickael
 	Autologin (hash de randomstring, integre dans l'entree de la collection User ?)
 
 Matthias
-
+	Views /profile (personnel ET autres [/profile/:login])
+	Views /ticket
+	Views /elearning
 
 Chandara
 	Implementation des baremes (controleurs, modeles)

@@ -3,8 +3,9 @@ var session = require('express-session');
 var keystone = require('keystone');
 
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
-
+var UsrDrv = require('../../driver/userDriver').UserDriver;
 var ActivityDriver = new ActDriv ();
+var UserDriver = new UsrDrv ();
 
 var router = express.Router();
 
@@ -298,5 +299,35 @@ router.get('/', function (req, res) {
 		}
 	});
 });
+
+router.get('/autologin', function (req, res) {
+	UserDriver.getByUid(req.session.user, function (code, user) {
+		if (code == 500) {
+			console.error('Error authenticating user. Exiting ...');
+			res.redirect('/logout');
+		} else {
+			var str = Math.random().toString(36)+Math.random().toString(36)+Math.random().toString(36)+Math.random().toString(36);
+			User.model.find()
+			.where('autologin', str)
+			.exec(function (err, ret){
+				if (err) {
+					res.status(500).send('/profile/autologin error');
+				} else if (ret.length != 0) {
+					console.log(ret);
+					console.log('endof ret');
+					req.flash('error', '/profile/autologin error');
+					res.redirect('/profile');
+				} else {
+					user.autologin = str;
+					user.save(function (err, q_saved){
+
+						req.flash('info', 'autologin (re)generated : '+str);
+						res.redirect('/profile');
+					});
+				}
+			});
+		}
+	})
+})
 
 module.exports = router;
