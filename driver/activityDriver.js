@@ -104,7 +104,6 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 								actTab.push(actList[j]);
 						}
 					}
-					console.log(actTab);
 					cb(202, actTab);
 				}
 			});
@@ -146,7 +145,6 @@ ActivityDriver.prototype.getPastAct = function (user, cb) {
 								actTab.push(actList[j]);
 						}
 					}
-					console.log(actTab);
 					cb(202, actTab);
 				}
 			});
@@ -214,7 +212,6 @@ ActivityDriver.prototype.create = function (data, cb) {
 					cb(500, err);
 				}
 				else {
-					console.log(q_saved);
 					cb(201, data.name + ' was successfully added to the activity list !');
 				}
 			});

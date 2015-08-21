@@ -87,7 +87,7 @@
 			Categories (one for each module or project)							[NOT OK]
 			Add files to a category												[NOT OK]
 
-		Autologin																[NOT OK]
+		Autologin																[OK]
 
 
 				TRUCS A FAIRE

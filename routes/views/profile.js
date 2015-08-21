@@ -154,8 +154,6 @@ function getActivities (user, cb) {
 			cb(null, null, null);
 		}
 		else {
-			console.log(actList);
-			console.log('user is :'+user);
 			ActivityRegistration.model.find()
 			.where('user', user)
 			.where('encours', true)
@@ -172,9 +170,6 @@ function getActivities (user, cb) {
 						cb(null, actList, null);
 					else
 					{
-						console.log("what is this? ??");
-						console.log(q_register);
-						console.log("registrations found WAIT WHAT ?");
 						var actInList = [];
 						for (var i = 0; i < q_register.length; i++) {
 							Activity.model.findById(q_register[i].activity)
@@ -207,10 +202,6 @@ function fetch_credits(cb){
 
 function fetch_data(q_res, req, res, actInList, actList, cb)
 {
-	console.log('actInList:');
-	console.log(actInList);
-	console.log('actList');
-	console.log(actList);
 	var data =
 	{
 		firstname: null,
@@ -241,13 +232,10 @@ function fetch_data(q_res, req, res, actInList, actList, cb)
 	};
 	fetch_name(q_res, function(err, named){
 		data.name = named;
-		console.log('named:');
 		fetch_credits(function(err, credited){
-			console.log('credited:');
 			data.cred_a = credited.a;
 			data.cred_p = credited.p;
 			fetch_modules(q_res, req, res, function(err, moduled){
-				console.log('moduled:');
 				data.mod = moduled;
 				cb(null, data);
 			});
@@ -285,10 +273,8 @@ router.get('/', function (req, res) {
 								res.status(err).send(actPList)
 							}
 							else {
-								console.log('actlist is here !');
 								fetch_data(q_res, req, res, actInList, actPList, function(err, fetched) {
 									locals.data = fetched;
-									console.log('actlist available');
 									view.render('index');
 								});
 							}
@@ -313,8 +299,6 @@ router.get('/autologin', function (req, res) {
 				if (err) {
 					res.status(500).send('/profile/autologin error');
 				} else if (ret.length != 0) {
-					console.log(ret);
-					console.log('endof ret');
 					req.flash('error', '/profile/autologin error');
 					res.redirect('/profile');
 				} else {
