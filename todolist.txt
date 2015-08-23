@@ -117,10 +117,3 @@ Chandara
 		POST/admin/activity/delete/:name
 
 BAREME
-
-
-
-
-
-
-
