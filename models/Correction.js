@@ -12,6 +12,7 @@ var Correction = new keystone.List('Correction', {
 
 Correction.add({
 	peer: {type: Types.Relationship, ref: 'User'},
+	groupe: {type : Types.Relationship, ref: 'ActivityRegistration'},
 	done: {type: Boolean, default: false},
 	final_grade: {type: Types.Number},
 	gradesByElement: {type: Types.Number, many: true}
