@@ -16,8 +16,7 @@ Ticket.add({
 	author: { type: String },
 	content: { type: Types.Textarea },
 	category: { type: Types.Relationship, ref: 'TicketCategory' },
-	priority: { type: Types.Select, options: 'Non Important, Normal, Important, Urgent, Over 9000', default: 'Normal' },
-	deleted: {type: Boolean, default: false}
+	priority: { type: Types.Select, options: 'Non Important, Normal, Important, Urgent, Over 9000', default: 'Normal' }
 });
 
 Ticket.defaultColumns = 'title, state|20%, author|20%, category|20%';

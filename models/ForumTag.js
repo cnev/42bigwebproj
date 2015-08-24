@@ -9,8 +9,7 @@ var Types = keystone.Field.Types;
 var ForumTag = new keystone.List('ForumTag');
 
 ForumTag.add({
-	name: {type: String},
-	deleted: {type: Boolean, default: false}
+	name: {type: String}
 });
 
 ForumTag.register();

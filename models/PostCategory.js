@@ -9,8 +9,7 @@ var PostCategory = new keystone.List('PostCategory', {
 });
 
 PostCategory.add({
-	name: { type: String, required: true },
-	deleted: {type: Boolean, default: false}
+	name: { type: String, required: true }
 });
 
 PostCategory.relationship({ ref: 'Post', path: 'categories' });

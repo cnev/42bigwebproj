@@ -14,8 +14,7 @@ var Model = mongoose.model;
 var Test = new keystone.List('Test');
 
 Test.add({
-	content: { type: String, many: true },
-	deleted: {type: Boolean, default: false}
+	content: { type: String, many: true }
 });
 
 Test.register();

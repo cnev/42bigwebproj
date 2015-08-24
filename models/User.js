@@ -21,8 +21,7 @@ User.add({
 		bocalStaff: { type: Boolean, default: false },
 		bocalStudent: { type: Boolean, default: false }
 	},
-	autologin: {type: String},
-	deleted: {type: Boolean, default: false}
+	autologin: {type: String}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true }
 });
