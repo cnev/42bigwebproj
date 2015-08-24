@@ -11,11 +11,11 @@ var Correction = new keystone.List('Correction', {
 });
 
 Correction.add({
-	peer: {type: Types.Relationship, ref: 'User'},
-	groupe: {type : Types.Relationship, ref: 'ActivityRegistration'},
-	done: {type: Boolean, default: false},
-	final_grade: {type: Types.Number},
-	gradesByElement: {type: Types.Number, many: true}
+	peer: {type: Types.Relationship, ref: 'User'}, //correcteur
+	groupe: {type : Types.Relationship, ref: 'ActivityRegistration'}, //groupe de corriger
+	done: {type: Boolean, default: false}, // corriger ?
+	final_grade: {type: Types.Number}, // note final
+	gradesByElement: {type: Types.Number, many: true} // note par element
 });
 
 /**

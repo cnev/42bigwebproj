@@ -7,6 +7,24 @@ var router = express.Router();
 
 router.get('/', function (req, res) {
 	/* Recap des corrections a faire */
+	var view = new keystone.View(req, res);
+	var locals = res.locals;
+	locals.corr = [];
+
+	UserDriver.getByUid(req.session.user, function (err, user){
+		Correction.model.find()
+		.where('peer', user)
+		.exec(function (err, corr) {
+			if (err)
+				res.status(err).send(err);
+			else
+			{
+				res.locals.corr = corr;
+				console.log(corr);
+				view.render('notation_overview');
+			}
+		});
+	});
 
 		/*
 			1) Preparer la view (new keystone.View)

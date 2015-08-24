@@ -57,6 +57,7 @@ exports = module.exports = function(app) {
 	app.use('/forum', middleware.checkAuth, require('./views/forum'));
 	app.use('/profile', middleware.checkAuth, require('./views/profile'));
 	app.use('/peer_correction', middleware.checkAuth, require('./views/peer_correction'));
+	app.use('/notation', middleware.checkAuth, require('./views/notation'));
 	app.use('/ticket', middleware.checkAuth, require('./views/ticket'));
 	app.use('/schedule', middleware.checkAuth, require('./views/schedule'));
 	app.use('/admin', middleware.checkAuth, middleware.requireAdmin, require('./views/admin'));
