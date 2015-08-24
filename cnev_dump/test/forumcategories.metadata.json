@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"test.forumcategories"}]}
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"test.forumcategories"},{"v":1,"key":{"module":1},"name":"module_1","ns":"test.forumcategories","background":true,"safe":null}]}

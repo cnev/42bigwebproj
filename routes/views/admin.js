@@ -5,9 +5,11 @@ var router = express.Router();
 
 var ActDriv = require('../../driver/activityDriver').ActivityDriver;
 var ModDriv = require('../../driver/moduleDriver').ModuleDriver;
+var UsrDrv = require('../../driver/userDriver').UserDriver;
 
 var ActivityDriver = new ActDriv ();
 var ModuleDriver = new ModDriv ();
+var UserDriver = new UsrDrv ();
 
 var Module = keystone.list('Module');
 var Activity = keystone.list('Activity');
@@ -440,16 +442,38 @@ router.get('/ticket', function (req, res){
 	Ticket.model.find()
 	.sort('updatedAt')
 	.exec(function (err, tickets){
-		res.locals.admin = true;
-		res.locals.tickets = tickets;
-		res.locals.admin_id = req.session.user_id;
-		view.render('ticket_overview');
+		UserDriver.getByUid(req.session.user, function (code, user){
+			if (code == 500 || code == 404) {
+				res.status(500).send('ErrorRoute /ticket');
+			} else {
+				res.locals.data = {
+
+				};
+				res.locals.data.admin = true;
+				res.locals.data.tickets = tickets;
+				res.locals.data.admin_id = user;
+				view.render('ticket_overview');
+			}
+		});
 	});
 });
+
+function ticketLock(req, ticket, cb) {
+	ticket.state = 'locked';
+	UserDriver.getByUid(req.session.user, function (code, user){
+		if (code == 500 || code == 404) {
+			cb(500, 'Error ticketLock');
+		} else {
+			ticket.openedBy = user;
+			cb(null, true);
+		}
+	});
+}
 
 router.get('/ticket/view/:id', function (req, res){
 	Ticket.model.findById(req.params.id)
 	.exec(function (err, ticket){
+		console.log(ticket);
 		if (err) {
 			res.status(err).send(err);
 		} else if (!ticket) {
@@ -460,11 +484,17 @@ router.get('/ticket/view/:id', function (req, res){
 				req.flash('error', 'this ticket is locked !');
 				res.redirect('/admin/ticket');
 			} else {
-				ticket.state = 'locked';
-				ticket.save(function (err, saved) {
-					req.flash('info', 'this ticket is now locked !');
-					res.redirect('/admin/ticket');
-				})
+				ticketLock(req, ticket, function (code, q_locked){
+					if (code == 500 || code == 404) {
+						res.status(code).send(q_locked);
+					} else {
+						ticket.save(function (err, saved) {
+							console.log(ticket);
+							req.flash('info', 'this ticket is now locked !');
+							res.redirect('/admin/ticket');
+						});
+					}
+				});
 			}
 		}
 	});

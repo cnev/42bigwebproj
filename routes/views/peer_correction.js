@@ -6,8 +6,13 @@ var ActivityRegistration = keystone.list('ActivityRegistration');
 var Module = keystone.list('Module');
 var User = keystone.list('User');
 
-var router = express.Router();
+var ActDrv = require('../../driver/activityDriver').ActivityDriver;
+var ActivityDriver = new ActDrv ();
+var ActRegDrv = require('../../driver/actRegisDriver').ActRegisDriver;
+var ActRegisDriver = new ActRegDrv ();
 
+var router = express.Router();
+/*
 function build_userList(activity_name, cb)
 {
 	var list = [];
@@ -217,7 +222,76 @@ router.get('/',function (req, res) {
 			}
 		})
 	})
+});*/
 
+function generatePeers(activity, groups, cb) {
+	ActRegisDriver.getUsersByActivity(activity, function (code, userlist){
+		if (code == 500) {
+
+		} else if (code == 404) {
+
+		} else {
+			if (activity.req_corrections >= groups.length) {
+				cb(501, 'not enough groups for correction !');
+			} else {
+				var usedGroups = [];
+				for (var i = 0; i < groups.length; i++) {
+					for (var j = 0; j < activity.req_corrections; j++) {
+						var randomUserIndex = Math.floor((Math.random() * userlist.length));
+						if (usedGroups.indexOf(randomUserIndex) != -1 || groups[i].indexOf(userlist[randomUserIndex]) != -1)
+							j--;
+						else {
+							usedGroups.push(userList[randomUserIndex]);
+						}
+					}
+				}
+			}
+		}
+	});
+}
+// (nb_groupes * min_inscr_groupe / req_corrections) >= 2
+
+				/*
+function generateCorrection(group, i, cb) {
+	var correction = new Correction {
+		peer:
+	};
+}*/
+
+router.get('/process/:name', function (req, res){
+	ActivityDriver.getOne(req.params.name, function (code, activity){
+		if (code == 500 || code == 404) {
+			res.status(code).send(activity);
+		} else {
+			ActRegisDriver.getGroupsByActivity(activity, function (code, groups){
+				if (code == 500)
+					res.status(code).send(groups);
+				else if (code == 404) {
+					res.status(code).send(groups);
+				} else {
+					generatePeers(activity, groups, function (err, peers){
+						if (err) {
+
+						} else {
+
+						}
+					});
+					for (var i = 0; i < groups.length; i++) {
+						generateCorrection(groups[i], i, function (err, i_ret){
+							if (err) {
+								res.status(err).send("Error generating corrections");
+							} else {
+								if (i_ret == groups.length - 1) {
+									req.flash('info', 'did it work ?!');
+									res.redirect('/');
+								}
+							}
+						});
+					}
+				}
+			});
+		}
+	});
 });
 
 module.exports = router;

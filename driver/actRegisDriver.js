@@ -202,4 +202,19 @@ ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb
 	});
 };
 
+ActRegisDriver.prototype.getGroupsByActivity = function (activity, cb) {
+	var that = this;
+	ActivityRegistration.model.find()
+	.where('activity', activity)
+	.exec(function (err, groups){
+		if (err)
+			cb(500, err);
+		else if (groups.length == 0) {
+			cb(404, 'no group found for this activity');
+		} else {
+			cb(200, groups);
+		}
+	});
+};
+
 exports.ActRegisDriver = ActRegisDriver;

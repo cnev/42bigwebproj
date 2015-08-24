@@ -491,14 +491,38 @@ _helpers.ticketCategoryList = function(list){
 	}
 }
 
-_helpers.ticketHandlerButton = function(ticket, admin_id){
-	console.log("DO SOMETHING !");
+function ticketOverviewButton(ticket, admin_id) {
 	if (ticket.state == 'closed')
-		return new hbs.SafeString('<button class="btn btn-danger>Ticket closed</button>');
+		return ('<button class="btn btn-danger">Ticket closed</button>');
 	else if (ticket.state == 'locked' && ticket.openedBy != admin_id)
-		return new hbs.SafeString('<button class="btn btn-warning>Ticket locked</button>');
+		return ('<button class="btn btn-warning">Ticket locked</button>');
 	else
-		return new hbs.SafeString('<a href="/admin/ticket/view/'+ticket._id+'" class="btn btn-info" role="button">Handle this</a>');
+		return ('<a href="/admin/ticket/view/'+ticket._id+'" class="btn btn-info" role="button">Handle this</a>');
+}
+
+function pushTicket(ticket, i, cb) {
+	var out = '<div class="panel panel-default">'
+	+'<div class="panel-heading">'+'<h1>'+data.tickets[i].title+'</h1></div>'
+	+'<div class="panel-body">'
+	+'<p>'+data.tickets[i].state+'>/p>'
+	+'<p>Written by '+data.tickets[i].author+' at '+data.tickets[i].createdAt+'</p>'
+	+'<p>'+data.tickets[i].content+'>/p>'
+	+'<p>'+data.tickets[i].priority+'>/p>'
+	+ticketOverviewButton(data.tickets[i], data.admin_id)
+	+'</div></div>';
+}
+
+_helpers.ticketOverview = function(data){
+	var output = '';
+	for (var i = 0; i > data.tickets.length; i++) {
+		output += pushTicket(output, data.tickets[i], i, function (err, ok){
+
+		});
+
+		if (i == data.ticket.length - 1){
+			return new hbs.SafeString(output);
+		}
+	}
 }
 
 _helpers.projectgroup_registration = function(size) {

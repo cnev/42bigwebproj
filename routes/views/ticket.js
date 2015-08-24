@@ -22,8 +22,10 @@ router.get('/', function (req, res){
 				if (err) {
 					res.status(err).send(err);
 				} else {
-					console.log(tickets);
-					res.locals.tickets = tickets;
+					res.locals.data = {
+
+					};
+					res.locals.data.tickets = tickets;
 					view.render('ticket_overview');
 				}
 			});

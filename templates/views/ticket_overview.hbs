@@ -2,25 +2,12 @@
 	<a href="/ticket/new" class="btn btn-danger" role="button">Open a ticket</a>
 </div>
 
-<p></p>
+<p>
+	{{data.admin}}<br />
+	{{data.tickets}}<br />
+	{{data.admin_id}}<br />
+</p>
 
 <div class="container-fluid">
-	{{#each tickets}}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h1>{{this.title}}</h1>
-		</div>
-		<div class="panel-body">
-		<p>{{this.state}}</p>
-		<p>written by {{this.author}} at {{this.createdAt}}</p>
-		<p>{{this.content}}</p>
-		<p>{{this.priority}}</p>
-		{{#if ../admin}}
-			<div class="panel-footer">
-				{{#ticketHandlerButton this admin_id}}{{this}}{{/ticketHandlerButton}}
-			</div>
-		{{/if}}
-		</div>
-	</div>
-	{{/each}}
+	{{#ticketOverview data}}{{this}}{{/ticketOverview}}
 </div>
