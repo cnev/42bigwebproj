@@ -1,19 +1,19 @@
 var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
-var Activity = keystone.list('Activity');
-var ActReg = keystone.list('ActivityRegistration');
-var Corection = keystone.list('Corection');
+var Activity = keystone.list('Activity');//
+var ActReg = keystone.list('ActivityRegistration');//
+var Corection = keystone.list('Corection');//
 var ForCat = keystone.list('ForumCategory');
 var ForPost = keystone.list('ForumPost');
 var ForThr = keystone.list('ForumThread');
-var Module = keystone.list('Module');
-var ModReg = keystone.list('ModuleRegistration');
-var Notation = keystone.list('Notation');
-var NotElem = keystone.list('NotationElement');
+var Module = keystone.list('Module');//
+var ModReg = keystone.list('ModuleRegistration');//
+var Notation = keystone.list('Notation');//
+var NotElem = keystone.list('NotationElement');//
 var Ticket = keystone.list('Ticket');
 var TktCat = keystone.list('TicketCategory');
-var User = keystone.list('User');
+var User = keystone.list('User'); // not to delete ... juste may need ...
 
 var IncursiveDriver = function () {};
 
