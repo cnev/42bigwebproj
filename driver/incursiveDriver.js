@@ -11,7 +11,6 @@ var Module = keystone.list('Module');
 var ModReg = keystone.list('ModuleRegistration');
 var Notation = keystone.list('Notation');
 var NotElem = keystone.list('NotationElement');
-var ProjGrp = keystone.list('ProjectGroup');
 var Ticket = keystone.list('Ticket');
 var TktCat = keystone.list('TicketCategory');
 var User = keystone.list('User');

@@ -8,8 +8,7 @@ var ModuleRegistration = new keystone.List('ModuleRegistration', {
 ModuleRegistration.add({
 	user: {type: Types.Relationship, ref: 'User'},
 	module: {type: Types.Relationship, ref: 'Module'},
-	status: {type: Types.Select, options: 'success, fail, pending'},
-	deleted: {type: Boolean, default: false}
+	status: {type: Types.Select, options: 'success, fail, pending'}
 });
 
 ModuleRegistration.register();
