@@ -493,9 +493,9 @@ _helpers.ticketCategoryList = function(list){
 
 _helpers.ticketHandlerButton = function(ticket, admin_id){
 	console.log("DO SOMETHING !");
-	if (this.status == 'closed')
+	if (ticket.state == 'closed')
 		return new hbs.SafeString('<button class="btn btn-danger>Ticket closed</button>');
-	else if (this.status == 'locked' && this.openedBy != admin_id)
+	else if (ticket.state == 'locked' && ticket.openedBy != admin_id)
 		return new hbs.SafeString('<button class="btn btn-warning>Ticket locked</button>');
 	else
 		return new hbs.SafeString('<a href="/admin/ticket/view/'+ticket._id+'" class="btn btn-info" role="button">Handle this</a>');
