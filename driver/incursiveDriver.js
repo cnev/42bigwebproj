@@ -1,23 +1,23 @@
 var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
-var Activity = keystone.list('Activity');
-var ActReg = keystone.list('ActivityRegistration');
-var Corection = keystone.list('Corection');
+var Activity = keystone.list('Activity');//
+var ActReg = keystone.list('ActivityRegistration');//
+var Corection = keystone.list('Corection');//
 var ForCat = keystone.list('ForumCategory');
 var ForPost = keystone.list('ForumPost');
 var ForThr = keystone.list('ForumThread');
-var Module = keystone.list('Module');
-var ModReg = keystone.list('ModuleRegistration');
-var Notation = keystone.list('Notation');
-var NotElem = keystone.list('NotationElement');
+var Module = keystone.list('Module');//
+var ModReg = keystone.list('ModuleRegistration');//
+var Notation = keystone.list('Notation');//
+var NotElem = keystone.list('NotationElement');//
 var Ticket = keystone.list('Ticket');
 var TktCat = keystone.list('TicketCategory');
-var User = keystone.list('User');
+var User = keystone.list('User'); // not to delete ... juste may need ...
 
 var IncursiveDriver = function () {};
 
-IncursiveDriver.prototype.delNotElem = function(neid, nb, cb) {
+IncursiveDriver.prototype.delNotElem = function (neid, nb, cb) {
 	// body...
 	NotElem.model.findById(neid).remove(function (err) {
 		if (err) {
@@ -30,7 +30,7 @@ IncursiveDriver.prototype.delNotElem = function(neid, nb, cb) {
 	});
 };
 
-IncursiveDriver.prototype.delNotElemTab = function(notElemTab, cb) {
+IncursiveDriver.prototype.delNotElemTab = function (notElemTab, cb) {
 	// body...
 	var i;
 	var faildel = [];
@@ -47,7 +47,7 @@ IncursiveDriver.prototype.delNotElemTab = function(notElemTab, cb) {
 	}
 };
 
-IncursiveDriver.prototype.delNotation = function(nid, nb, cb) {
+IncursiveDriver.prototype.delNotation = function (nid, nb, cb) {
 	// body...
 	var that = this;
 	Notation.model.findById(nid).exec(function (err, notation) {
@@ -79,8 +79,9 @@ IncursiveDriver.prototype.delNotation = function(nid, nb, cb) {
 	});
 };
 
-IncursiveDriver.prototype.delNotByAct = function(act, cb) {
+IncursiveDriver.prototype.delNotByAct = function (act, cb) {
 	// body...
+	var that = this;
 	Notation.model.find().where('activity', act).exec(function (err, notations) {
 		var i;
 		var faildel = [];
@@ -107,20 +108,69 @@ IncursiveDriver.prototype.delNotByAct = function(act, cb) {
 	});
 };
 
-IncursiveDriver.prototype.delActReg = function(arid, nb, cb) {
+IncursiveDriver.prototype.delCorection = function (cid, nb, cb) {
 	// body...
-	ActReg.model.findById(arid).remove(function (err) {
+	Corection.model.findById(cid).remove(function (err) {
 		if (err) {
 			console.error(err);
-			cb(500, err);
+			cb(500, err, nb);
 		}
 		else {
-			cb(200, 'ActivityRegistration deleted');
+			cb(200, 'Corection deleted', nb);
 		}
 	});
 };
 
-IncursiveDriver.prototype.delActRgByAct = function(act, cb) {
+IncursiveDriver.prototype.delCorByActReg = function (arid, cb) {
+	// body...
+	var that = this;
+	Corection.model.find().where('groupe', arid).exec(function (err, corections) {
+		var i;
+		var faildel = [];
+		if (err) {
+			console.error(err);
+			cb(err);
+		}
+		else if (!corections || !corections.length) {
+			cb (200, 'Nothing to do');
+		}
+		else {
+			for (i = 0 ; i < corections.length ; i++)
+			that.delCorection(corections[i]._id, (i + 1), function (code, ret, nb) {
+				if (code != 200) {
+					faildel.push(ret);
+				}
+				if (nb == corections.length) {
+					console.error(faildel);
+					cb(200, 'Corections deleted');
+				}
+			});
+		}
+	});
+};
+
+IncursiveDriver.prototype.delActReg = function (arid, nb, cb) {
+	// body...
+	var that = this;
+	that.delCorByActReg(arid, function (code, ret) {
+		if (code != 200) {
+			cb(code, ret, nb);
+		}
+		else {
+			ActReg.model.findById(arid).remove(function (err) {
+				if (err) {
+					console.error(err);
+					cb(500, err, nb);
+				}
+				else {
+					cb(200, 'ActivityRegistration deleted', nb);
+				}
+			});
+		}
+	});
+};
+
+IncursiveDriver.prototype.delActRgByAct = function (act, cb) {
 	// body...
 	ActReg.model.find().where('activity', act).exec(function (err, actregs) {
 		var i;
@@ -151,7 +201,7 @@ IncursiveDriver.prototype.delActRgByAct = function(act, cb) {
 IncursiveDriver.prototype.delActivity = function (name, cb) {
 	// body...
 	var that = this;
-	Activity.model.findOne({'name':name, 'deleted':false}).exec(function (err, activity) {
+	Activity.model.findOne({'name':name}).exec(function (err, activity) {
 		if (err) {
 			console.error(err);
 			cb(500, err);
@@ -176,7 +226,7 @@ IncursiveDriver.prototype.delActivity = function (name, cb) {
 									cb(500, err);
 								}
 								else {
-									cb(200, 'Activity deleted');
+									cb(200, 'Activity deleted', nb);
 								}
 							});
 						}
@@ -187,7 +237,7 @@ IncursiveDriver.prototype.delActivity = function (name, cb) {
 	});
 };
 
-IncursiveDriver.prototype.delActByMod = function(modId, cb) {
+IncursiveDriver.prototype.delActByMod = function (modId, cb) {
 	// body...
 	var that = this;
 	Activity.model.find().where('module', modId).exec(function (err, activities) {
@@ -221,10 +271,10 @@ IncursiveDriver.prototype.delModReg = function (mrid, nb, cb) {
 	ModReg.model.findById(mrid).remove(function (err) {
 		if (err) {
 			console.error(err);
-			cb(500, err);
+			cb(500, err, nb);
 		}
 		else {
-			cb(200, 'ModuleRegistration deleted');
+			cb(200, 'ModuleRegistration deleted', nb);
 		}
 	});
 };
@@ -297,3 +347,4 @@ IncursiveDriver.prototype.delModule = function (name, cb) {
 		}
 	});
 };
+
