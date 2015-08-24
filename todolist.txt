@@ -107,6 +107,11 @@ Matthias
 	Views /ticket
 	Views /elearning
 
+	notation {
+		controller,
+		view
+	}
+
 Chandara
 	Implementation des baremes (controleurs, modeles)
 	Implementation de l'e-learning (controleurs, modeles)

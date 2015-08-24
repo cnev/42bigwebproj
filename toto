@@ -1,0 +1,5 @@
+in mongo	> db.users.remove({'uid': 'cnev'})
+			db.users.remove({'uid': 'vjung'})
+e1r8p17% mongorestore -d test cnev_dump/test
+in mongo	> db.users.find()
+			trouver le autologin

@@ -25,21 +25,6 @@ router.get('/', function (req, res) {
 			}
 		});
 	});
-
-		/*
-			1) Preparer la view (new keystone.View)
-			2) Charger le res.locals :
-				[Collection].model.find()
-				.where(['attribut'], ['valeur'])
-				.exec(function (err, XOXO){
-					if (err)
-
-					else
-						res.locals = UN TAS DE TRUCS;
-						view.render();
-				});
-
-		*/
 });
 
 /* :id = ID du ActivityRegistration [Groupe] */
