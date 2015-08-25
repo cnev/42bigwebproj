@@ -5,15 +5,12 @@ var Activity = keystone.list('Activity');//
 var ActReg = keystone.list('ActivityRegistration');//
 var Corection = keystone.list('Corection');//
 var ForCat = keystone.list('ForumCategory');
-var ForPost = keystone.list('ForumPost');
-var ForThr = keystone.list('ForumThread');
+var ForPost = keystone.list('ForumPost');//
+var ForThr = keystone.list('ForumThread');//
 var Module = keystone.list('Module');//
 var ModReg = keystone.list('ModuleRegistration');//
 var Notation = keystone.list('Notation');//
 var NotElem = keystone.list('NotationElement');//
-var Ticket = keystone.list('Ticket');
-var TktCat = keystone.list('TicketCategory');
-var User = keystone.list('User'); // not to delete ... juste may need ...
 
 var IncursiveDriver = function () {};
 
@@ -357,21 +354,143 @@ IncursiveDriver.prototype.delModRegByMod = function (modId, callback) {
 	});
 };
 
-IncursiveDriver.prototype.delPostByPost = function (postid, callback, nb) {
+IncursiveDriver.prototype.delForPost = function (postid, callback, nb1) {
 	// body...
-	// recursive...
+	var that = this;
+	var tocb  [];
+	ForPost.model.find().where('reply_of', postid).exec(function (err, forposts) {
+		var i;
+		var faildel = [];
+		var deldone = [];
+		if (err) {
+			console.error(err);
+			callback(500, err, nb1);
+		}
+		else if (!forposts || !forposts.length) {
+			ForPost.model.findById(postid).remove(function (err) {
+				if (err) {
+					console.error(err);
+					callback(500, err, nb1);
+				}
+				else {
+					callback(200, 'ForPost deleted', nb1);
+				}
+			});
+		}
+		else {
+			for (i = 0 ; i < forposts.length ; i++) {
+				that.delForPost(forposts[i]._id, function (code, ret, nb2) {
+					if (code != 200) {
+						faildel.push(ret);
+					}
+					else {
+						deldone.push(ret);
+					}
+					if (nb2 == forposts.length) {
+						ForPost.model.findById(postid).remove(function (err) {
+							if (err) {
+								console.error(err);
+								callback(500, err, nb1);
+							}
+							else {
+								tocb.push(faildel);
+								tocb.push(deldone);
+								tocb.push('ForPost deleted');
+								callback(200, tocb, nb1);
+							}
+						});
+					}
+				}, (i + 1));
+			}
+		}
+	});
 };
 
-IncursiveDriver.prototype.delForPost = function (postid, callback, nb) {
+IncursiveDriver.prototype.delForThr = function (ftid, callback, nb1) {
 	// body...
-};
-
-IncursiveDriver.prototype.delForPostByThr = function (ftid, callback, nb) {
-	// body...
+	var that = this;
+	var tocb = [];
+	ForThr.findById(ftid).exec(function (err, forthr) {
+		var faildel = [];
+		var deldone = [];
+		var i;
+		var forposts;
+		if (err) {
+			console.error(err);
+			callback(500, err, nb1);
+		}
+		else if (!forthr) {
+			callback(404, 'Unexpectedly ForumThread Not Found', nb1);
+		}
+		else {
+			forposts = forthr.posts;
+			if (forposts.length != forthr.nb_posts) {
+				callback(500, 'Seems to be such a strange error.', nb1);
+			}
+			else {
+				for (i = 0 ; i < forposts.length ; i++) {
+					that.delForPost(forposts[i], function (code, ret, nb2) {
+						if (code != 200) {
+							faildel.push(ret);
+						}
+						else {
+							deldone.push(ret);
+						}
+						if (nb2 == forposts.length) {
+							forthr.remove(function (err) {
+								if (err) {
+									console.error(err);
+									callback(500, err, nb1);
+								}
+								else {
+									tocb.push(faildel);
+									tocb.push(deldone);
+									tocb.push('ForumThread deleted');
+									callback(200, tocb, nb1);
+								}
+							});
+						}
+					}, (i + 1));
+				}
+			}
+		}
+	});
 };
 
 IncursiveDriver.prototype.delForThrByCat = function (fcid, callback) {
 	// body...
+	var that = this;
+	var tocb = [];
+	ForThr.model.find().where('category', fcid).exec(function (err, forthrs) {
+		var i;
+		var faildel = [];
+		var deldone = [];
+		if (err) {
+			console.error(err);
+			callback(500, err);
+		}
+		else if (!forthrs || !forthrs.length) {
+			callback(200, 'Nothing to do');
+		}
+		else {
+			for (i = 0 ; i < forthrs.length ; i++) {
+				that.delForThr(forthrs[i]._id, function (code, ret, nb) {
+					if (code != 200) {
+						faildel.push(ret);
+					}
+					else {
+						deldone.push(ret);
+					}
+					if (nb == forthrs.length) {
+						tocb.push(faildel);
+						tocb.push(deldone);
+						tocb.push('ForumThreads deleted');
+						callback(200, tocb);
+					}
+				}, (i + 1))
+			}
+		}
+	});
 };
 
 IncursiveDriver.prototype.delForCatByMod = function (modId, callback) {
@@ -402,11 +521,11 @@ IncursiveDriver.prototype.delForCatByMod = function (modId, callback) {
 							tocb.push('ForumCategory deleted')
 							callback(200, tocb);
 						}
-					})
+					});
 				}
-			})
+			});
 		}
-	})
+	});
 };
 
 IncursiveDriver.prototype.delModule = function (name, callback) {
@@ -455,8 +574,9 @@ IncursiveDriver.prototype.delModule = function (name, callback) {
 						}
 					});
 				}
-			})
+			});
 		}
 	});
 };
 
+exports.IncursiveDriver = IncursiveDriver;
