@@ -48,7 +48,7 @@ router.post('/', function (req, res)
 	{
 		filter: '(&(uid='+req.body.username+'))',
 		scope: 'sub',
-		attributes: ['sn', 'uid', 'uidNumber', 'dn', 'alias', 'cn', 'gidNumber', 'givenName']
+		attributes: ['sn', 'uid', 'uidNumber', 'dn', 'alias', 'cn', 'gidNumber', 'givenName', 'jpegPhoto']
 	};
 	client.search('ou=paris,ou=people,dc=42,dc=fr', opts, function(err, result)
 	{

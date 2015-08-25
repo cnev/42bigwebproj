@@ -46,7 +46,20 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	});
 };
 
+function checkDupUser(members, j, i, cb) {
+	console.log(j);
+	console.log(members[j]);
+	console.log(i);
+	console.log(members[i]);
+	console.log(members[j].user == members[i].user);
+	if (j != i && members[j].user == members[i].user)
+		cb(409, j, i, 'Duplicate ids in form.');
+	else
+		cb(200, j, i, "OK");
+}
+
 function validateUser(activity, members, i, cb) {
+	var gotErr = false;
 	console.log('member: '+i);
 	console.log(members[i]);
 	GroupRegis.model.findOne()
@@ -57,7 +70,16 @@ function validateUser(activity, members, i, cb) {
 			cb(err, i, "ERROR");
 		}
 		else if (!actR) {
-			cb(200, i, "OK");
+			for (var j = 0; j < members.length; j++) {
+				checkDupUser(members, j, i, function (code, ret_j, ret_i, msg){
+					if (code == 409 && !gotErr) {
+						cb(409, ret_i, msg);
+						gotErr = true;
+					}
+					else if (ret_j == members.length - 1 && !gotErr)
+						cb(200, ret_i, "OK");
+				});
+			}
 		}
 		else {
 			cb(409, i, 'One or more members already is/are registered to this activity.');
@@ -137,16 +159,16 @@ function registerUser (user, activity, i, cb) {
 	User.model.findById(user)
 	.exec(function (err, q_user){
 		if (err)
-			cb(err, "USER ERROR");
+			cb(err, i, "USER ERROR");
 		else if (!q_user)
-			cb(404, "ERROR FINDING USER");
+			cb(404, i, "ERROR FINDING USER");
 		else {
 			Activity.model.findById(activity)
 			.exec(function (err, q_act){
 				if (err)
-					cb(err, "ACTIVITY ERROR");
-				else if (!q_user)
-					cb(404, "ERROR FINDING ACTIVITY");
+					cb(err, i, "ACTIVITY ERROR");
+				else if (!q_act)
+					cb(404, i, "ERROR FINDING ACTIVITY");
 				else {
 					var actRegis = new ActRegis.model({
 						user: q_user,
@@ -154,9 +176,10 @@ function registerUser (user, activity, i, cb) {
 					});
 					actRegis.save(function (err, q_saved){
 						if (err)
-							cb(err, q_saved)
+							cb(err, i, q_saved);
 						else {
-							cb(200, actRegis);
+							console.log('during registerUser');
+							cb(200, i, q_saved);
 						}
 					});
 				}
@@ -165,13 +188,15 @@ function registerUser (user, activity, i, cb) {
 	});
 }
 
-ActRegisDriver.prototype.registerGroup = function (groupR) {
+ActRegisDriver.prototype.registerGroup = function (groupR, cb) {
 	for (var i = 0; i < groupR.members.length; i++) {
-		registerUser(groupR.members[i], groupR.activity, i, function (code, ret_i){
+		registerUser(groupR.members[i], groupR.activity, i, function (code, ret_i, ret){
 			if (code != 200) {
+				console.log("failing registerGroup");
 				cb(code, "ERROR REGISTERING GROUP");
 			} else {
-				if (i == groupR.members.length - 1) {
+				if (ret_i == groupR.members.length - 1) {
+					console.log("okaying registerGroup");
 					cb(200, "OK !");
 				}
 			}
@@ -258,7 +283,7 @@ ActRegisDriver.prototype.getUsersByActivity = function (activity, cb) {
 	.exec(function (err, groups){
 		if (err){
 			cb(err, "ACTREGISDRIVER.getUsersByActivity ERROR");
-		} else if (groups.length == 0) {
+		} else if (!groups || groups.length == 0) {
 			cb(404, 'no users registered to this activity');
 		} else {
 			cb(200, groups);

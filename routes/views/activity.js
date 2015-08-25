@@ -159,7 +159,7 @@ router.post('/register/:name', function (req, res) {
 						res.redirect('/activity');
 					}
 					else if (code == 409) {
-						req.flash('error', 'You are already registered to this activity !');
+						req.flash('error', actR);
 						res.redirect('/activity');
 					}
 					else {
