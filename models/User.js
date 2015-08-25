@@ -21,6 +21,7 @@ User.add({
 		bocalStaff: { type: Boolean, default: false },
 		bocalStudent: { type: Boolean, default: false }
 	},
+	img: { type: String },
 	autologin: {type: String}
 }, 'Permissions', {
 	isAdmin: { type: Boolean, label: 'Can access Keystone', index: true }
