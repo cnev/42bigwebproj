@@ -32,7 +32,7 @@ router.get('/:link', function (req, res){
 			sess.user_id = user;
 			sess.pw = user.password;
 			sess.logged = true;
-			 sess.userClass = user.isStaff.bocalStaff ? 'staff' :
+			sess.userClass = user.isStaff.bocalStaff ? 'staff' :
 					(user.isStaff.bocalStudent ? 'bocal' : 'student');
 			sess.isAdmin = (user.isStaff.bocalStaff || user.isStaff.bocalStudent) ? true : false;
 			req.session.forceLog = false;

@@ -157,13 +157,9 @@ router.post('/register/:name', function (req, res) {
 					if (code == 200) {
 						req.flash('info', 'You are now registered to this activity !');
 						res.redirect('/activity');
-					}
-					else if (code == 409) {
+					} else {
 						req.flash('error', actR);
 						res.redirect('/activity');
-					}
-					else {
-						res.status(code).send(actR);
 					}
 				});
 			}

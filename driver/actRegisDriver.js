@@ -51,8 +51,8 @@ function checkDupUser(members, j, i, cb) {
 	console.log(members[j]);
 	console.log(i);
 	console.log(members[i]);
-	console.log(members[j].user == members[i].user);
-	if (j != i && members[j].user == members[i].user)
+	console.log(members[j].uid == members[i].uid);
+	if (j != i && members[j].uid == members[i].uid)
 		cb(409, j, i, 'Duplicate ids in form.');
 	else
 		cb(200, j, i, "OK");
@@ -245,6 +245,13 @@ ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 	res.redirect('/activity/view/'+req.params.name);
 }*/
 
+function ownerAmongMembers(owner, members){
+	if (members.indexOf(owner) != -1)
+		return true;
+	else
+		return false;
+}
+
 ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb) {
 	// body...
 	var that = this;
@@ -257,21 +264,25 @@ ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb
 			cb(404, 'User Not Found');
 		}
 		else {
-			Activity.model.findOne({'name':activity}).exec(function (err, act) {
-				if (err) {
-					console.error(err);
-					cb(500, err);
-				}
-				else if (!act) {
-					cb(404, 'Activity Not Found');
-				}
-				else {
-					that.register(act, usr, members, function (code, actR) {
-						console.log('ALL CLEAR ! '+code)
-						cb(code, actR);
-					});
-				}
-			});
+			if (!ownerAmongMembers(usr, members))
+				cb(500, 'You are not registering yourself !!');
+			else {
+				Activity.model.findOne({'name':activity}).exec(function (err, act) {
+					if (err) {
+						console.error(err);
+						cb(500, err);
+					}
+					else if (!act) {
+						cb(404, 'Activity Not Found');
+					}
+					else {
+						that.register(act, usr, members, function (code, actR) {
+							console.log('ALL CLEAR ! '+code)
+							cb(code, actR);
+						});
+					}
+				});
+			}
 		}
 	});
 };

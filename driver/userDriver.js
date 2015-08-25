@@ -1,6 +1,7 @@
 var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 var passhash = require('password-hash');
+var fs = require('fs');
 
 var User = keystone.list('User');
 
@@ -38,6 +39,25 @@ UserDriver.prototype.getByUid = function (uid, cb) {
 	});
 };
 
+function generatePhoto(logger, cb) {
+	console.log('/public/images/userpics/'+logger.uid+'.jpeg');
+	fs.open('/nfs/zfs-student-5/users/2013/cnev/sarah/5_fw/42bigwebproj/public/images/userpics/'+logger.uid+'.jpeg', 'w', function (err, fd){
+		if (err)
+			console.error(err);
+		else {
+			console.log(logger.jpegPhoto);
+			fs.write(fd, logger.jpegPhoto, function (err, written, string){
+				if (err){
+					console.error(err);
+					cb(200, 'ok');
+				} else {
+					cb(200, 'ok');
+				}
+			});
+		}
+	});
+}
+
 UserDriver.prototype.create = function (logger, pass, cb) {
 	// body...
 	var newUser = new User.model({
@@ -46,8 +66,7 @@ UserDriver.prototype.create = function (logger, pass, cb) {
 		password: passhash.generate(pass, {'algorithm':'whirlpool', 'saltLength':16, 'iteration':3}),
 		email: logger.alias[0],
 		uidNumber: logger.uidNumber,
-		gidNumber: logger.gidNumber,
-		img: logger.jpegPhoto
+		gidNumber: logger.gidNumber
 	});
 	newUser.save(function (err, usrsaved) {
 		if (err) {
@@ -55,7 +74,9 @@ UserDriver.prototype.create = function (logger, pass, cb) {
 			cb(500, err);
 		}
 		else {
-			cb(201, usrsaved);
+			generatePhoto(logger, function (err, q_photo){
+				cb(201, usrsaved);
+			});
 		}
 	});
 };
@@ -66,7 +87,7 @@ UserDriver.prototype.toLog = function (logger, pass, cb) {
 	that.getByUid(logger.uid, function (code1, user) {
 		if (code1 == 404) {
 			that.create(logger, pass, function (code2, usrc) {
-				cb(code2, usrc)
+				cb(code2, usrc);
 			});
 		}
 		else {
