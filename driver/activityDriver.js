@@ -84,7 +84,6 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 		else {
 			ActivityRegistration.model.find()
 			.where('encours', true)
-			.where('members').in([user])
 			.exec(function (err, actRList) {
 				var i;
 				var j;
@@ -92,7 +91,7 @@ ActivityDriver.prototype.getUserAct = function (user, cb) {
 				if (err) {
 					cb(500, err);
 				}
-				else if (!actRList) {
+				else if (!actRList && !actRList.length) {
 					console.log('No activities found');
 					cb(404, 'No Activities Found');
 				}
@@ -125,7 +124,6 @@ ActivityDriver.prototype.getPastAct = function (user, cb) {
 		else {
 			ActivityRegistration.model.find()
 			.where('encours', true)
-			.where('members').in([user])
 			.exec(function (err, actRList) {
 				var i;
 				var j;

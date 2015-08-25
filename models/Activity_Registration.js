@@ -7,7 +7,8 @@ var ActivityRegistration = new keystone.List('ActivityRegistration', {
 
 ActivityRegistration.add({
 	user: {type: Types.Relationship, ref: 'User'},
-	activity: {type: Types.Relationship, ref: 'Activity'}
+	activity: {type: Types.Relationship, ref: 'Activity'},
+	encours: {type: Boolean, default: true}
 });
 
 ActivityRegistration.register();

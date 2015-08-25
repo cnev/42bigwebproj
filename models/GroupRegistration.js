@@ -8,8 +8,7 @@ var GroupRegistration = new keystone.List('GroupRegistration', {
 GroupRegistration.add({
 	owner: {type: Types.Relationship, ref: 'User'},
 	members: {type: Types.Relationship, ref: 'ActivityRegistration', many: true},
-	activity: {type: Types.Relationship, ref: 'Activity'},
-	encours: {type: Boolean, default: true}/*,
+	activity: {type: Types.Relationship, ref: 'Activity'}/*,
 	corrections: {type: Types.Relationship, ref: 'Correction', many: true}*/
 });
 

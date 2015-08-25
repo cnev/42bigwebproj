@@ -2,6 +2,7 @@ var keystone = require('keystone');
 var ObjectId = require('mongodb').ObjectId;
 
 var ActRegis = keystone.list('ActivityRegistration');
+var GroupRegis = keystone.list('GroupRegistration');
 var Activity = keystone.list('Activity');
 var User = keystone.list('User');
 
@@ -9,8 +10,8 @@ var ActRegisDriver = function () {};
 
 ActRegisDriver.prototype.getActivities = function (user, cb) {
 	// body...
-	ActRegis.model.find().where({'encours': true})
-	.where('members').in([user])
+	ActRegis.model.find()
+	.where({'encours': true})
 	.exec(function (err, actRList) {
 		if (err) {
 			console.error(err);
@@ -29,7 +30,7 @@ ActRegisDriver.prototype.getActivities = function (user, cb) {
 ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	// body...
 	ActRegis.model.findOne({'activity': activity})
-	.where('members').in([user])
+	.where('user', user)
 	.exec(function (err, actR) {
 		if (err) {
 			console.error(err);
@@ -48,20 +49,17 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 function validateUser(activity, members, i, cb) {
 	console.log('member: '+i);
 	console.log(members[i]);
-	ActRegis.model.findOne()
+	GroupRegis.model.findOne()
 	.where('activity', activity)
 	.where('members').in([members[i]])
-	.exec(function (code, actR) {
-		if (code == 500) {
-			console.log('PAF');
-			cb(code, i, "ERROR");
+	.exec(function (err, actR) {
+		if (err) {
+			cb(err, i, "ERROR");
 		}
-		else if (code == 404) {
-			console.log("PORO");
+		else if (!actR) {
 			cb(200, i, "OK");
 		}
 		else {
-			console.log('KNIFE');
 			cb(409, i, 'One or more members already is/are registered to this activity.');
 		}
 	});
@@ -134,32 +132,83 @@ that.getOneActivity(activity, owner, function (code, ret) {
 			}
 		}
 	});*/
+
+function registerUser (user, activity, i, cb) {
+	User.model.findById(user)
+	.exec(function (err, q_user){
+		if (err)
+			cb(err, "USER ERROR");
+		else if (!q_user)
+			cb(404, "ERROR FINDING USER");
+		else {
+			Activity.model.findById(activity)
+			.exec(function (err, q_act){
+				if (err)
+					cb(err, "ACTIVITY ERROR");
+				else if (!q_user)
+					cb(404, "ERROR FINDING ACTIVITY");
+				else {
+					var actRegis = new ActRegis.model({
+						user: q_user,
+						activity: q_act
+					});
+					actRegis.save(function (err, q_saved){
+						if (err)
+							cb(err, q_saved)
+						else {
+							cb(200, actRegis);
+						}
+					});
+				}
+			});
+		}
+	});
+}
+
+ActRegisDriver.prototype.registerGroup = function (groupR) {
+	for (var i = 0; i < groupR.members.length; i++) {
+		registerUser(groupR.members[i], groupR.activity, i, function (code, ret_i){
+			if (code != 200) {
+				cb(code, "ERROR REGISTERING GROUP");
+			} else {
+				if (i == groupR.members.length - 1) {
+					cb(200, "OK !");
+				}
+			}
+		});
+	}
+};
+
 ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 	// body...
 	var that = this;
 	//console.log(members);
 	that.validateGroup(activity, members, function (code, actR){
-		console.log('postvalidate');
 		if (code == 500)
 			cb(500, 'REGISTRATION ERROR');
 		else if (code == 409) {
 			cb(409, actR);
 		}
 		else if (code == 200) {
-			console.log("PANDA");
-			var newActR = new ActRegis.model({
+			var newGroupR = new GroupRegis.model({
 				owner: owner,
 				members: members,
-				activity: activity,
-				encours: true
+				activity: activity
 			});
-			newActR.save(function (err, cActR) {
+			newGroupR.save(function (err, cActR) {
 				if (err) {
 					console.error(err);
 					cb(500, err);
 				}
 				else {
-					cb(201, cActR);
+					console.log("before registerGroup");
+					that.registerGroup(newGroupR, function (code, actRegis){
+						if (code != 200){
+							cb(code, actRegis);
+						}
+						else
+							cb(200, actRegis);
+					});
 				}
 			});
 		}
@@ -192,8 +241,8 @@ ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb
 					cb(404, 'Activity Not Found');
 				}
 				else {
-					console.log('WABBIT');
 					that.register(act, usr, members, function (code, actR) {
+						console.log('ALL CLEAR ! '+code)
 						cb(code, actR);
 					});
 				}
@@ -202,29 +251,17 @@ ActRegisDriver.prototype.preRegister = function(activity, owner_uid, members, cb
 	});
 };
 
-ActRegisDriver.prototype.getGroupsByActivity = function (activity, cb) {
-	var that = this;
-	ActivityRegistration.model.find()
-	.where('activity', activity)
-	.exec(function (err, groups){
-		if (err)
-			cb(500, err);
-		else if (groups.length == 0) {
-			cb(404, 'no group found for this activity');
-		} else {
-			cb(200, groups);
-		}
-	});
-};
-
 ActRegisDriver.prototype.getUsersByActivity = function (activity, cb) {
 	var that = this;
-
-	that.getGroupsByActivity(activity, function (code, groups){
-		if (code == 500 || code == 404) {
-			cb(code, groups);
+	ActRegis.model.find()
+	.where('activity', activity)
+	.exec(function (err, groups){
+		if (err){
+			cb(err, "ACTREGISDRIVER.getUsersByActivity ERROR");
+		} else if (groups.length == 0) {
+			cb(404, 'no users registered to this activity');
 		} else {
-
+			cb(200, groups);
 		}
 	});
 };
