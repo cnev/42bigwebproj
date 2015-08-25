@@ -46,7 +46,8 @@ UserDriver.prototype.create = function (logger, pass, cb) {
 		password: passhash.generate(pass, {'algorithm':'whirlpool', 'saltLength':16, 'iteration':3}),
 		email: logger.alias[0],
 		uidNumber: logger.uidNumber,
-		gidNumber: logger.gidNumber
+		gidNumber: logger.gidNumber,
+		img: logger.jpegPhoto
 	});
 	newUser.save(function (err, usrsaved) {
 		if (err) {
