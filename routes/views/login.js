@@ -111,6 +111,7 @@ router.post('/', function (req, res)
 							sess.pw = usr.password;
 							sess.dn = entry.object.dn;
 							sess.logged = true;
+							sess.img = usr.img;
 			 				sess.userClass = usr.isStaff.bocalStaff ? 'staff' :
 									(usr.isStaff.bocalStudent ? 'bocal' : 'student');
 							sess.isAdmin = (usr.isStaff.bocalStaff || usr.isStaff.bocalStudent) ? true : false;
