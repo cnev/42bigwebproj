@@ -27,15 +27,12 @@
 			</form>
 -->
 
-
 <!--
 - nom / prénom
 - photo
 - nombre de crédits acquis / possibles
 - liste des modules / activités en cours, ceux qui sont passés et ceux qui vont débuter
 - liste des personnes liées aux activités et corrections
-
-
 
 var normales:
 	data.lastname (le nom)
@@ -53,9 +50,11 @@ var tableau:
 	sess.people_to_correct (liste des personnes qui doivent me corriger)
 	sess.people_correct_me (liste des personnes que je dois corriger)
 -->
+<!--
 {{#unless sess.isAdmin}}
 		<div class="container-fluid">
-			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.name.last }} {{ data.name.first }}, {{ sess.user }}</br></br></br></p>
+			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle">
+			<p>{{ data.name.last }} {{ data.name.first }}, {{ sess.user }}</p>
 			<p>
 				{{#each data.mod}}
 					Hi module : {{this.name}} </br>
@@ -81,5 +80,38 @@ var tableau:
 		</div>
 		<a href="/profile/autologin" role="button" class="btn btn-default">Generate Autologin Link</a>
 {{/if}}
+-->
 
-
+<div class="container-fluid row">
+	<div class="col-md-6">
+		<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle">
+		{{#if sess.isAdmin}}
+			<p>{{ data.name.last }} {{ data.name.first }}, {{ sess.user }}</p>
+		{{else}}
+			<p>You are : {{ sess.user }} the ADMIN</p>
+		{{/if}}
+	</div>
+	<div class="col-md-6">
+		{{#if sess.isAdmin}}
+			<h1>LES TRUCS D'UN ADMIN HEUREUX !</h1>
+			<div class="container">
+				<a href="/schedule" role="button" class="btn btn-info">SCHEDULE</a>
+			</div>
+		{{else}}
+			<p>
+			{{#each data.mod}}
+				Hi module : {{this.name}} </br>
+			{{/each}}
+			<br />Supposed to be actInList ...<br />
+			{{#each data.actInList}}
+				Hi Activity : {{this.name}} </br>
+			{{/each}}
+			<br />Supposed to be actList ...<br />
+			{{#each data.actList}}
+				Hi Activity : {{this.name}} </br>
+			{{/each}}
+			</p>
+		{{/if}}
+	</div>
+	<a href="/profile/autologin" role="button" class="btn btn-default">Generate Autologin Link</a>
+</div>
