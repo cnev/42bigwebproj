@@ -55,7 +55,7 @@ var tableau:
 -->
 {{#unless sess.isAdmin}}
 		<div class="container-fluid">
-			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.lastname }} {{ sess.firstname }}, {{ sess.user }}</br></br></br></p>
+			<img src="{{!-- sess.picture --}}" alt="your profil picture" class="img-responsive img-circle"><p>{{ data.name.last }} {{ data.name.first }}, {{ sess.user }}</br></br></br></p>
 			<p>
 				{{#each data.mod}}
 					Hi module : {{this.name}} </br>
