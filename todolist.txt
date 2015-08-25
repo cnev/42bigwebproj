@@ -93,12 +93,12 @@
 				TRUCS A FAIRE
 
 Mickael
-	Enregistrer la date/heure de chaque post/thread (modeles)
-	Realiser la liste des drivers en fonction des models et des besoins
-	Refonte du ActInList/ActList
-		pastActivities,pastModules = si inscription effectuee && periode terminee
-		curActivities,curModules = si inscription possible || inscription effectuee && periode en cours
-		nextActivities,nextModules = si inscription possible d'ici 7 jours && hors periode d'execution
+[DONE]	Enregistrer la date/heure de chaque post/thread (modeles)
+		Realiser la liste des drivers en fonction des models et des besoins
+			Refonte du ActInList/ActList
+				pastActivities,pastModules = si inscription effectuee && periode terminee
+				curActivities,curModules = si inscription possible || inscription effectuee && periode en cours
+				nextActivities,nextModules = si inscription possible d'ici 7 jours && hors periode d'execution
 	Etudier les importations de .csv pour la fin de module et les corrections d'exam
 	Autologin (hash de randomstring, integre dans l'entree de la collection User ?)
 
