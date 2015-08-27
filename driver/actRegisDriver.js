@@ -75,11 +75,11 @@ function validateUser(activity, user, cb, nb) {
 		}
 		else {
 			GroupRegis.model.findOne({'activity':activity}).where('members').in([user])
-			.exec(function (err, actR) {
+			.exec(function (err, grpR) {
 				if (err) {
 					cb(err, "ERROR", nb);
 				}
-				else if (actR) {
+				else if (grpR) {
 					cb(409, 'One or more members already is/are registered to this activity.', nb);
 				}
 				else {
