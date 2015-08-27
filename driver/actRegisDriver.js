@@ -46,43 +46,46 @@ ActRegisDriver.prototype.getOneActivity = function (activity, user, cb) {
 	});
 };
 
-function checkDupUser(members, j, i, cb) {
-	console.log(j);
-	console.log(members[j]);
-	console.log(i);
-	console.log(members[i]);
-	console.log(members[j].uid == members[i].uid);
-	if (j != i && members[j].uid == members[i].uid)
-		cb(409, j, i, 'Duplicate ids in form.');
-	else
-		cb(200, j, i, "OK");
+function checkDupUser (members, cb) {
+	var i;
+	var j;
+	var code1 = 200;
+	var ret = 'OK';
+	for (i = 0 ; (i < members.length) || (code1 != 200) ; i++) {
+		for (j = i + 1 ; (j < members.length) || (code1 != 200) ; j++) {
+			if (members[i] == members[j]) {
+				code1 = 409;
+				ret = 'Duplicate ids in form.';
+			}
+		}
+	}
+	cb(code1, ret);
 }
 
-function validateUser(activity, members, i, cb) {
+function validateUser(activity, user, cb, nb) {
 	var gotErr = false;
 	console.log('member: '+i);
 	console.log(members[i]);
-	GroupRegis.model.findOne()
-	.where('activity', activity)
-	.where('members').in([members[i]])
-	.exec(function (err, actR) {
+	ActRegis.model.findOne({'activity':activity, 'user':user}).exec(function (err, actR) {
 		if (err) {
-			cb(err, i, "ERROR");
+			cb(500, err, nb);
 		}
 		else if (!actR) {
-			for (var j = 0; j < members.length; j++) {
-				checkDupUser(members, j, i, function (code, ret_j, ret_i, msg){
-					if (code == 409 && !gotErr) {
-						cb(409, ret_i, msg);
-						gotErr = true;
-					}
-					else if (ret_j == members.length - 1 && !gotErr)
-						cb(200, ret_i, "OK");
-				});
-			}
+			cb(409, 'One or more user is/are not registered in the activity.', nb)
 		}
 		else {
-			cb(409, i, 'One or more members already is/are registered to this activity.');
+			GroupRegis.model.findOne({'activity':activity}).where('members').in([user])
+			.exec(function (err, actR) {
+				if (err) {
+					cb(err, "ERROR", nb);
+				}
+				else if (actR) {
+					cb(409, 'One or more members already is/are registered to this activity.', nb);
+				}
+				else {
+					cb(200, 'User Ok', nb);
+				}
+			});
 		}
 	});
 }
@@ -91,20 +94,24 @@ ActRegisDriver.prototype.validateGroup = function(activity, members, cb) {
 	var that = this;
 	var tmp;
 	var ok = true;
-	for (var i = 0 ; i < members.length; i++) {
-		validateUser(activity, members, i, function (code, i, actR){
-			if (code == 500 || code == 409) {
-				ok = false;
+	var i;
+	checkDupUser(members, function (code, doc) {
+		if (code == 409) {
+			cb(code, doc);
+		}
+		else {
+			for (i = 0 ; i < members.length ; i++) {
+				validateUser(activity, members[i], function (code, actR, nb) {
+					if (code == 500 || code == 409) {
+						ok = false;
+					}
+					if (nb == members.length || !ok) {
+						cb(code, (ok ? 'All requested users are ok for registration.' : actR));
+					}
+				}, (i + 1));
 			}
-			if (i == members.length - 1) {
-				if (ok) {
-					cb(200, null);
-				} else {
-					cb(code, actR);
-				}
-			}
-		});
-	}
+		}
+	});
 };
 /*
 that.getOneActivity(activity, owner, function (code, ret) {
@@ -237,7 +244,7 @@ ActRegisDriver.prototype.register = function (activity, owner, members, cb) {
 				}
 			});
 		}
-	})
+	});
 };
 
 /*if (model_q_res.registration.ends.getTime() < now.getTime()) {

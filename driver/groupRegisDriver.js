@@ -23,4 +23,4 @@ GroupRegisDriver.prototype.getGroupsByActivity = function (activity, cb) {
 	});
 };
 
-exports.ActRegisDriver = ActRegisDriver;
+exports.GroupRegisDriver = GroupRegisDriver;
